@@ -8,11 +8,20 @@ apply plugin: 'java'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+
+
+
 if (hasProperty("teamcity")) {
     version = majorVersion + '.' + teamcity["build.number"]
 }else {
     version = majorVerion + '.000'
 }
+
+if (project.hasProperty("commit")) {
+    version += '.git-' + project.commit
+}
+
+
 
 repositories {
     mavenCentral()
@@ -47,12 +56,13 @@ dependencies {
 
 jar {
 
-    archiveName = projectName + '.' + version + '.git-' + commit + '.jar'
+    archiveName = projectName + '.' + version + '.jar'
 
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
         attributes("Built-By": System.properties['user.name'],
+                   "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
                    "Implementation-Title": projectName,
                    "Implementation-Version": version)
     }
