@@ -15,7 +15,7 @@ targetCompatibility = 1.7
 if (hasProperty("teamcity")) {
     version = majorVersion + '.' + teamcity["build.number"] + '.git-' + System.properties["build.vcs.number." + vcsRootId]
 }else {
-    version = majorVerion + '.000'
+    version = majorVerion + '.000.git-unknown'
 }
 
 repositories {
