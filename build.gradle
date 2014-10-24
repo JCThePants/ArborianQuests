@@ -18,6 +18,7 @@ dependencies {
 }
 
 sourceSets {
+
     main {
         java {
             srcDir 'src'
