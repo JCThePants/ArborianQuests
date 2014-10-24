@@ -12,7 +12,7 @@ targetCompatibility = 1.7
 
 // Set version number
 if (hasProperty("teamcity")) {
-    version = majorVersion + '.' + teamcity["build.number"] + '.git-' + System.properties["build.vcs.number"]
+    version = majorVersion + '.' + teamcity["build.number"] + '.git-' + teamcity["build.vcs.number"]
 }else {
     version = majorVerion + '.000.git-unknown'
 }
