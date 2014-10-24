@@ -16,3 +16,16 @@ repositories {
 dependencies {
     compile files('bukkit/bukkit-1.7.9-R0.jar')
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        /*
+        resources {
+            srcDir 'src/resources'
+        }
+        */
+    }
+}
