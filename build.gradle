@@ -48,7 +48,7 @@ resources {
 
 dependencies {
     provided files('C:/JavaRepo/bukkit/bukkit-1.7.9-R0.jar',
-                   'download/gradle/GenericsLib.jar')
+                   '${ project.projectDir }/download/gradle/GenericsLib.jar')
 }
 
 
