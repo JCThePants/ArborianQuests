@@ -1,32 +1,34 @@
 def projectName = 'ArborianQuests'
 def majorVersion = '0'
+def vcsRootId = 'GIT_BukkitArborianQuests'
 
 defaultTasks 'build'
 
 apply plugin: 'java'
 
+// Minimum Java Version
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 
-
-
+// Set version number
 if (hasProperty("teamcity")) {
     version = majorVersion + '.' + teamcity["build.number"]
 }else {
     version = majorVerion + '.000'
 }
 
-if (project.hasProperty("commit")) {
-    version += '.git-' + project.commit
+if (project.hasProperty("build.vcs.number." + vcsRootId)) {
+    version += '.git-' + build.vcs.number[vcsRootId]
 }
-
 
 
 repositories {
     mavenCentral()
 }
 
+// Add provided configuration to prevent dependencies
+// from being included in the jar
 configurations {
     provided
 }
@@ -48,12 +50,14 @@ sourceSets {
     }
 }
 
+// Add dependencies
 dependencies {
     provided files('C:/JavaRepo/bukkit/bukkit-1.7.9-R0.jar',
                    'GenericsLib.jar')
 }
 
 
+// Jar file output with version number
 jar {
 
     archiveName = projectName + '.' + version + '.jar'
@@ -69,6 +73,7 @@ jar {
 
 }
 
+// Task to create a Jar file artifact with no version number
 task simpleNamedJar(type: Jar) {
 
     archiveName = projectName + '.jar'
