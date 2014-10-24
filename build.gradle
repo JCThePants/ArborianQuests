@@ -13,15 +13,10 @@ targetCompatibility = 1.7
 
 // Set version number
 if (hasProperty("teamcity")) {
-    version = majorVersion + '.' + teamcity["build.number"]
+    version = majorVersion + '.' + teamcity["build.number"] + '.git-' + System.properties["build.vcs.number." + vcsRootId]
 }else {
     version = majorVerion + '.000'
 }
-
-if (project.hasProperty("build.vcs.number." + vcsRootId)) {
-    version += '.git-' + build.vcs.number[vcsRootId]
-}
-
 
 repositories {
     mavenCentral()
