@@ -59,7 +59,7 @@ jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
-        attributes("Built-By": System.properties['user.name'],
+        attributes("Built-By": "JCThePants", //System.properties['user.name']
                    "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
                    "Implementation-Title": projectName,
                    "Implementation-Version": version)
@@ -75,7 +75,7 @@ task simpleNamedJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
-        attributes("Built-By": System.properties['user.name'],
+        attributes("Built-By": "JCThePants", //System.properties['user.name']
                    "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
                    "Implementation-Title": projectName,
                    "Implementation-Version": version)
