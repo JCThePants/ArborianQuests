@@ -9,9 +9,9 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 if (hasProperty("teamcity")) {
-    version = teamcity["build.number"]
+    version = majorVersion + '.' + teamcity["build.number"]
 }else {
-    version = '0'
+    version = majorVerion + '.000'
 }
 
 repositories {
@@ -31,13 +31,6 @@ sourceSets {
         java {
             srcDir 'src'
         }
-
-        /*
-resources {
-    srcDir 'src/resources'
-}
-*/
-
     }
 
     test {
@@ -54,13 +47,14 @@ dependencies {
 
 jar {
 
-    archiveName = projectName + '.' + majorVersion + '.' + version + '.' + archivesBaseName + '.jar'
+    archiveName = projectName + '.' + version + '.git-' + commit + '.jar'
 
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
-        attributes("Implementation-Title": projectName,
-                "Implementation-Version": version)
+        attributes("Built-By": System.properties['user.name'],
+                   "Implementation-Title": projectName,
+                   "Implementation-Version": version)
     }
 
 }
@@ -72,8 +66,10 @@ task simpleNamedJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
-        attributes("Implementation-Title": projectName,
-                "Implementation-Version": version)
+        attributes("Built-By": System.properties['user.name'],
+                   "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+                   "Implementation-Title": projectName,
+                   "Implementation-Version": version)
     }
 
     with jar
