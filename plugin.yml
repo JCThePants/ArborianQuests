@@ -1,0 +1,18 @@
+name: ArborianQuests
+author: JC The Pants
+main: com.jcwhatever.bukkit.arborianquests.ArborianQuests
+version: 0.1
+depend: [jcGenerics]
+commands:
+    quest:
+        description: Base command for Arborian Quests
+        usage: |
+            ERROR!
+    quests:
+        description: Base command for Arborian Quests
+        usage: |
+            ERROR!
+    arborianquests:
+        description: Base command for Arborian Quests
+        usage: |
+            ERROR!
