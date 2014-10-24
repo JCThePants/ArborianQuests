@@ -1,32 +1,84 @@
+def projectName = 'ArborianQuests'
+def majorVersion = '0'
+
+defaultTasks 'build'
+
 apply plugin: 'java'
 
 sourceCompatibility = 1.7
-version = '1.0'
+targetCompatibility = 1.7
 
-def repositoryPath = 'C:\\JavaRepo'
+if (hasProperty("teamcity")) {
+    version = teamcity["build.number"]
+}else {
+    version = '0'
+}
 
 repositories {
     mavenCentral()
-
-    flatDir {
-        dirs repositoryPath
-    }
 }
 
-dependencies {
-    compile files('bukkit/bukkit-1.7.9-R0.jar')
+configurations {
+    provided
 }
 
 sourceSets {
 
     main {
+        compileClasspath += configurations.provided
+        runtimeClasspath += configurations.provided
+
         java {
             srcDir 'src'
         }
+
         /*
-        resources {
-            srcDir 'src/resources'
-        }
-        */
+resources {
+    srcDir 'src/resources'
+}
+*/
+
     }
+
+    test {
+        compileClasspath += configurations.provided
+        runtimeClasspath += configurations.provided
+    }
+}
+
+dependencies {
+    provided files('C:/JavaRepo/bukkit/bukkit-1.7.9-R0.jar',
+                   'download/gradle/GenericsLib.jar')
+}
+
+
+jar {
+
+    archiveName = projectName + '.' + majorVersion + '.' + version + '.' + archivesBaseName + '.jar'
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    manifest {
+        attributes("Implementation-Title": projectName,
+                "Implementation-Version": version)
+    }
+
+}
+
+task simpleNamedJar(type: Jar) {
+
+    archiveName = projectName + '.jar'
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    manifest {
+        attributes("Implementation-Title": projectName,
+                "Implementation-Version": version)
+    }
+
+    with jar
+}
+
+artifacts {
+    archives simpleNamedJar
 }
