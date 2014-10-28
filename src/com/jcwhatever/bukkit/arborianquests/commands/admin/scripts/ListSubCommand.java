@@ -57,7 +57,7 @@ public class ListSubCommand extends AbstractCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<IScript> scripts = ArborianQuests.getInstance().getScriptManager().getScripts();
+        List<IScript> scripts = ArborianQuests.getPlugin().getScriptManager().getScripts();
 
         for (IScript script : scripts) {
             pagin.add(script.getName());

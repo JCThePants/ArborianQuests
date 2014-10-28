@@ -55,7 +55,7 @@ public class ScriptRegion extends Region {
      * @param settings  The data node to load and save settings.
      */
     public ScriptRegion(String name, IDataNode settings) {
-        super(ArborianQuests.getInstance(), name, settings);
+        super(ArborianQuests.getPlugin(), name, settings);
     }
 
     /**

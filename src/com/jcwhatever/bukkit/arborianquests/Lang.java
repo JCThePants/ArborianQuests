@@ -32,6 +32,6 @@ public class Lang {
 
     @Localized
     public static String get(String text, Object... params) {
-        return ArborianQuests.getInstance().getLanguageManager().get(text, params);
+        return ArborianQuests.getPlugin().getLanguageManager().get(text, params);
     }
 }

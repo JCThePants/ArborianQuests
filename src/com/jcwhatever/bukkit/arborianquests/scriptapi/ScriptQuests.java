@@ -62,7 +62,7 @@ public class ScriptQuests extends GenericsScriptApi {
     public ScriptQuests(Plugin plugin) {
 
         // quests is always the owning plugin.
-        super(ArborianQuests.getInstance());
+        super(ArborianQuests.getPlugin());
 
         _requests.addOnLifetimeEnd(new LifespanEndAction<ResponseRequest>() {
             @Override
@@ -164,7 +164,7 @@ public class ScriptQuests extends GenericsScriptApi {
             }
         };
 
-        ResponseRequest request = CommandRequests.request(ArborianQuests.getInstance(),
+        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
                 questName, p, handler, ResponseType.ACCEPT);
 
         _requests.add(request);

@@ -37,7 +37,7 @@ public class CommandHandler extends AbstractCommandHandler{
      * Constructor
      */
     public CommandHandler() {
-        super(ArborianQuests.getInstance());
+        super(ArborianQuests.getPlugin());
     }
 
     @Override

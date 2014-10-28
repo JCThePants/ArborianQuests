@@ -59,7 +59,7 @@ public class ListSubCommand extends AbstractCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<ScriptRegion> regions = ArborianQuests.getInstance().getScriptRegionManager().getRegions();
+        List<ScriptRegion> regions = ArborianQuests.getPlugin().getScriptRegionManager().getRegions();
 
         for (ScriptRegion region : regions) {
             pagin.add(region.getName(), region.isDefined() ? region.getWorld().getName() : Lang.get(_UNDEFINED_REGION));

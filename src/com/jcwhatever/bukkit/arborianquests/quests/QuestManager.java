@@ -50,7 +50,7 @@ public class QuestManager {
         if (quest != null)
             return quest;
 
-        IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getInstance(), new DataPath("quests." + questName));
+        IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
         dataNode.set("quest-name", questName);
         dataNode.set("display-name", displayName);
         dataNode.saveAsync(null);
@@ -67,7 +67,7 @@ public class QuestManager {
 
         questName = questName.toLowerCase();
 
-        DataStorage.removeStorage(ArborianQuests.getInstance(), new DataPath("quests." + questName));
+        DataStorage.removeStorage(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
 
         return _quests.remove(questName) != null;
     }

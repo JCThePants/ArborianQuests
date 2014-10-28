@@ -39,45 +39,45 @@ public class Msg {
     private Msg() {}
 
     public static void tell(CommandSender sender, String message, Object...params) {
-        Messenger.tell(ArborianQuests.getInstance(), sender, message, params);
+        Messenger.tell(ArborianQuests.getPlugin(), sender, message, params);
     }
 
     public static void tell(Player p, String message, Object...params) {
-        Messenger.tell(ArborianQuests.getInstance(), p, message, params);
+        Messenger.tell(ArborianQuests.getPlugin(), p, message, params);
     }
 
     public static void tellImportant(UUID playerId, String context, String message, Object...params) {
-        Messenger.tellImportant(ArborianQuests.getInstance(), playerId, context, message, params);
+        Messenger.tellImportant(ArborianQuests.getPlugin(), playerId, context, message, params);
     }
 
     public static void info(String message, Object...params) {
-        Messenger.info(ArborianQuests.getInstance(), message, params);
+        Messenger.info(ArborianQuests.getPlugin(), message, params);
     }
 
     public static void debug(String message, Object...params) {
         //if (!Plugin.getInstance().isDebugging())
         //	return;
-        Messenger.debug(ArborianQuests.getInstance(), message, params);
+        Messenger.debug(ArborianQuests.getPlugin(), message, params);
     }
 
     public static void warning(String message, Object...params) {
-        Messenger.warning(ArborianQuests.getInstance(), message, params);
+        Messenger.warning(ArborianQuests.getPlugin(), message, params);
     }
 
     public static void severe(String message, Object...params) {
-        Messenger.severe(ArborianQuests.getInstance(), message, params);
+        Messenger.severe(ArborianQuests.getPlugin(), message, params);
     }
 
     public static void broadcast(String message, Object...params) {
-        Messenger.broadcast(ArborianQuests.getInstance(), message, params);
+        Messenger.broadcast(ArborianQuests.getPlugin(), message, params);
     }
 
     public static void broadcast(String message, Collection<Player> exclude, Object...params) {
-        Messenger.broadcast(ArborianQuests.getInstance(), message, exclude, params);
+        Messenger.broadcast(ArborianQuests.getPlugin(), message, exclude, params);
     }
 
     public static ChatPaginator getPaginator(String title, Object...params) {
-        return new ChatPaginator(ArborianQuests.getInstance(), 6, PaginatorTemplate.HEADER, PaginatorTemplate.FOOTER, TextUtils.format(title, params));
+        return new ChatPaginator(ArborianQuests.getPlugin(), 6, PaginatorTemplate.HEADER, PaginatorTemplate.FOOTER, TextUtils.format(title, params));
     }
 
 }

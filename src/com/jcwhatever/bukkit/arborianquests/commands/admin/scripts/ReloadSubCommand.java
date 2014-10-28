@@ -42,7 +42,7 @@ public class ReloadSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
 
-        ArborianQuests.getInstance().reloadScripts();
+        ArborianQuests.getPlugin().reloadScripts();
 
         tellSuccess(sender, "Quest scripts reloaded.");
     }

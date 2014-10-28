@@ -55,7 +55,7 @@ public class ScriptRegions extends GenericsScriptApi {
     public ScriptRegions(Plugin plugin) {
 
         // quests is always the owning plugin
-        super(ArborianQuests.getInstance());
+        super(ArborianQuests.getPlugin());
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ScriptRegions extends GenericsScriptApi {
         PreCon.notNullOrEmpty(regionName);
         PreCon.notNull(onEnter);
 
-        ScriptRegion region = ArborianQuests.getInstance().getScriptRegionManager().getRegion(regionName);
+        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
         if (region == null)
             return false;
 
@@ -110,7 +110,7 @@ public class ScriptRegions extends GenericsScriptApi {
         PreCon.notNullOrEmpty(questName);
         PreCon.notNull(onEnter);
 
-        ScriptRegion region = ArborianQuests.getInstance().getScriptRegionManager().getRegion(regionName);
+        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
         if (region == null)
             return false;
 
@@ -134,7 +134,7 @@ public class ScriptRegions extends GenericsScriptApi {
         PreCon.notNullOrEmpty(regionName);
         PreCon.notNull(onLeave);
 
-        ScriptRegion region = ArborianQuests.getInstance().getScriptRegionManager().getRegion(regionName);
+        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
         if (region == null)
             return false;
 
@@ -160,7 +160,7 @@ public class ScriptRegions extends GenericsScriptApi {
         PreCon.notNullOrEmpty(regionName);
         PreCon.notNull(onLeave);
 
-        ScriptRegion region = ArborianQuests.getInstance().getScriptRegionManager().getRegion(regionName);
+        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
         if (region == null)
             return false;
 

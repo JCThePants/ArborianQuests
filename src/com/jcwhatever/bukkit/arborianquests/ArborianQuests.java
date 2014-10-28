@@ -51,7 +51,7 @@ public class ArborianQuests extends GenericsPlugin {
 
     private static ArborianQuests _instance;
 
-    public static ArborianQuests getInstance() {
+    public static ArborianQuests getPlugin() {
         return _instance;
     }
 
@@ -91,10 +91,10 @@ public class ArborianQuests extends GenericsPlugin {
     @Override
     protected void onEnablePlugin() {
 
-        IDataNode _flagNode = DataStorage.getStorage(ArborianQuests.getInstance(), new DataPath("flags"));
+        IDataNode _flagNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("flags"));
         _flagNode.load();
 
-        IDataNode _metaNode = DataStorage.getStorage(ArborianQuests.getInstance(), new DataPath("meta"));
+        IDataNode _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
         _scriptManager = new GenericsScriptManager(this, ScriptHelper.getGlobalEngineManager());
