@@ -26,7 +26,6 @@ package com.jcwhatever.bukkit.arborianquests;
 
 import com.jcwhatever.bukkit.generic.messaging.Messenger;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
-import com.jcwhatever.bukkit.generic.messaging.ChatPaginator.PaginatorTemplate;
 import com.jcwhatever.bukkit.generic.utils.TextUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,7 +76,7 @@ public class Msg {
     }
 
     public static ChatPaginator getPaginator(String title, Object...params) {
-        return new ChatPaginator(ArborianQuests.getPlugin(), 6, PaginatorTemplate.HEADER, PaginatorTemplate.FOOTER, TextUtils.format(title, params));
+        return new ChatPaginator(ArborianQuests.getPlugin(), 6, TextUtils.format(title, params));
     }
 
 }
