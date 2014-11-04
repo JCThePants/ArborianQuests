@@ -70,6 +70,7 @@ public class Quest {
     }
 
     public QuestStatus getStatus(Player p) {
+        //noinspection ConstantConditions
         return _playerNode.getEnum(p.getUniqueId().toString(), QuestStatus.NONE, QuestStatus.class);
     }
 
@@ -136,6 +137,7 @@ public class Quest {
     }
 
     private void setStatus(Player p, QuestStatus status) {
+
         if (status == QuestStatus.NONE) {
             _playerNode.remove(p.getUniqueId().toString());
         }
@@ -155,19 +157,20 @@ public class Quest {
 
     private void loadSettings() {
         Set<String> rawPlayerIds = _playerNode.getSubNodeNames();
-        if (rawPlayerIds != null && !rawPlayerIds.isEmpty()) {
-            for (String rawId : rawPlayerIds) {
-                UUID id = Utils.getId(rawId);
-                if (id == null)
-                    continue;
 
-                QuestStatus status = _playerNode.getEnum(rawId, QuestStatus.NONE, QuestStatus.class);
-                if (status == null || status.getCurrentStatus() != CurrentQuestStatus.IN_PROGRESS)
-                    continue;
+        for (String rawId : rawPlayerIds) {
+            UUID id = Utils.getId(rawId);
+            if (id == null)
+                continue;
 
-                _playerQuests.put(id, this);
-            }
+            QuestStatus status = _playerNode.getEnum(rawId, QuestStatus.NONE, QuestStatus.class);
+            //noinspection ConstantConditions
+            if (status.getCurrentStatus() != CurrentQuestStatus.IN_PROGRESS)
+                continue;
+
+            _playerQuests.put(id, this);
         }
+
     }
 
 }
