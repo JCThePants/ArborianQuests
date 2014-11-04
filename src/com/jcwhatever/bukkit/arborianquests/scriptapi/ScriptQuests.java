@@ -185,8 +185,8 @@ public class ScriptQuests extends GenericsScriptApi {
     /**
      * Ask the player to accept a quest.
      *
-     * @param questName  The name of the quest.
      * @param p          The player to ask.
+     * @param questName  The name of the quest.
      * @param onAccept   Runnable to run if the player accepts.
      */
     public void queryQuest(final Player p, String questName, final Runnable onAccept) {
