@@ -24,9 +24,11 @@
 
 package com.jcwhatever.bukkit.arborianquests.commands.users;
 
+import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
+import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
@@ -34,7 +36,6 @@ import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
-import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.FormatTemplate;
@@ -56,7 +57,7 @@ public class BaseCommand extends AbstractCommand {
 
     @Localizable static final String _NOT_CONSOLE = "Console does not have quests. Use '?' argument for list of commands.";
     @Localizable static final String _PAGINATOR_TITLE="My Current Quests";
-    @Localizable static final String _HELP = "Type '/quests ?' for a list of commands.";
+    @Localizable static final String _HELP = "Type '/{plugin-command} ?' for a list of commands.";
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws InvalidValueException, InvalidCommandSenderException {
@@ -72,7 +73,8 @@ public class BaseCommand extends AbstractCommand {
         List<Quest> myQuests = new ArrayList<>(quests.size());
 
         for (Quest quest : quests) {
-            if (quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS)
+            QuestStatus status = quest.getStatus(p);
+            if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS)
                 myQuests.add(quest);
         }
 
