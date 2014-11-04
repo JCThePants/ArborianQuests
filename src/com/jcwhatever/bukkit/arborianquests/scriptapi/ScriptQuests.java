@@ -164,6 +164,25 @@ public class ScriptQuests extends GenericsScriptApi {
     }
 
     /**
+     * Join player to a quest.
+     *
+     * @param p          The player.
+     * @param questName  The name of the quest.
+     *
+     * @return  True if quest was found and player joined.
+     */
+    public boolean joinQuest(Player p, String questName) {
+
+        final Quest quest = QuestManager.get(questName);
+        if (quest == null)
+            return false;
+
+        quest.acceptQuest(p);
+
+        return true;
+    }
+
+    /**
      * Ask the player to accept a quest.
      *
      * @param questName  The name of the quest.
