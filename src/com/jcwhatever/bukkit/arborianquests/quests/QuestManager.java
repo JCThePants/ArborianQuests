@@ -51,6 +51,7 @@ public class QuestManager {
             return quest;
 
         IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
+        dataNode.load();
         dataNode.set("quest-name", questName);
         dataNode.set("display-name", displayName);
         dataNode.saveAsync(null);
