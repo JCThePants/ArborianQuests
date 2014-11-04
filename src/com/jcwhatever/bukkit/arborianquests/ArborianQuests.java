@@ -25,7 +25,9 @@
 package com.jcwhatever.bukkit.arborianquests;
 
 import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
+import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
+import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptLocations;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptQuests;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptRegions;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
@@ -57,6 +59,8 @@ public class ArborianQuests extends GenericsPlugin {
 
     private GenericsScriptManager _scriptManager;
     private ScriptRegionManager _scriptRegionManager;
+    private ScriptLocationManager _scriptLocationManager;
+
     private List<IScriptApi> _scriptApi;
     private List<IEvaluatedScript> _evaluatedScripts = new ArrayList<>(50);
 
@@ -72,6 +76,10 @@ public class ArborianQuests extends GenericsPlugin {
 
     public ScriptRegionManager getScriptRegionManager() {
         return _scriptRegionManager;
+    }
+
+    public ScriptLocationManager getScriptLocationManager() {
+        return _scriptLocationManager;
     }
 
     public List<IEvaluatedScript> getEvaluatedScripts() {
@@ -104,6 +112,7 @@ public class ArborianQuests extends GenericsPlugin {
         _scriptApi.add(new ScriptApiMeta(this, _metaNode));
         _scriptApi.add(new ScriptQuests(this));
         _scriptApi.add(new ScriptRegions(this));
+        _scriptApi.add(new ScriptLocations(this));
 
         ScriptApiRepo.registerApiType(this, ScriptQuests.class);
         ScriptApiRepo.registerApiType(this, ScriptRegions.class);
@@ -111,7 +120,11 @@ public class ArborianQuests extends GenericsPlugin {
         IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
         regionNode.load();
 
+        IDataNode locationNode = DataStorage.getStorage(this, new DataPath("locations"));
+        locationNode.load();
+
         _scriptRegionManager = new ScriptRegionManager(regionNode);
+        _scriptLocationManager = new ScriptLocationManager(locationNode);
 
         reloadScripts();
 

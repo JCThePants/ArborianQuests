@@ -1,17 +1,17 @@
 /* This file is part of ArborianQuests for Bukkit, licensed under the MIT License (MIT).
- *
+ * 
  * Copyright (c) JCThePants (www.jcwhatever.com)
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,33 +22,46 @@
  */
 
 
-package com.jcwhatever.bukkit.arborianquests.commands;
+package com.jcwhatever.bukkit.arborianquests.locations;
 
-import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.scripts.ScriptsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
+import com.jcwhatever.bukkit.generic.mixins.INamedLocation;
+import com.jcwhatever.bukkit.generic.mixins.INamedLocationDistance;
+import com.jcwhatever.bukkit.generic.mixins.implemented.NamedLocationDistance;
+import com.jcwhatever.bukkit.generic.utils.PreCon;
+import org.bukkit.Location;
 
-public class CommandHandler extends AbstractCommandHandler{
+public class ScriptLocation implements INamedLocation {
 
-    /**
-     * Constructor
-     */
-    public CommandHandler() {
-        super(ArborianQuests.getPlugin());
+    private final String _name;
+    private final String _searchName;
+    private final Location _location;
+
+    public ScriptLocation(String name, Location location) {
+        PreCon.notNullOrEmpty(name);
+        PreCon.notNull(location);
+
+        _name = name;
+        _searchName = name.toLowerCase();
+        _location = location;
     }
 
     @Override
-    protected void registerCommands() {
+    public String getName() {
+        return _name;
+    }
 
-        setBaseCommand(BaseCommand.class);
+    @Override
+    public String getSearchName() {
+        return _searchName;
+    }
 
-        registerCommand(LocationsCommand.class);
-        registerCommand(RegionsCommand.class);
-        registerCommand(ScriptsCommand.class);
-        registerCommand(ListCommand.class);
+    @Override
+    public Location getLocation() {
+        return _location;
+    }
+
+    @Override
+    public INamedLocationDistance getDistance(Location location) {
+        return new NamedLocationDistance(this, location);
     }
 }

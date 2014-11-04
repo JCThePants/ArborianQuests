@@ -1,17 +1,17 @@
 /* This file is part of ArborianQuests for Bukkit, licensed under the MIT License (MIT).
- *
+ * 
  * Copyright (c) JCThePants (www.jcwhatever.com)
- *
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * 
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,33 +22,22 @@
  */
 
 
-package com.jcwhatever.bukkit.arborianquests.commands;
+package com.jcwhatever.bukkit.arborianquests.commands.admin.locations;
 
-import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.scripts.ScriptsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
+import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
+import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
 
-public class CommandHandler extends AbstractCommandHandler{
+@ICommandInfo(
+        command={"locations"},
+        description="Manage quest locations.")
+public class LocationsCommand extends AbstractCommand {
 
-    /**
-     * Constructor
-     */
-    public CommandHandler() {
-        super(ArborianQuests.getPlugin());
-    }
+    public LocationsCommand() {
+        super();
 
-    @Override
-    protected void registerCommands() {
-
-        setBaseCommand(BaseCommand.class);
-
-        registerCommand(LocationsCommand.class);
-        registerCommand(RegionsCommand.class);
-        registerCommand(ScriptsCommand.class);
-        registerCommand(ListCommand.class);
+        registerSubCommand(AddSubCommand.class);
+        registerSubCommand(DelSubCommand.class);
+        registerSubCommand(ListSubCommand.class);
     }
 }
+
