@@ -184,11 +184,11 @@ public class ScriptRegion extends Region {
 
     @Override
     protected boolean canDoPlayerEnter(Player p) {
-        return !_onEnter.isEmpty() && !_onQuestEnter.isEmpty();
+        return !_onEnter.isEmpty() || !_onQuestEnter.isEmpty();
     }
 
     @Override
     protected boolean canDoPlayerLeave(Player p) {
-        return !_onLeave.isEmpty() && !_onQuestLeave.isEmpty();
+        return !_onLeave.isEmpty() || !_onQuestLeave.isEmpty();
     }
 }
