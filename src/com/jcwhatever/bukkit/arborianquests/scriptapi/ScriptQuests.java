@@ -28,6 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
+import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.bukkit.generic.collections.LifespanEndAction;
@@ -137,13 +138,39 @@ public class ScriptQuests extends GenericsScriptApi {
     }
 
     /**
+     * Mark a players quest status as complete.
+     *
+     * @param p          The player.
+     * @param questName  The name of the quest.
+     *
+     * @return  True if the player quest is completed.
+     */
+    public boolean complete(Player p, String questName) {
+        PreCon.notNull(p);
+        PreCon.notNullOrEmpty(questName);
+
+        Quest quest = QuestManager.get(questName);
+        if (quest == null)
+            return false;
+
+        QuestStatus status = quest.getStatus(p);
+
+        if (status.getCompletionStatus() != QuestCompletionStatus.NOT_COMPLETED)
+            return true;
+
+        quest.finishQuest(p);
+
+        return true;
+    }
+
+    /**
      * Ask the player to accept a quest.
      *
      * @param questName  The name of the quest.
      * @param p          The player to ask.
      * @param onAccept   Runnable to run if the player accepts.
      */
-    public void query(final Player p, String questName, final Runnable onAccept) {
+    public void queryQuest(final Player p, String questName, final Runnable onAccept) {
 
         final Quest quest = QuestManager.get(questName);
         if (quest == null)
@@ -174,4 +201,38 @@ public class ScriptQuests extends GenericsScriptApi {
 
     }
 
+    /**
+     * Ask the player a question.
+     *
+     * @param p          The player to ask.
+     * @param context    The name of the context.
+     * @param question   The question to ask the player.
+     * @param onAccept   Runnable to run if the player accepts.
+     */
+    public void query(final Player p, String context, String question, final Runnable onAccept) {
+        PreCon.notNull(p);
+        PreCon.notNullOrEmpty(context);
+        PreCon.notNull(question);
+        PreCon.notNull(onAccept);
+
+        ResponseHandler handler = new ResponseHandler() {
+
+            @Override
+            public void onResponse(ResponseType response) {
+
+                if (response == ResponseType.YES) {
+                    onAccept.run();
+                }
+            }
+        };
+
+        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
+                context, p, handler, ResponseType.YES);
+
+        _requests.add(request);
+
+        Msg.tell(p, question);
+        Msg.tell(p, "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.");
+        Msg.tell(p, "Expires in 30 seconds.");
+    }
 }
