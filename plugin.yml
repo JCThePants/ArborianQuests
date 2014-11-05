@@ -1,5 +1,5 @@
 name: ArborianQuests
-author: JC The Pants
+author: JCThePants
 main: com.jcwhatever.bukkit.arborianquests.ArborianQuests
 version: 0.0-beta
 depend: [GenericsLib]
