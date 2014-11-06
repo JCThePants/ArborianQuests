@@ -64,7 +64,7 @@ public class BaseCommand extends AbstractCommand {
 
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
 
-        int page = args.getInt("page");
+        int page = args.getInteger("page");
         Player p = (Player)sender;
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
