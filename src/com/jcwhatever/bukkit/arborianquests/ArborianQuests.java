@@ -47,9 +47,7 @@ import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ArborianQuests extends GenericsPlugin {
 
@@ -171,19 +169,8 @@ public class ArborianQuests extends GenericsPlugin {
 
     private void resetApi() {
 
-        Set<IScriptApi> reset = new HashSet<>(30);
-
         for (IEvaluatedScript script : _evaluatedScripts) {
-            List<IScriptApi> apis = script.getScriptApi();
-
-            for (IScriptApi api : apis) {
-                if (reset.contains(api))
-                    continue;
-
-                api.reset();
-
-                reset.add(api);
-            }
+            script.resetApi();
         }
     }
 }
