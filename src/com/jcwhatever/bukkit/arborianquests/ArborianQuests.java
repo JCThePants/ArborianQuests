@@ -27,7 +27,9 @@ package com.jcwhatever.bukkit.arborianquests;
 import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
+import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptFlags;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptLocations;
+import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptMeta;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptQuests;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptRegions;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
@@ -37,8 +39,6 @@ import com.jcwhatever.bukkit.generic.scripting.IScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.scripting.ScriptHelper;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
-import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiFlags;
-import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiMeta;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -60,6 +60,9 @@ public class ArborianQuests extends GenericsPlugin {
     private GenericsScriptManager _scriptManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
+
+    private IDataNode _flagsNode;
+    private IDataNode _metaNode;
 
     private List<IScriptApi> _scriptApi;
     private List<IEvaluatedScript> _evaluatedScripts = new ArrayList<>(50);
@@ -96,26 +99,35 @@ public class ArborianQuests extends GenericsPlugin {
         return "[ArborianQuests] ";
     }
 
+    public IDataNode getFlagsDataNode() {
+        return _flagsNode;
+    }
+
+    public IDataNode getMetaDataNode() {
+        return _metaNode;
+    }
+
     @Override
     protected void onEnablePlugin() {
 
-        IDataNode _flagNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("flags"));
-        _flagNode.load();
+        _flagsNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("flags"));
+        _flagsNode.load();
 
-        IDataNode _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
+        _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
         _scriptManager = new GenericsScriptManager(this, ScriptHelper.getGlobalEngineManager());
 
         _scriptApi = ScriptHelper.getDefaultApi(this, _scriptManager);
-        _scriptApi.add(new ScriptApiFlags(this, _flagNode));
-        _scriptApi.add(new ScriptApiMeta(this, _metaNode));
+        _scriptApi.add(new ScriptMeta(this));
+        _scriptApi.add(new ScriptFlags(this));
         _scriptApi.add(new ScriptQuests(this));
         _scriptApi.add(new ScriptRegions(this));
         _scriptApi.add(new ScriptLocations(this));
 
         ScriptApiRepo.registerApiType(this, ScriptQuests.class);
         ScriptApiRepo.registerApiType(this, ScriptRegions.class);
+        ScriptApiRepo.registerApiType(this, ScriptFlags.class);
 
         IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
         regionNode.load();
