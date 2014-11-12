@@ -150,6 +150,17 @@ public class ScriptItems extends GenericsScriptApi {
         }
 
         /**
+         * Dispose floating item.
+         *
+         * @param item  The item to remove and dispose.
+         *
+         * @return  True if successful.
+         */
+        public boolean disposeFloatingItem(FloatingItem item) {
+            return _manager.remove(item.getName());
+        }
+
+        /**
          * Add an item pickup handler.
          *
          * @param item      The item to add the callback to.
