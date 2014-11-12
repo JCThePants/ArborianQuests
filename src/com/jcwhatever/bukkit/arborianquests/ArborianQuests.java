@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.arborianquests;
 
 import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
+import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptFlags;
@@ -60,6 +61,7 @@ public class ArborianQuests extends GenericsPlugin {
     private GenericsScriptManager _scriptManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
+    private ScriptItemManager _scriptItemManager;
 
     private IDataNode _flagsNode;
     private IDataNode _metaNode;
@@ -83,6 +85,10 @@ public class ArborianQuests extends GenericsPlugin {
 
     public ScriptLocationManager getScriptLocationManager() {
         return _scriptLocationManager;
+    }
+
+    public ScriptItemManager getScriptItemManager() {
+        return _scriptItemManager;
     }
 
     public List<IEvaluatedScript> getEvaluatedScripts() {
@@ -135,8 +141,12 @@ public class ArborianQuests extends GenericsPlugin {
         IDataNode locationNode = DataStorage.getStorage(this, new DataPath("locations"));
         locationNode.load();
 
+        IDataNode itemsNode = DataStorage.getStorage(this, new DataPath("items"));
+        itemsNode.load();
+
         _scriptRegionManager = new ScriptRegionManager(regionNode);
         _scriptLocationManager = new ScriptLocationManager(locationNode);
+        _scriptItemManager = new ScriptItemManager(itemsNode);
 
         reloadScripts();
 
