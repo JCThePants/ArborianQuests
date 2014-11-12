@@ -29,20 +29,22 @@ import com.jcwhatever.bukkit.generic.collections.SetMap;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Utils;
+
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.Nullable;
 
 /**
  * Represents a quest and players within the quest.
  */
 public class Quest {
 
-    private String _questName;
-    private String _displayName;
-    private IDataNode _playerNode;
+    private final String _questName;
+    private final String _displayName;
+    private final IDataNode _playerNode;
+    private final IDataNode _flagsNode;
 
     private static SetMap<UUID, Quest> _playerQuests = new SetMap<>(100);
 
@@ -59,6 +61,7 @@ public class Quest {
         _questName = questName;
         _displayName = displayName;
         _playerNode = dataNode.getNode("players");
+        _flagsNode = dataNode.getNode("flags");
     }
 
     public String getName() {
@@ -134,6 +137,62 @@ public class Quest {
                 setStatus(p, QuestStatus.NONE);
                 break;
         }
+    }
+
+    /**
+     * Determine if a player has a flag set.
+     *
+     * @param playerId  The ID of the player to check
+     * @param flagName  The name of the flag
+     *
+     * @return  True if the flag is set.
+     */
+    public boolean hasFlag(UUID playerId, String flagName) {
+        PreCon.notNull(playerId);
+        PreCon.notNullOrEmpty(flagName);
+
+        return _flagsNode.getBoolean(playerId.toString() + '.' + flagName, false);
+    }
+
+    /**
+     * Set a flag on a player.
+     *
+     * @param playerId  The players ID.
+     * @param flagName  The name of the flag.
+     */
+    public void setFlag(UUID playerId, String flagName) {
+        PreCon.notNull(playerId);
+        PreCon.notNullOrEmpty(flagName);
+
+        _flagsNode.set(playerId.toString() + '.' + flagName, true);
+        _flagsNode.saveAsync(null);
+    }
+
+    /**
+     * Clear a flag on a player.
+     *
+     * @param playerId  The players ID.
+     * @param flagName  The name of the flag.
+     */
+    public void clearFlag(UUID playerId, String flagName) {
+        PreCon.notNull(playerId);
+        PreCon.notNullOrEmpty(flagName);
+
+
+        _flagsNode.remove(playerId.toString() + '.' + flagName);
+        _flagsNode.saveAsync(null);
+    }
+
+    /**
+     * Clear all flags set on a player.
+     *
+     * @param playerId  The ID of the player.
+     */
+    public void clearFlags(UUID playerId) {
+        PreCon.notNull(playerId);
+
+        _flagsNode.remove(playerId.toString());
+        _flagsNode.saveAsync(null);
     }
 
     private void setStatus(Player p, QuestStatus status) {

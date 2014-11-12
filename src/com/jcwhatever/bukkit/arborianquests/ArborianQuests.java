@@ -64,7 +64,6 @@ public class ArborianQuests extends GenericsPlugin {
     private ScriptLocationManager _scriptLocationManager;
     private ScriptItemManager _scriptItemManager;
 
-    private IDataNode _flagsNode;
     private IDataNode _metaNode;
 
     private List<IScriptApi> _scriptApi;
@@ -106,19 +105,12 @@ public class ArborianQuests extends GenericsPlugin {
         return "[ArborianQuests] ";
     }
 
-    public IDataNode getFlagsDataNode() {
-        return _flagsNode;
-    }
-
     public IDataNode getMetaDataNode() {
         return _metaNode;
     }
 
     @Override
     protected void onEnablePlugin() {
-
-        _flagsNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("flags"));
-        _flagsNode.load();
 
         _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
