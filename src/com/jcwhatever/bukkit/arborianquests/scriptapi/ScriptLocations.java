@@ -31,13 +31,15 @@ import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 @IScriptApiInfo(
-        variableName = "locations",
+        variableName = "questLocations",
         description = "Get quest scriptable locations.")
 public class ScriptLocations extends GenericsScriptApi {
 
@@ -76,6 +78,13 @@ public class ScriptLocations extends GenericsScriptApi {
                 return null;
 
             return result.getLocation();
+        }
+
+        /**
+         * Get all script location objects.
+         */
+        public List<ScriptLocation> getScriptLocations() {
+            return ArborianQuests.getPlugin().getScriptLocationManager().getLocations();
         }
     }
 }
