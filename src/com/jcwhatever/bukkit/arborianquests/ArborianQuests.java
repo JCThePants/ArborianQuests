@@ -29,6 +29,7 @@ import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptFlags;
+import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptItems;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptLocations;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptMeta;
 import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptQuests;
@@ -130,10 +131,12 @@ public class ArborianQuests extends GenericsPlugin {
         _scriptApi.add(new ScriptQuests(this));
         _scriptApi.add(new ScriptRegions(this));
         _scriptApi.add(new ScriptLocations(this));
+        _scriptApi.add(new ScriptItems(this));
 
         ScriptApiRepo.registerApiType(this, ScriptQuests.class);
         ScriptApiRepo.registerApiType(this, ScriptRegions.class);
         ScriptApiRepo.registerApiType(this, ScriptFlags.class);
+        ScriptApiRepo.registerApiType(this, ScriptItems.class);
 
         IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
         regionNode.load();
