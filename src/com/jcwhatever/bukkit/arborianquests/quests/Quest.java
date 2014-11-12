@@ -44,7 +44,6 @@ public class Quest {
     private final String _questName;
     private final String _displayName;
     private final IDataNode _playerNode;
-    private final IDataNode _flagsNode;
 
     private static SetMap<UUID, Quest> _playerQuests = new SetMap<>(100);
 
@@ -61,7 +60,6 @@ public class Quest {
         _questName = questName;
         _displayName = displayName;
         _playerNode = dataNode.getNode("players");
-        _flagsNode = dataNode.getNode("flags");
     }
 
     public String getName() {
@@ -74,20 +72,29 @@ public class Quest {
 
     public QuestStatus getStatus(Player p) {
         //noinspection ConstantConditions
-        return _playerNode.getEnum(p.getUniqueId().toString(), QuestStatus.NONE, QuestStatus.class);
+        return getStatus(p.getUniqueId());
+    }
+
+    public QuestStatus getStatus(UUID playerId) {
+        //noinspection ConstantConditions
+        return _playerNode.getEnum(playerId.toString(), QuestStatus.NONE, QuestStatus.class);
     }
 
     public void acceptQuest(Player p) {
+        acceptQuest(p.getUniqueId());
+    }
 
-        QuestStatus status = getStatus(p);
+    public void acceptQuest(UUID playerId) {
+
+        QuestStatus status = getStatus(playerId);
 
         switch (status) {
             case NONE:
-                setStatus(p, QuestStatus.INCOMPLETE);
+                setStatus(playerId, QuestStatus.INCOMPLETE);
                 break;
 
             case COMPLETED:
-                setStatus(p, QuestStatus.RERUN);
+                setStatus(playerId, QuestStatus.RERUN);
                 break;
 
             case INCOMPLETE:
@@ -101,16 +108,20 @@ public class Quest {
     }
 
     public void finishQuest(Player p) {
+        finishQuest(p.getUniqueId());
+    }
 
-        QuestStatus status = getStatus(p);
+    public void finishQuest(UUID playerId) {
+
+        QuestStatus status = getStatus(playerId);
 
         switch (status) {
             case RERUN:
-                setStatus(p, QuestStatus.COMPLETED);
+                setStatus(playerId, QuestStatus.COMPLETED);
                 break;
 
             case INCOMPLETE:
-                setStatus(p, QuestStatus.NONE);
+                setStatus(playerId, QuestStatus.NONE);
                 break;
 
             case NONE:
@@ -121,20 +132,24 @@ public class Quest {
     }
 
     public void cancelQuest(Player p) {
+        cancelQuest(p.getUniqueId());
+    }
 
-        QuestStatus status = getStatus(p);
+    public void cancelQuest(UUID playerId) {
+
+        QuestStatus status = getStatus(playerId);
 
         switch (status) {
             case RERUN:
                 // fall through
             case COMPLETED:
-                setStatus(p, QuestStatus.COMPLETED);
+                setStatus(playerId, QuestStatus.COMPLETED);
                 break;
 
             case NONE:
                 // fall through
             case INCOMPLETE:
-                setStatus(p, QuestStatus.NONE);
+                setStatus(playerId, QuestStatus.NONE);
                 break;
         }
     }
@@ -151,7 +166,7 @@ public class Quest {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        return _flagsNode.getBoolean(playerId.toString() + '.' + flagName, false);
+        return _playerNode.getBoolean(playerId.toString() + ".flags." + flagName, false);
     }
 
     /**
@@ -164,8 +179,8 @@ public class Quest {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        _flagsNode.set(playerId.toString() + '.' + flagName, true);
-        _flagsNode.saveAsync(null);
+        _playerNode.set(playerId.toString() + ".flags" + flagName, true);
+        _playerNode.saveAsync(null);
     }
 
     /**
@@ -178,9 +193,8 @@ public class Quest {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-
-        _flagsNode.remove(playerId.toString() + '.' + flagName);
-        _flagsNode.saveAsync(null);
+        _playerNode.remove(playerId.toString() + ".flags" + flagName);
+        _playerNode.saveAsync(null);
     }
 
     /**
@@ -191,24 +205,26 @@ public class Quest {
     public void clearFlags(UUID playerId) {
         PreCon.notNull(playerId);
 
-        _flagsNode.remove(playerId.toString());
-        _flagsNode.saveAsync(null);
+        cancelQuest(playerId);
+
+        _playerNode.remove(playerId.toString() + ".flags");
+        _playerNode.saveAsync(null);
     }
 
-    private void setStatus(Player p, QuestStatus status) {
+    private void setStatus(UUID playerId, QuestStatus status) {
 
         if (status == QuestStatus.NONE) {
-            _playerNode.remove(p.getUniqueId().toString());
+            _playerNode.remove(playerId.toString() + ".status");
         }
         else {
-            _playerNode.set(p.getUniqueId().toString(), status);
+            _playerNode.set(playerId.toString() + ".status", status);
         }
 
         if (status.getCurrentStatus() == CurrentQuestStatus.NONE) {
-            _playerQuests.removeValue(p.getUniqueId(), this);
+            _playerQuests.removeValue(playerId, this);
         }
         else if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS) {
-            _playerQuests.put(p.getUniqueId(), this);
+            _playerQuests.put(playerId, this);
         }
 
         _playerNode.saveAsync(null);
