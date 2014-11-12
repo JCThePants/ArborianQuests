@@ -53,7 +53,7 @@ import org.bukkit.plugin.Plugin;
         description = "Provide scripts API access for quests.")
 public class ScriptQuests extends GenericsScriptApi {
 
-    TimedSet<ResponseRequest> _requests = new TimedSet<ResponseRequest>(20, 600);
+    private static ApiObject _api;
 
     /**
      * Constructor.
@@ -65,193 +65,199 @@ public class ScriptQuests extends GenericsScriptApi {
         // quests is always the owning plugin.
         super(ArborianQuests.getPlugin());
 
-        _requests.addOnLifetimeEnd(new LifespanEndAction<ResponseRequest>() {
-            @Override
-            public void onEnd(ResponseRequest item) {
-                CommandRequests.cancel(item);
-            }
-        });
-
+        _api = new ApiObject();
     }
 
     @Override
     public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        return this;
+        return _api;
     }
 
-    @Override
-    public void reset() {
-        for (ResponseRequest request : _requests)
-            CommandRequests.cancel(request);
-    }
+    public static class ApiObject implements IScriptApiObject {
 
-    /**
-     * Create a quest via script. Quests are not stored and must be
-     * created by the script each time it is loaded.
-     *
-     * @param name         The name of the quest.
-     * @param displayName  The displayName of the quest.
-     * @return
-     */
-    public Quest create(String name, String displayName) {
-        return QuestManager.create(name, displayName);
-    }
+        TimedSet<ResponseRequest> _requests = new TimedSet<ResponseRequest>(20, 600);
 
-    /**
-     * Remove a quest.
-     *
-     * @param quest  The quest to discard.
-     */
-    public boolean dispose(Quest quest) {
-        PreCon.notNull(quest);
+        ApiObject() {
+            _requests.addOnLifetimeEnd(new LifespanEndAction<ResponseRequest>() {
+                @Override
+                public void onEnd(ResponseRequest item) {
+                    CommandRequests.cancel(item);
+                }
+            });
+        }
 
-        return QuestManager.dispose(quest.getName());
-    }
+        @Override
+        public void reset() {
+            for (ResponseRequest request : _requests)
+                CommandRequests.cancel(request);
+        }
 
-    /**
-     * Determine if a player has accepted a quest.
-     *
-     * @param questName  The name of the quest.
-     * @return
-     */
-    public boolean isInQuest(Player p, String questName) {
-        PreCon.notNull(p);
-        PreCon.notNullOrEmpty(questName);
+        /**
+         * Create a quest via script. Quests are not stored and must be
+         * created by the script each time it is loaded.
+         *
+         * @param name        The name of the quest.
+         * @param displayName The displayName of the quest.
+         * @return
+         */
+        public Quest create(String name, String displayName) {
+            return QuestManager.create(name, displayName);
+        }
 
-        Quest quest = QuestManager.get(questName);
-        return quest != null && quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS;
-    }
+        /**
+         * Remove a quest.
+         *
+         * @param quest The quest to discard.
+         */
+        public boolean dispose(Quest quest) {
+            PreCon.notNull(quest);
 
-    /**
-     * Determine if a player has already completed a quest.
-     *
-     * @param p
-     * @param questName
-     * @return
-     */
-    public boolean hasCompleted(Player p, String questName) {
-        PreCon.notNull(p);
-        PreCon.notNullOrEmpty(questName);
+            return QuestManager.dispose(quest.getName());
+        }
 
-        Quest quest = QuestManager.get(questName);
-        return quest != null && quest.getStatus(p).getCompletionStatus() == QuestCompletionStatus.COMPLETED;
-    }
+        /**
+         * Determine if a player has accepted a quest.
+         *
+         * @param questName The name of the quest.
+         * @return
+         */
+        public boolean isInQuest(Player p, String questName) {
+            PreCon.notNull(p);
+            PreCon.notNullOrEmpty(questName);
 
-    /**
-     * Mark a players quest status as complete.
-     *
-     * @param p          The player.
-     * @param questName  The name of the quest.
-     *
-     * @return  True if the player quest is completed.
-     */
-    public boolean complete(Player p, String questName) {
-        PreCon.notNull(p);
-        PreCon.notNullOrEmpty(questName);
+            Quest quest = QuestManager.get(questName);
+            return quest != null && quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS;
+        }
 
-        Quest quest = QuestManager.get(questName);
-        if (quest == null)
-            return false;
+        /**
+         * Determine if a player has already completed a quest.
+         *
+         * @param p
+         * @param questName
+         * @return
+         */
+        public boolean hasCompleted(Player p, String questName) {
+            PreCon.notNull(p);
+            PreCon.notNullOrEmpty(questName);
 
-        QuestStatus status = quest.getStatus(p);
+            Quest quest = QuestManager.get(questName);
+            return quest != null && quest.getStatus(p).getCompletionStatus() == QuestCompletionStatus.COMPLETED;
+        }
 
-        if (status.getCompletionStatus() != QuestCompletionStatus.NOT_COMPLETED)
+        /**
+         * Mark a players quest status as complete.
+         *
+         * @param p         The player.
+         * @param questName The name of the quest.
+         * @return True if the player quest is completed.
+         */
+        public boolean complete(Player p, String questName) {
+            PreCon.notNull(p);
+            PreCon.notNullOrEmpty(questName);
+
+            Quest quest = QuestManager.get(questName);
+            if (quest == null)
+                return false;
+
+            QuestStatus status = quest.getStatus(p);
+
+            if (status.getCompletionStatus() != QuestCompletionStatus.NOT_COMPLETED)
+                return true;
+
+            quest.finishQuest(p);
+
             return true;
+        }
 
-        quest.finishQuest(p);
+        /**
+         * Join player to a quest.
+         *
+         * @param p         The player.
+         * @param questName The name of the quest.
+         * @return True if quest was found and player joined.
+         */
+        public boolean joinQuest(Player p, String questName) {
 
-        return true;
-    }
+            final Quest quest = QuestManager.get(questName);
+            if (quest == null)
+                return false;
 
-    /**
-     * Join player to a quest.
-     *
-     * @param p          The player.
-     * @param questName  The name of the quest.
-     *
-     * @return  True if quest was found and player joined.
-     */
-    public boolean joinQuest(Player p, String questName) {
+            quest.acceptQuest(p);
 
-        final Quest quest = QuestManager.get(questName);
-        if (quest == null)
-            return false;
+            return true;
+        }
 
-        quest.acceptQuest(p);
+        /**
+         * Ask the player to accept a quest.
+         *
+         * @param p         The player to ask.
+         * @param questName The name of the quest.
+         * @param onAccept  Runnable to run if the player accepts.
+         */
+        public void queryQuest(final Player p, String questName, final Runnable onAccept) {
 
-        return true;
-    }
+            final Quest quest = QuestManager.get(questName);
+            if (quest == null)
+                return;
 
-    /**
-     * Ask the player to accept a quest.
-     *
-     * @param p          The player to ask.
-     * @param questName  The name of the quest.
-     * @param onAccept   Runnable to run if the player accepts.
-     */
-    public void queryQuest(final Player p, String questName, final Runnable onAccept) {
+            ResponseHandler handler = new ResponseHandler() {
 
-        final Quest quest = QuestManager.get(questName);
-        if (quest == null)
-            return;
+                @Override
+                public void onResponse(ResponseType response) {
 
-        ResponseHandler handler = new ResponseHandler() {
+                    if (response == ResponseType.ACCEPT) {
 
-            @Override
-            public void onResponse(ResponseType response) {
+                        quest.acceptQuest(p);
 
-                if (response == ResponseType.ACCEPT) {
+                        if (onAccept != null)
+                            onAccept.run();
+                    }
+                }
+            };
 
-                    quest.acceptQuest(p);
+            ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
+                    questName, p, handler, ResponseType.ACCEPT);
 
-                    if (onAccept != null)
+            _requests.add(request);
+
+            Msg.tell(p, "{WHITE}Type '{YELLOW}/accept{WHITE}' to accept the quest.");
+            Msg.tell(p, "Expires in 30 seconds.");
+
+        }
+
+        /**
+         * Ask the player a question.
+         *
+         * @param p        The player to ask.
+         * @param context  The name of the context.
+         * @param question The question to ask the player.
+         * @param onAccept Runnable to run if the player accepts.
+         */
+        public void query(final Player p, String context, String question, final Runnable onAccept) {
+            PreCon.notNull(p);
+            PreCon.notNullOrEmpty(context);
+            PreCon.notNull(question);
+            PreCon.notNull(onAccept);
+
+            ResponseHandler handler = new ResponseHandler() {
+
+                @Override
+                public void onResponse(ResponseType response) {
+
+                    if (response == ResponseType.YES) {
                         onAccept.run();
+                    }
                 }
-            }
-        };
+            };
 
-        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                questName, p, handler, ResponseType.ACCEPT);
+            ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
+                    context, p, handler, ResponseType.YES);
 
-        _requests.add(request);
+            _requests.add(request);
 
-        Msg.tell(p, "{WHITE}Type '{YELLOW}/accept{WHITE}' to accept the quest.");
-        Msg.tell(p, "Expires in 30 seconds.");
-
-    }
-
-    /**
-     * Ask the player a question.
-     *
-     * @param p          The player to ask.
-     * @param context    The name of the context.
-     * @param question   The question to ask the player.
-     * @param onAccept   Runnable to run if the player accepts.
-     */
-    public void query(final Player p, String context, String question, final Runnable onAccept) {
-        PreCon.notNull(p);
-        PreCon.notNullOrEmpty(context);
-        PreCon.notNull(question);
-        PreCon.notNull(onAccept);
-
-        ResponseHandler handler = new ResponseHandler() {
-
-            @Override
-            public void onResponse(ResponseType response) {
-
-                if (response == ResponseType.YES) {
-                    onAccept.run();
-                }
-            }
-        };
-
-        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                context, p, handler, ResponseType.YES);
-
-        _requests.add(request);
-
-        Msg.tell(p, question);
-        Msg.tell(p, "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.");
-        Msg.tell(p, "Expires in 30 seconds.");
+            Msg.tell(p, question);
+            Msg.tell(p, "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.");
+            Msg.tell(p, "Expires in 30 seconds.");
+        }
     }
 }

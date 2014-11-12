@@ -45,7 +45,7 @@ import java.util.Set;
         description = "Provide scripts with API access to ScriptRegion events.")
 public class ScriptRegions extends GenericsScriptApi {
 
-    private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
+    private static ApiObject _api;
 
     /**
      * Constructor.
@@ -56,120 +56,123 @@ public class ScriptRegions extends GenericsScriptApi {
 
         // quests is always the owning plugin
         super(ArborianQuests.getPlugin());
+
+        _api = new ApiObject();
     }
 
     @Override
     public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        return this;
+        return _api;
     }
 
-    @Override
-    public void reset() {
-        for (ScriptRegion region: _referencedRegions) {
-            region.clearHandlers();
+    public static class ApiObject implements IScriptApiObject {
+
+        private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
+
+        @Override
+        public void reset() {
+            for (ScriptRegion region : _referencedRegions) {
+                region.clearHandlers();
+            }
+            _referencedRegions.clear();
         }
-        _referencedRegions.clear();
-    }
 
-    /**
-     * Add a handler to execute whenever a player enters a script region.
-     *
-     * @param regionName  The name of the script region.
-     * @param onEnter     The handler.
-     *
-     * @return  True if successful.
-     */
-    public boolean onEnter(String regionName, IScriptRegionResult onEnter) {
-        PreCon.notNullOrEmpty(regionName);
-        PreCon.notNull(onEnter);
+        /**
+         * Add a handler to execute whenever a player enters a script region.
+         *
+         * @param regionName The name of the script region.
+         * @param onEnter    The handler.
+         * @return True if successful.
+         */
+        public boolean onEnter(String regionName, IScriptRegionResult onEnter) {
+            PreCon.notNullOrEmpty(regionName);
+            PreCon.notNull(onEnter);
 
-        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
-        if (region == null)
+            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            if (region == null)
+                return false;
+
+            if (region.addOnEnter(onEnter)) {
+                _referencedRegions.add(region);
+                return true;
+            }
+
             return false;
-
-        if (region.addOnEnter(onEnter)) {
-            _referencedRegions.add(region);
-            return true;
         }
 
-        return false;
-    }
+        /**
+         * Add a handler to execute whenever a player enters a script region and is on the
+         * specified quest. Execution goes to the most recent quest the player is on.
+         *
+         * @param regionName The name of the script region.
+         * @param questName  The name of the quest.
+         * @param onEnter    The handler.
+         * @return True if successful.
+         */
+        public boolean onQuestEnter(String regionName, String questName, IScriptRegionResult onEnter) {
+            PreCon.notNullOrEmpty(regionName);
+            PreCon.notNullOrEmpty(questName);
+            PreCon.notNull(onEnter);
 
-    /**
-     * Add a handler to execute whenever a player enters a script region and is on the
-     * specified quest. Execution goes to the most recent quest the player is on.
-     *
-     * @param regionName  The name of the script region.
-     * @param questName   The name of the quest.
-     * @param onEnter     The handler.
-     *
-     * @return  True if successful.
-     */
-    public boolean onQuestEnter(String regionName, String questName, IScriptRegionResult onEnter) {
-        PreCon.notNullOrEmpty(regionName);
-        PreCon.notNullOrEmpty(questName);
-        PreCon.notNull(onEnter);
+            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            if (region == null)
+                return false;
 
-        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
-        if (region == null)
+            if (region.addOnQuestEnter(questName, onEnter)) {
+                _referencedRegions.add(region);
+                return true;
+            }
+
             return false;
-
-        if (region.addOnQuestEnter(questName, onEnter)) {
-            _referencedRegions.add(region);
-            return true;
         }
 
-        return false;
-    }
+        /**
+         * Add a handler to execute whenever a player leaves a script region.
+         *
+         * @param regionName The name of the script region.
+         * @param onLeave    The handler.
+         * @return True if successful.
+         */
+        public boolean onLeave(String regionName, IScriptRegionResult onLeave) {
+            PreCon.notNullOrEmpty(regionName);
+            PreCon.notNull(onLeave);
 
-    /**
-     * Add a handler to execute whenever a player leaves a script region.
-     *
-     * @param regionName  The name of the script region.
-     * @param onLeave     The handler.
-     *
-     * @return  True if successful.
-     */
-    public boolean onLeave(String regionName, IScriptRegionResult onLeave) {
-        PreCon.notNullOrEmpty(regionName);
-        PreCon.notNull(onLeave);
+            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            if (region == null)
+                return false;
 
-        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
-        if (region == null)
+            if (region.addOnLeave(onLeave)) {
+                _referencedRegions.add(region);
+                return true;
+            }
+
             return false;
-
-        if (region.addOnLeave(onLeave)) {
-            _referencedRegions.add(region);
-            return true;
         }
 
-        return false;
-    }
+        /**
+         * Add a handler to execute whenever a player leaves a script region and is on
+         * the specified quest. Execution goes to the most recent quest the player is on.
+         *
+         * @param regionName The name of the script region.
+         * @param questName  The name of the quest.
+         * @param onLeave    The handler.
+         * @return True if successful.
+         */
+        public boolean onQuestLeave(String regionName, String questName, IScriptRegionResult onLeave) {
+            PreCon.notNullOrEmpty(regionName);
+            PreCon.notNull(onLeave);
 
-    /**
-     * Add a handler to execute whenever a player leaves a script region and is on
-     * the specified quest. Execution goes to the most recent quest the player is on.
-     *
-     * @param regionName  The name of the script region.
-     * @param questName   The name of the quest.
-     * @param onLeave     The handler.
-     *
-     * @return  True if successful.
-     */
-    public boolean onQuestLeave(String regionName, String questName, IScriptRegionResult onLeave) {
-        PreCon.notNullOrEmpty(regionName);
-        PreCon.notNull(onLeave);
+            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            if (region == null)
+                return false;
 
-        ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
-        if (region == null)
+            if (region.addOnQuestLeave(questName, onLeave)) {
+                _referencedRegions.add(region);
+                return true;
+            }
+
             return false;
-
-        if (region.addOnQuestLeave(questName, onLeave)) {
-            _referencedRegions.add(region);
-            return true;
         }
-
-        return false;
     }
 
 }

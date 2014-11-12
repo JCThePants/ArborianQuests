@@ -55,11 +55,6 @@ public class ScriptLocations extends GenericsScriptApi {
         return new ApiObject();
     }
 
-    @Override
-    public void reset() {
-        // do nothing
-    }
-
     public static class ApiObject implements IScriptApiObject {
 
         @Override
