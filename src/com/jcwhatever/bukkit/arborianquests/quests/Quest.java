@@ -179,7 +179,7 @@ public class Quest {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        _playerNode.set(playerId.toString() + ".flags" + flagName, true);
+        _playerNode.set(playerId.toString() + ".flags." + flagName, true);
         _playerNode.saveAsync(null);
     }
 
@@ -193,7 +193,7 @@ public class Quest {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        _playerNode.remove(playerId.toString() + ".flags" + flagName);
+        _playerNode.remove(playerId.toString() + ".flags." + flagName);
         _playerNode.saveAsync(null);
     }
 
