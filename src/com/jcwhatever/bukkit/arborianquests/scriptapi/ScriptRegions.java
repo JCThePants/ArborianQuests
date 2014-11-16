@@ -32,16 +32,18 @@ import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+
 import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Provide scripts with API access to {@code ScriptRegion} events.
  */
 @IScriptApiInfo(
-        variableName = "regions",
+        variableName = "questRegions",
         description = "Provide scripts with API access to ScriptRegion events.")
 public class ScriptRegions extends GenericsScriptApi {
 
@@ -75,6 +77,18 @@ public class ScriptRegions extends GenericsScriptApi {
                 region.clearHandlers();
             }
             _referencedRegions.clear();
+        }
+
+        /**
+         * Get a quest region by name.
+         *
+         * @param name  The name of the region.
+         */
+        @Nullable
+        public ScriptRegion getRegion(String name) {
+            PreCon.notNullOrEmpty(name);
+
+            return ArborianQuests.getPlugin().getScriptRegionManager().getRegion(name);
         }
 
         /**
