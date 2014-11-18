@@ -30,11 +30,11 @@ import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
 
 public class QuestManager {
 
@@ -52,6 +52,7 @@ public class QuestManager {
 
         IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
         dataNode.load();
+
         dataNode.set("quest-name", questName);
         dataNode.set("display-name", displayName);
         dataNode.saveAsync(null);

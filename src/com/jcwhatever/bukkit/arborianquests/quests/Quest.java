@@ -77,7 +77,7 @@ public class Quest {
 
     public QuestStatus getStatus(UUID playerId) {
         //noinspection ConstantConditions
-        return _playerNode.getEnum(playerId.toString(), QuestStatus.NONE, QuestStatus.class);
+        return _playerNode.getEnum(playerId.toString() + ".status", QuestStatus.NONE, QuestStatus.class);
     }
 
     public void acceptQuest(Player p) {
