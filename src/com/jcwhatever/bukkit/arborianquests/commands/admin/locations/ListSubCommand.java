@@ -49,7 +49,7 @@ import java.util.List;
 
 public class ListSubCommand extends AbstractCommand {
 
-    @Localizable static final String _PAGINATOR_TITLE = "Quest Regions";
+    @Localizable static final String _PAGINATOR_TITLE = "Quest Locations";
 
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
