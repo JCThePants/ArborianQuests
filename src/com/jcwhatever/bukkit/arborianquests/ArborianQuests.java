@@ -127,6 +127,7 @@ public class ArborianQuests extends GenericsPlugin {
 
         ScriptApiRepo.registerApiType(this, ScriptQuests.class);
         ScriptApiRepo.registerApiType(this, ScriptRegions.class);
+        ScriptApiRepo.registerApiType(this, ScriptLocations.class);
         ScriptApiRepo.registerApiType(this, ScriptFlags.class);
         ScriptApiRepo.registerApiType(this, ScriptItems.class);
 
