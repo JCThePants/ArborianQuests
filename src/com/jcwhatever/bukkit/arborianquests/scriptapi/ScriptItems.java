@@ -30,7 +30,7 @@ import com.jcwhatever.bukkit.generic.items.floating.FloatingItem;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItem.PickupHandler;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItemManager;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-@IScriptApiInfo(
+@ScriptApiInfo(
         variableName = "questItems",
         description = "Give script api access to quest items.")
 public class ScriptItems extends GenericsScriptApi {

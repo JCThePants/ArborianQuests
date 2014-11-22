@@ -34,11 +34,11 @@ import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionSt
 import com.jcwhatever.bukkit.generic.collections.LifespanEndAction;
 import com.jcwhatever.bukkit.generic.collections.TimedSet;
 import com.jcwhatever.bukkit.generic.commands.response.CommandRequests;
-import com.jcwhatever.bukkit.generic.commands.response.ResponseHandler;
+import com.jcwhatever.bukkit.generic.commands.response.IResponseHandler;
 import com.jcwhatever.bukkit.generic.commands.response.ResponseRequest;
 import com.jcwhatever.bukkit.generic.commands.response.ResponseType;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -48,7 +48,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Provide scripts with API for quests.
  */
-@IScriptApiInfo(
+@ScriptApiInfo(
         variableName = "quests",
         description = "Provide scripts API access for quests.")
 public class ScriptQuests extends GenericsScriptApi {
@@ -200,7 +200,7 @@ public class ScriptQuests extends GenericsScriptApi {
             if (quest == null)
                 return;
 
-            ResponseHandler handler = new ResponseHandler() {
+            IResponseHandler handler = new IResponseHandler() {
 
                 @Override
                 public void onResponse(ResponseType response) {
@@ -239,7 +239,7 @@ public class ScriptQuests extends GenericsScriptApi {
             PreCon.notNull(question);
             PreCon.notNull(onAccept);
 
-            ResponseHandler handler = new ResponseHandler() {
+            IResponseHandler handler = new IResponseHandler() {
 
                 @Override
                 public void onResponse(ResponseType response) {

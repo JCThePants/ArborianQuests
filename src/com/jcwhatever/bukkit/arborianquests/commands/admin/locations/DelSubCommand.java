@@ -29,13 +29,13 @@ import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import org.bukkit.command.CommandSender;
 
-@ICommandInfo(
+@CommandInfo(
         parent="locations",
         command = "del",
         staticParams = { "locationName" },

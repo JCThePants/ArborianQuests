@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.arguments.LocationResponse;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
@@ -40,7 +40,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@ICommandInfo(
+@CommandInfo(
         parent="locations",
         command = "add",
         staticParams = { "locationName", "location" },

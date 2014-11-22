@@ -28,7 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.IScriptRegionResult;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScriptApiInfo;
+import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 /**
  * Provide scripts with API access to {@code ScriptRegion} events.
  */
-@IScriptApiInfo(
+@ScriptApiInfo(
         variableName = "questRegions",
         description = "Provide scripts with API access to ScriptRegion events.")
 public class ScriptRegions extends GenericsScriptApi {

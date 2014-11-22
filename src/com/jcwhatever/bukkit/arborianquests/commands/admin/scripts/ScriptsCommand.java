@@ -25,9 +25,9 @@
 package com.jcwhatever.bukkit.arborianquests.commands.admin.scripts;
 
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 
-@ICommandInfo(
+@CommandInfo(
         command={"scripts"},
         description="Manage quest scripts.")
 public class ScriptsCommand extends AbstractCommand {

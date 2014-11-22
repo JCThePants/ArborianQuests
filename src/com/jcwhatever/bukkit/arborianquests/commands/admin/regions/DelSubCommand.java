@@ -28,7 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.arborianquests.Lang;
@@ -36,7 +36,7 @@ import com.jcwhatever.bukkit.generic.language.Localizable;
 import org.bukkit.command.CommandSender;
 
 
-@ICommandInfo(
+@CommandInfo(
         parent="regions",
         command = "del",
         staticParams = { "regionName" },

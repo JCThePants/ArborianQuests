@@ -28,7 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
@@ -38,7 +38,7 @@ import com.jcwhatever.bukkit.generic.language.Localizable;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@ICommandInfo(
+@CommandInfo(
         command = "replay",
         staticParams = { "questName" },
         usage = "/{plugin-command} replay <questName>",

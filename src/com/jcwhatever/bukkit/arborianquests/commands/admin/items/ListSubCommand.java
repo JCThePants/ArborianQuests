@@ -29,7 +29,7 @@ import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.generic.items.ItemStackHelper;
@@ -42,7 +42,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-@ICommandInfo(
+@CommandInfo(
         parent="items",
         command = "list",
         staticParams = { "page=1" },

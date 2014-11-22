@@ -25,9 +25,9 @@
 package com.jcwhatever.bukkit.arborianquests.commands.admin.items;
 
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 
-@ICommandInfo(
+@CommandInfo(
         command={"items"},
         description="Manage quest items.")
 public class ItemsCommand extends AbstractCommand {

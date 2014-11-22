@@ -28,7 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.ICommandInfo;
+import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
@@ -39,7 +39,7 @@ import com.jcwhatever.bukkit.generic.regions.data.RegionSelection;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@ICommandInfo(
+@CommandInfo(
         parent="regions",
         command = "add",
         staticParams = { "regionName" },
