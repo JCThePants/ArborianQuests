@@ -139,7 +139,7 @@ public class ScriptRegion extends Region {
 
 
     @Override
-    protected void onPlayerEnter(Player p) {
+    protected void onPlayerEnter(Player p, EnterRegionReason reason) {
 
         // run global handlers
         for (IScriptRegionResult subscriber : _onEnter) {
@@ -161,7 +161,7 @@ public class ScriptRegion extends Region {
     }
 
     @Override
-    protected void onPlayerLeave(Player p) {
+    protected void onPlayerLeave(Player p, LeaveRegionReason reason) {
 
         // run global handlers
         for (IScriptRegionResult subscriber : _onLeave) {
@@ -183,12 +183,12 @@ public class ScriptRegion extends Region {
     }
 
     @Override
-    protected boolean canDoPlayerEnter(Player p) {
+    protected boolean canDoPlayerEnter(Player p, EnterRegionReason reason) {
         return !_onEnter.isEmpty() || !_onQuestEnter.isEmpty();
     }
 
     @Override
-    protected boolean canDoPlayerLeave(Player p) {
+    protected boolean canDoPlayerLeave(Player p, LeaveRegionReason reason) {
         return !_onLeave.isEmpty() || !_onQuestLeave.isEmpty();
     }
 }
