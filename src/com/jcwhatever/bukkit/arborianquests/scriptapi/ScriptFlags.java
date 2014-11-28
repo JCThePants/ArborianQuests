@@ -3,7 +3,7 @@ package com.jcwhatever.bukkit.arborianquests.scriptapi;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
-import com.jcwhatever.bukkit.generic.player.PlayerHelper;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
@@ -69,7 +69,7 @@ public class ScriptFlags extends GenericsScriptApi {
             PreCon.notNullOrEmpty(questName);
             PreCon.notNullOrEmpty(flagName);
 
-            Player p = PlayerHelper.getPlayer(player);
+            Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
             Quest quest = QuestManager.get(questName);
@@ -88,7 +88,7 @@ public class ScriptFlags extends GenericsScriptApi {
             PreCon.notNullOrEmpty(questName);
             PreCon.notNullOrEmpty(flagName);
 
-            Player p = PlayerHelper.getPlayer(player);
+            Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
             Quest quest = QuestManager.get(questName);
@@ -111,7 +111,7 @@ public class ScriptFlags extends GenericsScriptApi {
             PreCon.notNullOrEmpty(questName);
             PreCon.notNullOrEmpty(flagName);
 
-            Player p = PlayerHelper.getPlayer(player);
+            Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
             Quest quest = QuestManager.get(questName);
