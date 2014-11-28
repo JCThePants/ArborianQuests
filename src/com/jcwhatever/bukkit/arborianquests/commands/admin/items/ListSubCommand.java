@@ -32,7 +32,7 @@ import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
-import com.jcwhatever.bukkit.generic.items.ItemStackHelper;
+import com.jcwhatever.bukkit.generic.utils.ItemStackUtils;
 import com.jcwhatever.bukkit.generic.items.serializer.ItemStackSerializer.SerializerOutputType;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
@@ -63,7 +63,7 @@ public class ListSubCommand extends AbstractCommand {
         List<ScriptItem> items = ArborianQuests.getPlugin().getScriptItemManager().getItems();
 
         for (ScriptItem item : items) {
-            pagin.add(item.getName(), ItemStackHelper.serializeToString(item.getItem(), SerializerOutputType.COLOR));
+            pagin.add(item.getName(), ItemStackUtils.serializeToString(item.getItem(), SerializerOutputType.COLOR));
         }
 
         pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
