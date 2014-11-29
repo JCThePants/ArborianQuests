@@ -27,6 +27,8 @@ package com.jcwhatever.bukkit.arborianquests.commands.users;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
+import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
+import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
@@ -48,6 +50,8 @@ public class ReplayCommand extends AbstractCommand {
 
     @Localizable static final String _NOT_CONSOLE = "Console does not have quests.";
     @Localizable static final String _NOT_FOUND = "Quest named '{0}' not found.";
+    @Localizable static final String _FAIL_IN_PROGRESS = "Quest is in progress and cannot be cleared.";
+    @Localizable static final String _OP_IN_PROGRESS = "Quest is in progress but is being cleared anyways since you are Opped.";
     @Localizable static final String _SUCCESS = "Quest cleared and ready to replay.";
 
     @Override
@@ -65,6 +69,20 @@ public class ReplayCommand extends AbstractCommand {
         }
 
         Player p = (Player)sender;
+
+        QuestStatus status = quest.getStatus(p);
+
+        if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS) {
+
+            if (p.isOp()) {
+                tell(sender, Lang.get(_OP_IN_PROGRESS));
+            }
+            else {
+
+                tellError(sender, Lang.get(_FAIL_IN_PROGRESS));
+                return; // finished
+            }
+        }
 
         quest.clearFlags(p.getUniqueId());
 
