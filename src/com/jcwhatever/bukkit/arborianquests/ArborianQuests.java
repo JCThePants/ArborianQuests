@@ -39,7 +39,7 @@ import com.jcwhatever.bukkit.generic.scripting.GenericsScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.IScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
-import com.jcwhatever.bukkit.generic.scripting.ScriptHelper;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
@@ -117,7 +117,7 @@ public class ArborianQuests extends GenericsPlugin {
 
         _scriptManager = new GenericsScriptManager(this);
 
-        _scriptApi = ScriptHelper.getDefaultApi(this, _scriptManager);
+        _scriptApi = ScriptUtils.getDefaultApi(this, _scriptManager);
         _scriptApi.add(new ScriptMeta(this));
         _scriptApi.add(new ScriptFlags(this));
         _scriptApi.add(new ScriptQuests(this));
