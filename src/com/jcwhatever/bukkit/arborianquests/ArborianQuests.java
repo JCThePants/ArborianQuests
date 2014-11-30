@@ -115,7 +115,7 @@ public class ArborianQuests extends GenericsPlugin {
         _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
-        _scriptManager = new GenericsScriptManager(this, ScriptHelper.getGlobalEngineManager());
+        _scriptManager = new GenericsScriptManager(this);
 
         _scriptApi = ScriptHelper.getDefaultApi(this, _scriptManager);
         _scriptApi.add(new ScriptMeta(this));
