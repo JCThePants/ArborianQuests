@@ -30,8 +30,6 @@ import com.jcwhatever.bukkit.generic.items.floating.FloatingItem;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItem.PickupHandler;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItemManager;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
@@ -41,46 +39,31 @@ import com.jcwhatever.bukkit.generic.utils.PreCon;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nullable;
 
-@ScriptApiInfo(
-        variableName = "questItems",
-        description = "Give script api access to quest items.")
-public class ApiItems extends GenericsScriptApi {
+public class Items {
 
     private static ApiObject _api;
-    private static FloatingItemManager _manager;
 
     static {
 
         IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("floating-items"));
-        _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
+        FloatingItemManager manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
 
-        List<FloatingItem> floatingItems = _manager.getItems();
+        List<FloatingItem> floatingItems = manager.getItems();
 
         for (FloatingItem item : floatingItems) {
-            _manager.remove(item.getName());
+            manager.remove(item.getName());
         }
+
+        _api = new ApiObject(manager);
     }
 
-    /**
-     * Constructor.
-     *
-     * @param plugin The owning plugin
-     */
-    public ApiItems(Plugin plugin) {
-        super(plugin);
-
-        _api = new ApiObject(_manager);
-    }
-
-    @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
+    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
         return _api;
     }
 

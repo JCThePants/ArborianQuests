@@ -1,38 +1,19 @@
 package com.jcwhatever.bukkit.arborianquests.scripting;
 
-import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
-import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
-@ScriptApiInfo(
-        variableName = "questFlags",
-        description = "Provide script access to ArborianQuests flags.")
-public class ApiFlags extends GenericsScriptApi {
+public class Flags {
 
     private ApiObject _api;
 
-    /**
-     * Constructor. Automatically adds variable to script.
-     *
-     * @param plugin The owning plugin
-     */
-    public ApiFlags(Plugin plugin) {
-
-        // Arborian Quests is always the owning plugin
-        super(ArborianQuests.getPlugin());
-    }
-
-    @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
+    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
         if (_api == null)
             _api = new ApiObject();
 

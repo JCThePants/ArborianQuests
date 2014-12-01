@@ -28,42 +28,18 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.IScriptRegionResult;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
-
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nullable;
 
-/**
- * Provide scripts with API access to {@code ScriptRegion} events.
- */
-@ScriptApiInfo(
-        variableName = "questRegions",
-        description = "Provide scripts with API access to ScriptRegion events.")
-public class ApiRegions extends GenericsScriptApi {
+public class Regions {
 
-    private static ApiObject _api;
+    private static ApiObject _api = new ApiObject();
 
-    /**
-     * Constructor.
-     *
-     * @param plugin  Required plugin parameter for script api repository.
-     */
-    public ApiRegions(Plugin plugin) {
-
-        // quests is always the owning plugin
-        super(ArborianQuests.getPlugin());
-
-        _api = new ApiObject();
-    }
-
-    @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
+    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
         return _api;
     }
 

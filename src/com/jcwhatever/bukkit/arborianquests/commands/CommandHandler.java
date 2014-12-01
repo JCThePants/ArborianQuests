@@ -29,7 +29,6 @@ import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.items.ItemsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.scripts.ScriptsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.users.ReplayCommand;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
@@ -52,7 +51,6 @@ public class CommandHandler extends AbstractCommandHandler{
         registerCommand(ItemsCommand.class);
         registerCommand(LocationsCommand.class);
         registerCommand(RegionsCommand.class);
-        registerCommand(ScriptsCommand.class);
         registerCommand(ListCommand.class);
     }
 }

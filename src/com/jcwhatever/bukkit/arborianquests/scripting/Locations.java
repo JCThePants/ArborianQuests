@@ -27,33 +27,17 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 import javax.annotation.Nullable;
 
-@ScriptApiInfo(
-        variableName = "questLocations",
-        description = "Get quest scriptable locations.")
-public class ApiLocations extends GenericsScriptApi {
+public class Locations {
 
-    /**
-     * Constructor.
-     *
-     * @param plugin The owning plugin
-     */
-    public ApiLocations(Plugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public IScriptApiObject getApiObject(IEvaluatedScript script) {
+    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
         return new ApiObject();
     }
 

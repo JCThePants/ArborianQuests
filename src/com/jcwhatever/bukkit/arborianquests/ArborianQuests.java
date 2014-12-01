@@ -28,23 +28,13 @@ import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiFlags;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiItems;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiLocations;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiMeta;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiQuests;
-import com.jcwhatever.bukkit.arborianquests.scripting.ApiRegions;
-import com.jcwhatever.bukkit.arborianquests.scripting.ScriptManager;
+import com.jcwhatever.bukkit.arborianquests.scripting.QuestsApi;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.scripting.AbstractScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.ScriptUtils;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
-
-import java.io.File;
 
 public class ArborianQuests extends GenericsPlugin {
 
@@ -54,7 +44,6 @@ public class ArborianQuests extends GenericsPlugin {
         return _instance;
     }
 
-    private AbstractScriptManager _scriptManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
     private ScriptItemManager _scriptItemManager;
@@ -65,10 +54,6 @@ public class ArborianQuests extends GenericsPlugin {
         super();
 
         _instance = this;
-    }
-
-    public AbstractScriptManager getScriptManager() {
-        return _scriptManager;
     }
 
     public ScriptRegionManager getScriptRegionManager() {
@@ -103,14 +88,6 @@ public class ArborianQuests extends GenericsPlugin {
         _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
-        loadScripts();
-
-        ScriptApiRepo.registerApiType(this, ApiQuests.class);
-        ScriptApiRepo.registerApiType(this, ApiRegions.class);
-        ScriptApiRepo.registerApiType(this, ApiLocations.class);
-        ScriptApiRepo.registerApiType(this, ApiFlags.class);
-        ScriptApiRepo.registerApiType(this, ApiItems.class);
-
         IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
         regionNode.load();
 
@@ -124,39 +101,14 @@ public class ArborianQuests extends GenericsPlugin {
         _scriptLocationManager = new ScriptLocationManager(locationNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);
 
-        _scriptManager.reload();
-
         registerCommands(new CommandHandler());
+
+        ScriptApiRepo.registerApiType(this, QuestsApi.class);
     }
 
     @Override
     protected void onDisablePlugin() {
-        _scriptManager.clearScripts();
 
-        ScriptApiRepo.unregisterApiType(this, ApiQuests.class);
-        ScriptApiRepo.unregisterApiType(this, ApiRegions.class);
-    }
-
-    public void reloadScripts() {
-
-        _scriptManager.reload();
-    }
-
-    private void loadScripts() {
-        File scriptDir = new File(getDataFolder(), "scripts");
-        if (!scriptDir.exists() && !scriptDir.mkdirs())
-            throw new RuntimeException("Failed to create scripts folder.");
-
-        _scriptManager = new ScriptManager(this, scriptDir);
-
-        _scriptManager.addScriptApi(ScriptUtils.getDefaultApi(this, _scriptManager));
-        _scriptManager.addScriptApi(new ApiMeta(this));
-        _scriptManager.addScriptApi(new ApiFlags(this));
-        _scriptManager.addScriptApi(new ApiQuests(this));
-        _scriptManager.addScriptApi(new ApiRegions(this));
-        _scriptManager.addScriptApi(new ApiLocations(this));
-        _scriptManager.addScriptApi(new ApiItems(this));
-
-
+        ScriptApiRepo.unregisterApiType(this, QuestsApi.class);
     }
 }

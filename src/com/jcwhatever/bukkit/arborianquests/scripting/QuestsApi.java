@@ -51,45 +51,65 @@ import org.bukkit.plugin.Plugin;
 @ScriptApiInfo(
         variableName = "quests",
         description = "Provide scripts API access for quests.")
-public class ApiQuests extends GenericsScriptApi {
+public class QuestsApi extends GenericsScriptApi {
 
-    private static ApiObject _api;
+    private static TimedSet<ResponseRequest> _requests = new TimedSet<ResponseRequest>(20, 600);
+
+    private static Flags _flagsApi = new Flags();
+    private static Items _itemsApi = new Items();
+    private static Locations _locationsApi = new Locations();
+    private static Meta _metaApi = new Meta(ArborianQuests.getPlugin());
+    private static Regions _regionsApi = new Regions();
 
     /**
      * Constructor.
      *
      * @param plugin  required plugin constructor for script api repository.
      */
-    public ApiQuests(Plugin plugin) {
+    public QuestsApi(@SuppressWarnings("unused") Plugin plugin) {
 
         // quests is always the owning plugin.
         super(ArborianQuests.getPlugin());
-
-        _api = new ApiObject();
     }
 
     @Override
     public IScriptApiObject getApiObject(IEvaluatedScript script) {
-        return _api;
+        return new ApiObject(script);
     }
 
     public static class ApiObject implements IScriptApiObject {
 
-        TimedSet<ResponseRequest> _requests = new TimedSet<ResponseRequest>(20, 600);
+        public final IScriptApiObject flags;
+        public final IScriptApiObject items;
+        public final IScriptApiObject locations;
+        public final IScriptApiObject meta;
+        public final IScriptApiObject regions;
 
-        ApiObject() {
+        ApiObject(IEvaluatedScript script) {
             _requests.addOnLifetimeEnd(new LifespanEndAction<ResponseRequest>() {
                 @Override
                 public void onEnd(ResponseRequest item) {
                     CommandRequests.cancel(item);
                 }
             });
+
+            flags = _flagsApi.getApiObject(script);
+            items = _itemsApi.getApiObject(script);
+            locations = _locationsApi.getApiObject(script);
+            meta = _metaApi.getApiObject(script);
+            regions = _regionsApi.getApiObject(script);
         }
 
         @Override
         public void reset() {
             for (ResponseRequest request : _requests)
                 CommandRequests.cancel(request);
+
+            flags.reset();
+            items.reset();
+            locations.reset();
+            meta.reset();
+            regions.reset();
         }
 
         /**

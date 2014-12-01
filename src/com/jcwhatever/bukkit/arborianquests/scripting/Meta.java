@@ -6,17 +6,18 @@ import com.jcwhatever.bukkit.generic.scripting.api.ScriptApiMeta;
 
 import org.bukkit.plugin.Plugin;
 
+// annotation required but not used
 @ScriptApiInfo(
-        variableName = "questMeta",
-        description = "Gives script access to ArborianQuests meta data.")
-public class ApiMeta extends ScriptApiMeta {
+        variableName = "questsScriptApiMeta",
+        description = "")
+public class Meta extends ScriptApiMeta {
 
     /**
      * Constructor. Automatically adds variable to script.
      *
      * @param plugin   The owning plugin
      */
-    public ApiMeta(Plugin plugin) {
+    public Meta(Plugin plugin) {
         super(plugin, ArborianQuests.getPlugin().getMetaDataNode());
     }
 }
