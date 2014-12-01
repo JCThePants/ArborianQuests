@@ -32,7 +32,7 @@ import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.bukkit.generic.collections.LifespanEndAction;
-import com.jcwhatever.bukkit.generic.collections.TimedSet;
+import com.jcwhatever.bukkit.generic.collections.TimedHashSet;
 import com.jcwhatever.bukkit.generic.commands.response.CommandRequests;
 import com.jcwhatever.bukkit.generic.commands.response.IResponseHandler;
 import com.jcwhatever.bukkit.generic.commands.response.ResponseRequest;
@@ -53,7 +53,7 @@ import org.bukkit.plugin.Plugin;
         description = "Provide scripts API access for quests.")
 public class QuestsApi extends GenericsScriptApi {
 
-    private static TimedSet<ResponseRequest> _requests = new TimedSet<ResponseRequest>(20, 600);
+    private static TimedHashSet<ResponseRequest> _requests = new TimedHashSet<ResponseRequest>(20, 600);
 
     private static Flags _flagsApi = new Flags();
     private static Items _itemsApi = new Items();
@@ -88,7 +88,7 @@ public class QuestsApi extends GenericsScriptApi {
         public final IScriptApiObject regions;
 
         ApiObject(IEvaluatedScript script) {
-            _requests.addOnLifetimeEnd(new LifespanEndAction<ResponseRequest>() {
+            _requests.addOnLifespanEnd(new LifespanEndAction<ResponseRequest>() {
                 @Override
                 public void onEnd(ResponseRequest item) {
                     CommandRequests.cancel(item);
