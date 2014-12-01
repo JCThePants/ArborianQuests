@@ -32,6 +32,11 @@ public class Flags {
         }
 
         @Override
+        public boolean isDisposed() {
+            return false;
+        }
+
+        @Override
         public void dispose() {
             // do nothing
         }

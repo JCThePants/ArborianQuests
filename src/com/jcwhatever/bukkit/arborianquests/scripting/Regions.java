@@ -46,6 +46,12 @@ public class Regions {
     public static class ApiObject implements IScriptApiObject {
 
         private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
+        private boolean _isDisposed;
+
+        @Override
+        public boolean isDisposed() {
+            return _isDisposed;
+        }
 
         @Override
         public void dispose() {
@@ -53,6 +59,7 @@ public class Regions {
                 region.clearHandlers();
             }
             _referencedRegions.clear();
+            _isDisposed = true;
         }
 
         /**

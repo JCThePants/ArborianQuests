@@ -79,6 +79,8 @@ public class QuestsApi extends GenericsScriptApi {
 
     public static class ApiObject implements IScriptApiObject {
 
+        private boolean _isDisposed;
+
         public final IScriptApiObject flags;
         public final IScriptApiObject items;
         public final IScriptApiObject locations;
@@ -101,6 +103,11 @@ public class QuestsApi extends GenericsScriptApi {
         }
 
         @Override
+        public boolean isDisposed() {
+            return _isDisposed;
+        }
+
+        @Override
         public void dispose() {
             for (ResponseRequest request : _requests)
                 CommandRequests.cancel(request);
@@ -110,6 +117,8 @@ public class QuestsApi extends GenericsScriptApi {
             locations.dispose();
             meta.dispose();
             regions.dispose();
+
+            _isDisposed = true;
         }
 
         /**

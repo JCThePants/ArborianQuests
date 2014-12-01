@@ -73,10 +73,16 @@ public class Items {
         private LinkedList<PickupWrapper> _pickupCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _spawnCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _despawnCallbacks = new LinkedList<>();
+        private boolean _isDisposed;
 
 
         public ApiObject (FloatingItemManager manager) {
             _manager = manager;
+        }
+
+        @Override
+        public boolean isDisposed() {
+            return _isDisposed;
         }
 
         @Override
@@ -105,6 +111,8 @@ public class Items {
 
                 wrapper.getItem().removeOnDespawn(wrapper);
             }
+
+            _isDisposed = true;
         }
 
         @Nullable
