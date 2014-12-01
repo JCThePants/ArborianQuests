@@ -25,7 +25,7 @@
 package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
-import com.jcwhatever.bukkit.generic.collections.SetMap;
+import com.jcwhatever.bukkit.generic.collections.HashSetMap;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Utils;
@@ -45,7 +45,7 @@ public class Quest {
     private final String _displayName;
     private final IDataNode _playerNode;
 
-    private static SetMap<UUID, Quest> _playerQuests = new SetMap<>(100);
+    private static HashSetMap<UUID, Quest> _playerQuests = new HashSetMap<>(100);
 
     @Nullable
     public static Set<Quest> getPlayerQuests(Player p) {
