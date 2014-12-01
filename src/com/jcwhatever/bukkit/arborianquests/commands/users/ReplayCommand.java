@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.arborianquests.commands.users;
 
+import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
@@ -60,9 +60,9 @@ public class ReplayCommand extends AbstractCommand {
 
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
 
-        String questName = args.getName("questName", 32);
+        String questName = args.getName("questName", 48);
 
-        Quest quest = QuestManager.get(questName);
+        Quest quest = ArborianQuests.getQuestManager().get(questName);
         if (quest == null) {
             tellError(sender, Lang.get(_NOT_FOUND), questName);
             return; // finished

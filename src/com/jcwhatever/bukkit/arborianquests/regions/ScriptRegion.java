@@ -26,11 +26,11 @@ package com.jcwhatever.bukkit.arborianquests.regions;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.generic.collections.StackedHashMap;
 import com.jcwhatever.bukkit.generic.regions.Region;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class ScriptRegion extends Region {
 
         questName = questName.toLowerCase();
 
-        Quest quest = QuestManager.get(questName);
+        Quest quest = ArborianQuests.getQuestManager().get(questName);
         if (quest == null)
             return false;
 
@@ -128,7 +128,7 @@ public class ScriptRegion extends Region {
 
         questName = questName.toLowerCase();
 
-        Quest quest = QuestManager.get(questName);
+        Quest quest = ArborianQuests.getQuestManager().get(questName);
         if (quest == null)
             return false;
 

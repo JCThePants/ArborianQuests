@@ -1,7 +1,7 @@
 package com.jcwhatever.bukkit.arborianquests.scripting;
 
+import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
@@ -58,7 +58,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             return quest != null && quest.hasFlag(p.getUniqueId(), flagName);
         }
 
@@ -77,7 +77,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
                 return false;
 
@@ -100,7 +100,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
                 return false;
 

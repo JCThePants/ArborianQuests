@@ -60,10 +60,10 @@ public class AddAnchorSubCommand extends AbstractCommand {
 
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
 
-        String regionName = args.getName("regionName", 32);
+        String regionName = args.getName("regionName", 48);
         int diameter = args.getInteger("diameter");
 
-        ScriptRegionManager regionManager = ArborianQuests.getPlugin().getScriptRegionManager();
+        ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.getRegion(regionName);
         if (region != null) {

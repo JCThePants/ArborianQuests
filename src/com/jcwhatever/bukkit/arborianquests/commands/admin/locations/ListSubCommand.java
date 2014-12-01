@@ -58,7 +58,7 @@ public class ListSubCommand extends AbstractCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<ScriptLocation> locations = ArborianQuests.getPlugin().getScriptLocationManager().getLocations();
+        List<ScriptLocation> locations = ArborianQuests.getScriptLocationManager().getLocations();
 
         for (ScriptLocation location : locations) {
             pagin.add(location.getName(), LocationUtils.locationToString(location.getLocation()));

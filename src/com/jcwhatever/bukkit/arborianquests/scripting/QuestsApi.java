@@ -27,7 +27,6 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionStatus;
@@ -42,6 +41,7 @@ import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -122,7 +122,7 @@ public class QuestsApi extends GenericsScriptApi {
         }
 
         /**
-         * Create a quest via script. Quests are not stored and must be
+         * Create a primary quest via script. Quests are not stored and must be
          * created by the script each time it is loaded.
          *
          * @param name        The name of the quest.
@@ -130,7 +130,7 @@ public class QuestsApi extends GenericsScriptApi {
          * @return
          */
         public Quest create(String name, String displayName) {
-            return QuestManager.create(name, displayName);
+            return ArborianQuests.getQuestManager().create(name, displayName);
         }
 
         /**
@@ -141,7 +141,7 @@ public class QuestsApi extends GenericsScriptApi {
         public boolean dispose(Quest quest) {
             PreCon.notNull(quest);
 
-            return QuestManager.dispose(quest.getName());
+            return ArborianQuests.getQuestManager().dispose(quest);
         }
 
         /**
@@ -154,7 +154,7 @@ public class QuestsApi extends GenericsScriptApi {
             PreCon.notNull(p);
             PreCon.notNullOrEmpty(questName);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             return quest != null && quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS;
         }
 
@@ -169,7 +169,7 @@ public class QuestsApi extends GenericsScriptApi {
             PreCon.notNull(p);
             PreCon.notNullOrEmpty(questName);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             return quest != null && quest.getStatus(p).getCompletionStatus() == QuestCompletionStatus.COMPLETED;
         }
 
@@ -184,7 +184,7 @@ public class QuestsApi extends GenericsScriptApi {
             PreCon.notNull(p);
             PreCon.notNullOrEmpty(questName);
 
-            Quest quest = QuestManager.get(questName);
+            Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
                 return false;
 
@@ -193,7 +193,7 @@ public class QuestsApi extends GenericsScriptApi {
             if (status.getCompletionStatus() != QuestCompletionStatus.NOT_COMPLETED)
                 return true;
 
-            quest.finishQuest(p);
+            quest.finish(p);
 
             return true;
         }
@@ -207,11 +207,11 @@ public class QuestsApi extends GenericsScriptApi {
          */
         public boolean joinQuest(Player p, String questName) {
 
-            final Quest quest = QuestManager.get(questName);
+            final Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
                 return false;
 
-            quest.acceptQuest(p);
+            quest.accept(p);
 
             return true;
         }
@@ -225,7 +225,7 @@ public class QuestsApi extends GenericsScriptApi {
          */
         public void queryQuest(final Player p, String questName, final Runnable onAccept) {
 
-            final Quest quest = QuestManager.get(questName);
+            final Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
                 return;
 
@@ -236,7 +236,7 @@ public class QuestsApi extends GenericsScriptApi {
 
                     if (response == ResponseType.ACCEPT) {
 
-                        quest.acceptQuest(p);
+                        quest.accept(p);
 
                         if (onAccept != null)
                             onAccept.run();

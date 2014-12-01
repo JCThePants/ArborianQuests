@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.arborianquests;
 import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
+import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scripting.QuestsApi;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
@@ -44,6 +45,7 @@ public class ArborianQuests extends GenericsPlugin {
         return _instance;
     }
 
+    private QuestManager _questManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
     private ScriptItemManager _scriptItemManager;
@@ -56,16 +58,20 @@ public class ArborianQuests extends GenericsPlugin {
         _instance = this;
     }
 
-    public ScriptRegionManager getScriptRegionManager() {
-        return _scriptRegionManager;
+    public static QuestManager getQuestManager() {
+        return _instance._questManager;
     }
 
-    public ScriptLocationManager getScriptLocationManager() {
-        return _scriptLocationManager;
+    public static ScriptRegionManager getScriptRegionManager() {
+        return _instance._scriptRegionManager;
     }
 
-    public ScriptItemManager getScriptItemManager() {
-        return _scriptItemManager;
+    public static ScriptLocationManager getScriptLocationManager() {
+        return _instance._scriptLocationManager;
+    }
+
+    public static ScriptItemManager getScriptItemManager() {
+        return _instance._scriptItemManager;
     }
 
     @Override
@@ -97,6 +103,7 @@ public class ArborianQuests extends GenericsPlugin {
         IDataNode itemsNode = DataStorage.getStorage(this, new DataPath("items"));
         itemsNode.load();
 
+        _questManager = new QuestManager(this, getDataNode());
         _scriptRegionManager = new ScriptRegionManager(regionNode);
         _scriptLocationManager = new ScriptLocationManager(locationNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);

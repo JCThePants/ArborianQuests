@@ -32,6 +32,10 @@ import com.jcwhatever.bukkit.generic.utils.Utils;
 
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nullable;
@@ -39,13 +43,16 @@ import javax.annotation.Nullable;
 /**
  * Represents a quest and players within the quest.
  */
-public class Quest {
-
-    private final String _questName;
-    private final String _displayName;
-    private final IDataNode _playerNode;
+public abstract class Quest {
 
     private static HashSetMap<UUID, Quest> _playerQuests = new HashSetMap<>(100);
+
+    private final String _questName;
+    private String _displayName;
+    private final IDataNode _dataNode;
+    private final IDataNode _playerNode;
+    private final IDataNode _questNode;
+    private final Map<String, SubQuest> _subQuests = new HashMap<>(5);
 
     @Nullable
     public static Set<Quest> getPlayerQuests(Player p) {
@@ -54,20 +61,94 @@ public class Quest {
 
     public Quest(String questName, String displayName, IDataNode dataNode) {
         PreCon.notNullOrEmpty(questName);
-        PreCon.notNull(displayName);
+        PreCon.notNullOrEmpty(displayName);
         PreCon.notNull(dataNode);
 
         _questName = questName;
         _displayName = displayName;
+        _dataNode = dataNode;
         _playerNode = dataNode.getNode("players");
+        _questNode = dataNode.getNode("quests");
     }
 
     public String getName() {
         return _questName;
     }
 
+    public String getFullName() {
+        return _questName;
+    }
+
     public String getDisplayName() {
         return _displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        _displayName = displayName;
+    }
+
+    /**
+     * Get a sub quest of the quest by name.
+     *
+     * @param questName  The name of the sub quest.
+     */
+    @Nullable
+    public SubQuest getQuest(String questName) {
+        PreCon.notNullOrEmpty(questName);
+
+        return _subQuests.get(questName.toLowerCase());
+    }
+
+    /**
+     * Get all sub quests.
+     */
+    public List<SubQuest> getQuests() {
+        return new ArrayList<>(_subQuests.values());
+    }
+
+    /**
+     * Get or create a sub quest of the quest.
+     *
+     * @param questName    The quest name.
+     * @param displayName  The quest display name.
+     */
+    public Quest createQuest(String questName, String displayName) {
+        PreCon.notNullOrEmpty(questName);
+        PreCon.notNullOrEmpty(displayName);
+
+        questName = questName.toLowerCase();
+
+        SubQuest quest = _subQuests.get(questName);
+        if (quest != null) {
+            quest.setDisplayName(displayName);
+            return quest;
+        }
+
+        IDataNode node = _dataNode.getNode("quests." + questName);
+
+        quest = new SubQuest(this, questName, displayName, node);
+        node.set("display", displayName);
+        node.saveAsync(null);
+
+        _subQuests.put(questName, quest);
+
+        return quest;
+    }
+
+    public boolean removeQuest(String questName) {
+        PreCon.notNullOrEmpty(questName);
+
+        questName = questName.toLowerCase();
+
+        SubQuest quest = _subQuests.remove(questName);
+        if (quest == null)
+            return false;
+
+        IDataNode node = _dataNode.getNode("quests." + questName);
+        node.remove();
+        node.saveAsync(null);
+
+        return true;
     }
 
     public QuestStatus getStatus(Player p) {
@@ -80,11 +161,11 @@ public class Quest {
         return _playerNode.getEnum(playerId.toString() + ".status", QuestStatus.NONE, QuestStatus.class);
     }
 
-    public void acceptQuest(Player p) {
-        acceptQuest(p.getUniqueId());
+    public void accept(Player p) {
+        accept(p.getUniqueId());
     }
 
-    public void acceptQuest(UUID playerId) {
+    public void accept(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
 
@@ -102,16 +183,14 @@ public class Quest {
             case RERUN:
                 // do nothing
                 break;
-
-
         }
     }
 
-    public void finishQuest(Player p) {
-        finishQuest(p.getUniqueId());
+    public void finish(Player p) {
+        finish(p.getUniqueId());
     }
 
-    public void finishQuest(UUID playerId) {
+    public void finish(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
 
@@ -131,11 +210,11 @@ public class Quest {
         }
     }
 
-    public void cancelQuest(Player p) {
-        cancelQuest(p.getUniqueId());
+    public void cancel(Player p) {
+        cancel(p.getUniqueId());
     }
 
-    public void cancelQuest(UUID playerId) {
+    public void cancel(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
 
@@ -205,7 +284,7 @@ public class Quest {
     public void clearFlags(UUID playerId) {
         PreCon.notNull(playerId);
 
-        cancelQuest(playerId);
+        cancel(playerId);
 
         _playerNode.remove(playerId.toString() + ".flags");
         _playerNode.saveAsync(null);
@@ -231,6 +310,8 @@ public class Quest {
     }
 
     private void loadSettings() {
+
+        // load players
         Set<String> rawPlayerIds = _playerNode.getSubNodeNames();
 
         for (String rawId : rawPlayerIds) {
@@ -246,6 +327,20 @@ public class Quest {
             _playerQuests.put(id, this);
         }
 
-    }
+        // load sub quests
+        Set<String> questNames = _questNode.getSubNodeNames();
 
+        for (String questName : questNames) {
+
+            IDataNode node = _questNode.getNode(questName);
+
+            String displayName = node.getString("display", questName);
+            if (displayName == null)
+                throw new AssertionError();
+
+            SubQuest quest = new SubQuest(this, questName, displayName, node);
+
+            _subQuests.put(questName.toLowerCase(), quest);
+        }
+    }
 }

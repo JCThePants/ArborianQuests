@@ -26,14 +26,15 @@ package com.jcwhatever.bukkit.arborianquests.regions;
 
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
+
 import org.bukkit.Location;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 /**
  * Manages quest scripting regions.
@@ -111,6 +112,7 @@ public class ScriptRegionManager {
      *
      * @return  The newly created {@code ScriptRegion} or null if failed.
      */
+    @Nullable
     public ScriptRegion addFromAnchor(String name, Location anchor, int diameter) {
         PreCon.notNull(name);
         PreCon.notNull(anchor);

@@ -52,9 +52,9 @@ public class DelSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
 
-        String itemName = args.getName("itemName", 32);
+        String itemName = args.getName("itemName", 48);
 
-        ScriptItemManager manager = ArborianQuests.getPlugin().getScriptItemManager();
+        ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
         ScriptItem scriptItem = manager.getItem(itemName);
         if (scriptItem == null) {

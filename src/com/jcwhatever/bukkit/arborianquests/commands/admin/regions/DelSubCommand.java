@@ -52,9 +52,9 @@ public class DelSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
 
-        String regionName = args.getName("regionName", 32);
+        String regionName = args.getName("regionName", 48);
 
-        ScriptRegionManager regionManager = ArborianQuests.getPlugin().getScriptRegionManager();
+        ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.getRegion(regionName);
         if (region == null) {

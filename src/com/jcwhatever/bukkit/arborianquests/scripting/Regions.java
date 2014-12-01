@@ -71,7 +71,7 @@ public class Regions {
         public ScriptRegion getRegion(String name) {
             PreCon.notNullOrEmpty(name);
 
-            return ArborianQuests.getPlugin().getScriptRegionManager().getRegion(name);
+            return ArborianQuests.getScriptRegionManager().getRegion(name);
         }
 
         /**
@@ -85,7 +85,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onEnter);
 
-            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
             if (region == null)
                 return false;
 
@@ -111,7 +111,7 @@ public class Regions {
             PreCon.notNullOrEmpty(questName);
             PreCon.notNull(onEnter);
 
-            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
             if (region == null)
                 return false;
 
@@ -134,7 +134,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
-            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
             if (region == null)
                 return false;
 
@@ -159,7 +159,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
-            ScriptRegion region = ArborianQuests.getPlugin().getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
             if (region == null)
                 return false;
 

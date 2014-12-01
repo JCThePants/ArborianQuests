@@ -62,7 +62,7 @@ public class Locations {
         public Location get(String name) {
             PreCon.notNullOrEmpty(name);
 
-            ScriptLocation result = ArborianQuests.getPlugin().getScriptLocationManager().getLocation(name);
+            ScriptLocation result = ArborianQuests.getScriptLocationManager().getLocation(name);
             if (result == null)
                 return null;
 
@@ -73,7 +73,7 @@ public class Locations {
          * Get all script location objects.
          */
         public List<ScriptLocation> getScriptLocations() {
-            return ArborianQuests.getPlugin().getScriptLocationManager().getLocations();
+            return ArborianQuests.getScriptLocationManager().getLocations();
         }
     }
 }

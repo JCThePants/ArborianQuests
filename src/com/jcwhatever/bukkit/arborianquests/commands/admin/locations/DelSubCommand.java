@@ -51,9 +51,9 @@ public class DelSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
 
-        String locationName = args.getName("locationName", 32);
+        String locationName = args.getName("locationName", 48);
 
-        ScriptLocationManager manager = ArborianQuests.getPlugin().getScriptLocationManager();
+        ScriptLocationManager manager = ArborianQuests.getScriptLocationManager();
 
         ScriptLocation scriptLocation = manager.getLocation(locationName);
         if (scriptLocation == null) {

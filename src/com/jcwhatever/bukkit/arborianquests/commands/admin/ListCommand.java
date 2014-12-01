@@ -24,17 +24,18 @@
 
 package com.jcwhatever.bukkit.arborianquests.commands.admin;
 
+import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
-import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.FormatTemplate;
+
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -57,10 +58,10 @@ public class ListCommand extends AbstractCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<Quest> quests = QuestManager.getQuests();
+        List<Quest> quests = ArborianQuests.getQuestManager().getQuests();
 
         for (Quest quest : quests) {
-            pagin.add(quest.getName(), quest.getDisplayName());
+            pagin.addFormatted(quest.getName(), quest.getDisplayName());
         }
 
         pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);

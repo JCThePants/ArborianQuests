@@ -60,9 +60,9 @@ public class AddSubCommand extends AbstractCommand {
 
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
 
-        final String locationName = args.getName("locationName", 32);
+        final String locationName = args.getName("locationName", 48);
 
-        final ScriptLocationManager manager = ArborianQuests.getPlugin().getScriptLocationManager();
+        final ScriptLocationManager manager = ArborianQuests.getScriptLocationManager();
 
         ScriptLocation scriptLocation = manager.getLocation(locationName);
         if (scriptLocation != null) {

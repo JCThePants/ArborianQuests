@@ -56,7 +56,7 @@ public class AddSubCommand extends AbstractCommand {
     public void execute (CommandSender sender, CommandArguments args)
             throws InvalidValueException, InvalidCommandSenderException {
 
-        String itemName = args.getName("itemName", 32);
+        String itemName = args.getName("itemName", 48);
         ItemStack[] items = args.getItemStack(sender, "item");
 
         if (items.length != 1) {
@@ -64,7 +64,7 @@ public class AddSubCommand extends AbstractCommand {
             return; // finished
         }
 
-        ScriptItemManager manager = ArborianQuests.getPlugin().getScriptItemManager();
+        ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
         ScriptItem item = manager.getItem(itemName);
         if (item != null) {

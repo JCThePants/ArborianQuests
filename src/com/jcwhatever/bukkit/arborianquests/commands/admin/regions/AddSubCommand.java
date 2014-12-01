@@ -59,9 +59,9 @@ public class AddSubCommand extends AbstractCommand {
 
         InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
 
-        String regionName = args.getName("regionName", 32);
+        String regionName = args.getName("regionName", 48);
 
-        ScriptRegionManager regionManager = ArborianQuests.getPlugin().getScriptRegionManager();
+        ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.getRegion(regionName);
         if (region != null) {
@@ -73,6 +73,7 @@ public class AddSubCommand extends AbstractCommand {
         if (selection == null)
             return; // finished
 
+        //noinspection ConstantConditions
         region = regionManager.addRegion(regionName, selection.getP1(), selection.getP2());
         if (region == null) {
             tellError(sender, Lang.get(_FAILED));
