@@ -101,15 +101,15 @@ public class QuestsApi extends GenericsScriptApi {
         }
 
         @Override
-        public void reset() {
+        public void dispose() {
             for (ResponseRequest request : _requests)
                 CommandRequests.cancel(request);
 
-            flags.reset();
-            items.reset();
-            locations.reset();
-            meta.reset();
-            regions.reset();
+            flags.dispose();
+            items.dispose();
+            locations.dispose();
+            meta.dispose();
+            regions.dispose();
         }
 
         /**

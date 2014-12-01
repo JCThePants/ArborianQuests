@@ -80,7 +80,7 @@ public class Items {
         }
 
         @Override
-        public void reset() {
+        public void dispose() {
 
             List<FloatingItem> floatingItems = _manager.getItems();
 

@@ -48,7 +48,7 @@ public class Regions {
         private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
 
         @Override
-        public void reset() {
+        public void dispose() {
             for (ScriptRegion region : _referencedRegions) {
                 region.clearHandlers();
             }

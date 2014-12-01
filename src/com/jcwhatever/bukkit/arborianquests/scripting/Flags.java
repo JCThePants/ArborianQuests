@@ -22,7 +22,7 @@ public class Flags {
 
     public void reset() {
         if (_api != null)
-            _api.reset();
+            _api.dispose();
     }
 
     public static class ApiObject implements IScriptApiObject {
@@ -32,7 +32,7 @@ public class Flags {
         }
 
         @Override
-        public void reset() {
+        public void dispose() {
             // do nothing
         }
 

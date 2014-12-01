@@ -44,7 +44,7 @@ public class Locations {
     public static class ApiObject implements IScriptApiObject {
 
         @Override
-        public void reset() {
+        public void dispose() {
             // do nothing
         }
 
