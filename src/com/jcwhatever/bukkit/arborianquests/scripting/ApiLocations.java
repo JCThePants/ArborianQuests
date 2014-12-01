@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.bukkit.arborianquests.scriptapi;
+package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
@@ -41,14 +41,14 @@ import javax.annotation.Nullable;
 @ScriptApiInfo(
         variableName = "questLocations",
         description = "Get quest scriptable locations.")
-public class ScriptLocations extends GenericsScriptApi {
+public class ApiLocations extends GenericsScriptApi {
 
     /**
      * Constructor.
      *
      * @param plugin The owning plugin
      */
-    public ScriptLocations(Plugin plugin) {
+    public ApiLocations(Plugin plugin) {
         super(plugin);
     }
 

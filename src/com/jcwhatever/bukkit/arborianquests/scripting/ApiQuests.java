@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.bukkit.arborianquests.scriptapi;
+package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Msg;
@@ -51,7 +51,7 @@ import org.bukkit.plugin.Plugin;
 @ScriptApiInfo(
         variableName = "quests",
         description = "Provide scripts API access for quests.")
-public class ScriptQuests extends GenericsScriptApi {
+public class ApiQuests extends GenericsScriptApi {
 
     private static ApiObject _api;
 
@@ -60,7 +60,7 @@ public class ScriptQuests extends GenericsScriptApi {
      *
      * @param plugin  required plugin constructor for script api repository.
      */
-    public ScriptQuests(Plugin plugin) {
+    public ApiQuests(Plugin plugin) {
 
         // quests is always the owning plugin.
         super(ArborianQuests.getPlugin());

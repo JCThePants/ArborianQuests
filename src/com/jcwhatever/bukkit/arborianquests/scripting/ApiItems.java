@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.jcwhatever.bukkit.arborianquests.scriptapi;
+package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
@@ -51,7 +51,7 @@ import javax.annotation.Nullable;
 @ScriptApiInfo(
         variableName = "questItems",
         description = "Give script api access to quest items.")
-public class ScriptItems extends GenericsScriptApi {
+public class ApiItems extends GenericsScriptApi {
 
     private static ApiObject _api;
     private static FloatingItemManager _manager;
@@ -73,7 +73,7 @@ public class ScriptItems extends GenericsScriptApi {
      *
      * @param plugin The owning plugin
      */
-    public ScriptItems(Plugin plugin) {
+    public ApiItems(Plugin plugin) {
         super(plugin);
 
         _api = new ApiObject(_manager);

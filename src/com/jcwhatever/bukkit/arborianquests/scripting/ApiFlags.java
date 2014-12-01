@@ -1,4 +1,4 @@
-package com.jcwhatever.bukkit.arborianquests.scriptapi;
+package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
@@ -16,7 +16,7 @@ import org.bukkit.plugin.Plugin;
 @ScriptApiInfo(
         variableName = "questFlags",
         description = "Provide script access to ArborianQuests flags.")
-public class ScriptFlags extends GenericsScriptApi {
+public class ApiFlags extends GenericsScriptApi {
 
     private ApiObject _api;
 
@@ -25,7 +25,7 @@ public class ScriptFlags extends GenericsScriptApi {
      *
      * @param plugin The owning plugin
      */
-    public ScriptFlags(Plugin plugin) {
+    public ApiFlags(Plugin plugin) {
 
         // Arborian Quests is always the owning plugin
         super(ArborianQuests.getPlugin());

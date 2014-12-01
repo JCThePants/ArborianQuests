@@ -22,7 +22,7 @@
  */
 
 
-package com.jcwhatever.bukkit.arborianquests.scriptapi;
+package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.IScriptRegionResult;
@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 @ScriptApiInfo(
         variableName = "questRegions",
         description = "Provide scripts with API access to ScriptRegion events.")
-public class ScriptRegions extends GenericsScriptApi {
+public class ApiRegions extends GenericsScriptApi {
 
     private static ApiObject _api;
 
@@ -54,7 +54,7 @@ public class ScriptRegions extends GenericsScriptApi {
      *
      * @param plugin  Required plugin parameter for script api repository.
      */
-    public ScriptRegions(Plugin plugin) {
+    public ApiRegions(Plugin plugin) {
 
         // quests is always the owning plugin
         super(ArborianQuests.getPlugin());

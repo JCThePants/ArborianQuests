@@ -28,28 +28,23 @@ import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptFlags;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptItems;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptLocations;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptMeta;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptQuests;
-import com.jcwhatever.bukkit.arborianquests.scriptapi.ScriptRegions;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiFlags;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiItems;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiLocations;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiMeta;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiQuests;
+import com.jcwhatever.bukkit.arborianquests.scripting.ApiRegions;
+import com.jcwhatever.bukkit.arborianquests.scripting.ScriptManager;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.scripting.GenericsScriptManager;
-import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.IScript;
+import com.jcwhatever.bukkit.generic.scripting.AbstractScriptManager;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
-import com.jcwhatever.bukkit.generic.utils.ScriptUtils;
-import com.jcwhatever.bukkit.generic.scripting.api.IScriptApi;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.FileUtils.DirectoryTraversal;
+import com.jcwhatever.bukkit.generic.utils.ScriptUtils;
 import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ArborianQuests extends GenericsPlugin {
 
@@ -59,15 +54,12 @@ public class ArborianQuests extends GenericsPlugin {
         return _instance;
     }
 
-    private GenericsScriptManager _scriptManager;
+    private AbstractScriptManager _scriptManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
     private ScriptItemManager _scriptItemManager;
 
     private IDataNode _metaNode;
-
-    private List<IScriptApi> _scriptApi;
-    private List<IEvaluatedScript> _evaluatedScripts = new ArrayList<>(50);
 
     public ArborianQuests() {
         super();
@@ -75,7 +67,7 @@ public class ArborianQuests extends GenericsPlugin {
         _instance = this;
     }
 
-    public GenericsScriptManager getScriptManager() {
+    public AbstractScriptManager getScriptManager() {
         return _scriptManager;
     }
 
@@ -89,10 +81,6 @@ public class ArborianQuests extends GenericsPlugin {
 
     public ScriptItemManager getScriptItemManager() {
         return _scriptItemManager;
-    }
-
-    public List<IEvaluatedScript> getEvaluatedScripts() {
-        return _evaluatedScripts;
     }
 
     @Override
@@ -115,21 +103,13 @@ public class ArborianQuests extends GenericsPlugin {
         _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
-        _scriptManager = new GenericsScriptManager(this);
+        loadScripts();
 
-        _scriptApi = ScriptUtils.getDefaultApi(this, _scriptManager);
-        _scriptApi.add(new ScriptMeta(this));
-        _scriptApi.add(new ScriptFlags(this));
-        _scriptApi.add(new ScriptQuests(this));
-        _scriptApi.add(new ScriptRegions(this));
-        _scriptApi.add(new ScriptLocations(this));
-        _scriptApi.add(new ScriptItems(this));
-
-        ScriptApiRepo.registerApiType(this, ScriptQuests.class);
-        ScriptApiRepo.registerApiType(this, ScriptRegions.class);
-        ScriptApiRepo.registerApiType(this, ScriptLocations.class);
-        ScriptApiRepo.registerApiType(this, ScriptFlags.class);
-        ScriptApiRepo.registerApiType(this, ScriptItems.class);
+        ScriptApiRepo.registerApiType(this, ApiQuests.class);
+        ScriptApiRepo.registerApiType(this, ApiRegions.class);
+        ScriptApiRepo.registerApiType(this, ApiLocations.class);
+        ScriptApiRepo.registerApiType(this, ApiFlags.class);
+        ScriptApiRepo.registerApiType(this, ApiItems.class);
 
         IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
         regionNode.load();
@@ -144,51 +124,47 @@ public class ArborianQuests extends GenericsPlugin {
         _scriptLocationManager = new ScriptLocationManager(locationNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);
 
-        reloadScripts();
+        _scriptManager.reload();
 
         registerCommands(new CommandHandler());
     }
 
     @Override
     protected void onDisablePlugin() {
-        resetApi();
+        _scriptManager.clearScripts();
 
-        ScriptApiRepo.unregisterApiType(this, ScriptQuests.class);
-        ScriptApiRepo.unregisterApiType(this, ScriptRegions.class);
+        ScriptApiRepo.unregisterApiType(this, ApiQuests.class);
+        ScriptApiRepo.unregisterApiType(this, ApiRegions.class);
     }
 
     public void reloadScripts() {
 
-        resetApi();
-        _evaluatedScripts.clear();
+        _scriptManager.reload();
+    }
 
-        File scriptDir = new File(this.getDataFolder(), "scripts");
+    private void loadScripts() {
+        File scriptDir = new File(getDataFolder(), "scripts");
         if (!scriptDir.exists() && !scriptDir.mkdirs())
-            return;
+            throw new RuntimeException("Failed to create scripts folder.");
 
         File questScripts = new File(scriptDir, "quests");
         if (!questScripts.exists() && !questScripts.mkdirs())
-            return;
+            throw new RuntimeException("Failed to create scripts/quests folder");
 
         File libsDir = new File(scriptDir, "libs");
         if (!libsDir.exists() && !libsDir.mkdirs())
-            return;
+            throw new RuntimeException("Failed to create scripts/libs folder");
 
-        _scriptManager.clearScripts();
-        List<IScript> scripts = _scriptManager.loadScripts(questScripts, DirectoryTraversal.RECURSIVE);
+        _scriptManager = new ScriptManager(this, questScripts);
 
-        for (IScript script : scripts) {
-            IEvaluatedScript evaluated = script.evaluate(_scriptApi);
-            if (evaluated != null) {
-                _evaluatedScripts.add(evaluated);
-            }
-        }
-    }
+        _scriptManager.addScriptApi(ScriptUtils.getDefaultApi(this, _scriptManager));
+        _scriptManager.addScriptApi(new ApiMeta(this));
+        _scriptManager.addScriptApi(new ApiFlags(this));
+        _scriptManager.addScriptApi(new ApiQuests(this));
+        _scriptManager.addScriptApi(new ApiRegions(this));
+        _scriptManager.addScriptApi(new ApiLocations(this));
+        _scriptManager.addScriptApi(new ApiItems(this));
 
-    private void resetApi() {
 
-        for (IEvaluatedScript script : _evaluatedScripts) {
-            script.resetApi();
-        }
     }
 }
