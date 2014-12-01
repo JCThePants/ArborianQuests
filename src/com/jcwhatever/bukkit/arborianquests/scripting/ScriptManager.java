@@ -43,8 +43,8 @@ public class ScriptManager extends AbstractScriptManager<IScript, IEvaluatedScri
 
     private static ScriptConstructor<IScript> _scriptConstructor = new ScriptConstructor<IScript>() {
         @Override
-        public IScript construct(String name, @Nullable String filename, String type, String script) {
-            return new GenericsScript(name, filename, type, script);
+        public IScript construct(String name, @Nullable File file, String type, String script) {
+            return new GenericsScript(name, file, type, script);
         }
     };
 
