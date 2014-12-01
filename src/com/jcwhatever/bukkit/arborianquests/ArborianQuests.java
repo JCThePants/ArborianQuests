@@ -147,15 +147,7 @@ public class ArborianQuests extends GenericsPlugin {
         if (!scriptDir.exists() && !scriptDir.mkdirs())
             throw new RuntimeException("Failed to create scripts folder.");
 
-        File questScripts = new File(scriptDir, "quests");
-        if (!questScripts.exists() && !questScripts.mkdirs())
-            throw new RuntimeException("Failed to create scripts/quests folder");
-
-        File libsDir = new File(scriptDir, "libs");
-        if (!libsDir.exists() && !libsDir.mkdirs())
-            throw new RuntimeException("Failed to create scripts/libs folder");
-
-        _scriptManager = new ScriptManager(this, questScripts);
+        _scriptManager = new ScriptManager(this, scriptDir);
 
         _scriptManager.addScriptApi(ScriptUtils.getDefaultApi(this, _scriptManager));
         _scriptManager.addScriptApi(new ApiMeta(this));
