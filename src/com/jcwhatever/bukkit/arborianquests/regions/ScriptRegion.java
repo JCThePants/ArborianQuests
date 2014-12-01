@@ -27,7 +27,7 @@ package com.jcwhatever.bukkit.arborianquests.regions;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
-import com.jcwhatever.bukkit.generic.collections.StackedMap;
+import com.jcwhatever.bukkit.generic.collections.StackedHashMap;
 import com.jcwhatever.bukkit.generic.regions.Region;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
@@ -45,8 +45,8 @@ public class ScriptRegion extends Region {
 
     private List<IScriptRegionResult> _onEnter = new ArrayList<>(10);
     private List<IScriptRegionResult> _onLeave = new ArrayList<>(10);
-    private Map<Quest, IScriptRegionResult> _onQuestEnter = new StackedMap<>(30);
-    private Map<Quest, IScriptRegionResult> _onQuestLeave = new StackedMap<>(30);
+    private Map<Quest, IScriptRegionResult> _onQuestEnter = new StackedHashMap<>(30);
+    private Map<Quest, IScriptRegionResult> _onQuestLeave = new StackedHashMap<>(30);
 
     /**
      * Constructor.
