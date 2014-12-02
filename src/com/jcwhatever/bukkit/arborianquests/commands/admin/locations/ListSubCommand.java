@@ -64,6 +64,6 @@ public class ListSubCommand extends AbstractCommand {
             pagin.add(location.getName(), LocationUtils.locationToString(location.getLocation()));
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }

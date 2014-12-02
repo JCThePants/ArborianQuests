@@ -83,7 +83,7 @@ public class BaseCommand extends AbstractCommand {
             pagin.add(quest.getName(), quest.getDisplayName());
         }
 
-        pagin.show(p, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(p, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
 
         tell(sender, Lang.get(_HELP));
     }

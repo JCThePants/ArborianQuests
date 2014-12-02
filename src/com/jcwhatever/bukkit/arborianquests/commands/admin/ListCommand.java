@@ -64,6 +64,6 @@ public class ListCommand extends AbstractCommand {
             pagin.addFormatted(quest.getName(), quest.getDisplayName());
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }

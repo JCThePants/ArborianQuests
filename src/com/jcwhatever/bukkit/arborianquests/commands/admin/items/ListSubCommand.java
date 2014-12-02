@@ -66,6 +66,6 @@ public class ListSubCommand extends AbstractCommand {
             pagin.add(item.getName(), ItemStackUtils.serializeToString(item.getItem(), SerializerOutputType.COLOR));
         }
 
-        pagin.show(sender, page, FormatTemplate.ITEM_DESCRIPTION);
+        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
 }
