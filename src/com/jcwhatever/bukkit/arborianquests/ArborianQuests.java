@@ -35,7 +35,7 @@ import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.TextUtils.TextColor;
+import com.jcwhatever.bukkit.generic.utils.text.TextColor;
 
 public class ArborianQuests extends GenericsPlugin {
 
@@ -52,6 +52,9 @@ public class ArborianQuests extends GenericsPlugin {
 
     private IDataNode _metaNode;
 
+    /**
+     * Constructor.
+     */
     public ArborianQuests() {
         super();
 
