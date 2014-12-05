@@ -137,7 +137,7 @@ public class Items {
             PreCon.notNull(location);
 
             //noinspection ConstantConditions
-            return _manager.add(UUID.randomUUID().toString(), itemStack, location);
+            return _manager.add(UUID.randomUUID().toString(), itemStack.clone(), location);
         }
 
         /**
