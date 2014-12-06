@@ -40,27 +40,35 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 import javax.annotation.Nullable;
 
 public class Items {
 
     private static ApiObject _api;
+    private static FloatingItemManager _manager;
 
     static {
 
         IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("floating-items"));
-        FloatingItemManager manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
+        dataNode.load();
 
-        List<FloatingItem> floatingItems = manager.getItems();
+        _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
 
+        List<FloatingItem> floatingItems = _manager.getItems();
+
+        // remove all items, ensures items are removed if
+        // the server is not shut down properly.
         for (FloatingItem item : floatingItems) {
-            manager.remove(item.getName());
+            _manager.remove(item.getName());
         }
 
-        _api = new ApiObject(manager);
+        _api = new ApiObject();
     }
 
     public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
@@ -69,15 +77,15 @@ public class Items {
 
     public static class ApiObject implements IScriptApiObject {
 
-        private FloatingItemManager _manager;
+        private Map<FloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
         private LinkedList<PickupWrapper> _pickupCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _spawnCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _despawnCallbacks = new LinkedList<>();
         private boolean _isDisposed;
 
 
-        public ApiObject (FloatingItemManager manager) {
-            _manager = manager;
+        public ApiObject () {
+
         }
 
         @Override
@@ -88,10 +96,12 @@ public class Items {
         @Override
         public void dispose() {
 
-            List<FloatingItem> floatingItems = _manager.getItems();
+            Iterator<FloatingItem> iterator = _floatingItems.keySet().iterator();
 
-            for (FloatingItem item : floatingItems) {
+            while (iterator.hasNext()) {
+                FloatingItem item = iterator.next();
                 _manager.remove(item.getName());
+                iterator.remove();
             }
 
             while (!_pickupCallbacks.isEmpty()) {
@@ -132,12 +142,18 @@ public class Items {
          * @param itemStack  The item stack.
          * @param location   The location the item will spawn in.
          */
+        @Nullable
         public FloatingItem createFloatingItem(ItemStack itemStack, Location location) {
             PreCon.notNull(itemStack);
             PreCon.notNull(location);
 
-            //noinspection ConstantConditions
-            return _manager.add(UUID.randomUUID().toString(), itemStack.clone(), location);
+            FloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
+                    itemStack.clone(), location);
+
+            if (floatingItem != null)
+                _floatingItems.put(floatingItem, null);
+
+            return floatingItem;
         }
 
         /**
