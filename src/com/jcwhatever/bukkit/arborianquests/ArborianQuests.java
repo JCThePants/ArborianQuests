@@ -30,8 +30,8 @@ import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scripting.QuestsApi;
+import com.jcwhatever.bukkit.generic.GenericsLib;
 import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.scripting.ScriptApiRepo;
 import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataStorage.DataPath;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
@@ -113,12 +113,12 @@ public class ArborianQuests extends GenericsPlugin {
 
         registerCommands(new CommandHandler());
 
-        ScriptApiRepo.registerApiType(this, QuestsApi.class);
+        GenericsLib.getScriptApiRepo().registerApiType(this, QuestsApi.class);
     }
 
     @Override
     protected void onDisablePlugin() {
 
-        ScriptApiRepo.unregisterApiType(this, QuestsApi.class);
+        GenericsLib.getScriptApiRepo().unregisterApiType(this, QuestsApi.class);
     }
 }
