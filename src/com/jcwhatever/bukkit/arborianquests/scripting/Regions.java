@@ -79,22 +79,18 @@ public class Regions {
          *
          * @param regionName The name of the script region.
          * @param onEnter    The handler.
-         * @return True if successful.
          */
-        public boolean onEnter(String regionName, IScriptRegionResult onEnter) {
+        public void onEnter(String regionName, IScriptRegionResult onEnter) {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onEnter);
 
             ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
-            if (region == null)
-                return false;
-
-            if (region.addOnEnter(onEnter)) {
-                _referencedRegions.add(region);
-                return true;
+            if (region == null) {
+                throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
 
-            return false;
+            region.addOnEnter(onEnter);
+            _referencedRegions.add(region);
         }
 
         /**
@@ -104,23 +100,22 @@ public class Regions {
          * @param regionName The name of the script region.
          * @param questName  The name of the quest.
          * @param onEnter    The handler.
-         * @return True if successful.
          */
-        public boolean onQuestEnter(String regionName, String questName, IScriptRegionResult onEnter) {
+        public void onQuestEnter(String regionName, String questName, IScriptRegionResult onEnter) {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNullOrEmpty(questName);
             PreCon.notNull(onEnter);
 
             ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
-            if (region == null)
-                return false;
-
-            if (region.addOnQuestEnter(questName, onEnter)) {
-                _referencedRegions.add(region);
-                return true;
+            if (region == null) {
+                throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
 
-            return false;
+            if (!region.addOnQuestEnter(questName, onEnter)) {
+                throw new RuntimeException("Failed to find quest named:" + questName);
+            }
+
+            _referencedRegions.add(region);
         }
 
         /**
@@ -128,22 +123,18 @@ public class Regions {
          *
          * @param regionName The name of the script region.
          * @param onLeave    The handler.
-         * @return True if successful.
          */
-        public boolean onLeave(String regionName, IScriptRegionResult onLeave) {
+        public void onLeave(String regionName, IScriptRegionResult onLeave) {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
             ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
-            if (region == null)
-                return false;
-
-            if (region.addOnLeave(onLeave)) {
-                _referencedRegions.add(region);
-                return true;
+            if (region == null) {
+                throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
 
-            return false;
+            region.addOnLeave(onLeave);
+            _referencedRegions.add(region);
         }
 
         /**
@@ -153,22 +144,19 @@ public class Regions {
          * @param regionName The name of the script region.
          * @param questName  The name of the quest.
          * @param onLeave    The handler.
-         * @return True if successful.
          */
-        public boolean onQuestLeave(String regionName, String questName, IScriptRegionResult onLeave) {
+        public void onQuestLeave(String regionName, String questName, IScriptRegionResult onLeave) {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
             ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
-            if (region == null)
-                return false;
-
-            if (region.addOnQuestLeave(questName, onLeave)) {
-                _referencedRegions.add(region);
-                return true;
+            if (region == null) {
+                throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
 
-            return false;
+            if (!region.addOnQuestLeave(questName, onLeave)) {
+                throw new RuntimeException("Failed to find quest named:" + questName);
+            }
         }
     }
 
