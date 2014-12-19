@@ -66,7 +66,7 @@ public class ScriptRegion extends Region {
         _onLeave.clear();
         _onQuestEnter.clear();
         _onQuestLeave.clear();
-        setIsPlayerWatcher(false);
+        setEventListener(false);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ScriptRegion extends Region {
         PreCon.notNull(handler);
 
         _onEnter.add(handler);
-        setIsPlayerWatcher(true);
+        setEventListener(true);
         return true;
     }
 
@@ -100,7 +100,7 @@ public class ScriptRegion extends Region {
             return false;
 
         _onQuestEnter.put(quest, handler);
-        setIsPlayerWatcher(true);
+        setEventListener(true);
         return true;
     }
 
@@ -113,7 +113,7 @@ public class ScriptRegion extends Region {
         PreCon.notNull(handler);
 
         _onLeave.add(handler);
-        setIsPlayerWatcher(true);
+        setEventListener(true);
         return true;
     }
 
@@ -133,7 +133,7 @@ public class ScriptRegion extends Region {
             return false;
 
         _onQuestLeave.put(quest, handler);
-        setIsPlayerWatcher(true);
+        setEventListener(true);
         return true;
     }
 
