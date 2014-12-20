@@ -35,7 +35,7 @@ import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderExc
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.regions.data.RegionSelection;
+import com.jcwhatever.bukkit.generic.regions.selection.RegionSelection;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
