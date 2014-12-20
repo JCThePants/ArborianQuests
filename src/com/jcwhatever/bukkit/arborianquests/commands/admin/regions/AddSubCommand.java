@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.arborianquests.commands.admin.regions;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
@@ -33,9 +34,9 @@ import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
 import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
-import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.generic.language.Localizable;
-import com.jcwhatever.bukkit.generic.regions.selection.RegionSelection;
+import com.jcwhatever.bukkit.generic.regions.selection.IRegionSelection;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -44,11 +45,11 @@ import org.bukkit.entity.Player;
         command = "add",
         staticParams = { "regionName" },
         usage = "/{plugin-command} regions add <regionName>",
-        description = "Add a new quest region using your current World Edit selection.")
+        description = "Add a new quest region using your current region selection.")
 
 public class AddSubCommand extends AbstractCommand {
 
-    @Localizable static final String _NOT_CONSOLE = "Console can't select a world edit region.";
+    @Localizable static final String _NOT_CONSOLE = "Console can't select a region.";
     @Localizable static final String _REGION_ALREADY_EXISTS = "There is already a region with the name '{0}'.";
     @Localizable static final String _FAILED = "Failed to add quest region.";
     @Localizable static final String _SUCCESS = "Quest region '{0}' created.";
@@ -69,7 +70,7 @@ public class AddSubCommand extends AbstractCommand {
             return; // finished
         }
 
-        RegionSelection selection = getWorldEditSelection((Player)sender);
+        IRegionSelection selection = getRegionSelection((Player) sender);
         if (selection == null)
             return; // finished
 
