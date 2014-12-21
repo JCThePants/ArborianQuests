@@ -30,7 +30,7 @@ import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
@@ -52,7 +52,7 @@ public class ListSubCommand extends AbstractCommand {
     @Localizable static final String _UNDEFINED_REGION = "<undefined>";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
+    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
 
         int page = args.getInteger("page");
 

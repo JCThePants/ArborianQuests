@@ -31,7 +31,7 @@ import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidValueException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.bukkit.generic.utils.ItemStackUtils;
 import com.jcwhatever.bukkit.generic.items.serializer.ItemStackSerializer.SerializerOutputType;
 import com.jcwhatever.bukkit.generic.language.Localizable;
@@ -54,7 +54,7 @@ public class ListSubCommand extends AbstractCommand {
     @Localizable static final String _PAGINATOR_TITLE = "Quest Items";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidValueException {
+    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
 
         int page = args.getInteger("page");
 
