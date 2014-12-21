@@ -35,8 +35,8 @@ public class ItemsCommand extends AbstractCommand {
     public ItemsCommand() {
         super();
 
-        registerSubCommand(AddSubCommand.class);
-        registerSubCommand(DelSubCommand.class);
-        registerSubCommand(ListSubCommand.class);
+        registerCommand(AddSubCommand.class);
+        registerCommand(DelSubCommand.class);
+        registerCommand(ListSubCommand.class);
     }
 }

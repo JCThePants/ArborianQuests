@@ -35,9 +35,9 @@ public class LocationsCommand extends AbstractCommand {
     public LocationsCommand() {
         super();
 
-        registerSubCommand(AddSubCommand.class);
-        registerSubCommand(DelSubCommand.class);
-        registerSubCommand(ListSubCommand.class);
+        registerCommand(AddSubCommand.class);
+        registerCommand(DelSubCommand.class);
+        registerCommand(ListSubCommand.class);
     }
 }
 
