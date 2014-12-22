@@ -31,9 +31,7 @@ import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 import com.jcwhatever.bukkit.generic.regions.selection.IRegionSelection;
 
@@ -48,15 +46,13 @@ import org.bukkit.entity.Player;
 
 public class RedefineSubCommand extends AbstractCommand {
 
-    @Localizable static final String _NOT_CONSOLE = "Console can't select a region.";
     @Localizable static final String _REGION_NOT_FOUND = "A quest region named '{0}' was not found.";
     @Localizable static final String _SUCCESS = "Quest region '{0}' redefined.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args)
-            throws InvalidArgumentException, InvalidCommandSenderException {
+    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
+        CommandException.assertNotConsole(this, sender);
 
         String regionName = args.getName("regionName", 48);
 

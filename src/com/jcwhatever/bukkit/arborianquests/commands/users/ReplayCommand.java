@@ -32,9 +32,7 @@ import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatu
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
 
 import org.bukkit.command.CommandSender;
@@ -47,17 +45,15 @@ import org.bukkit.entity.Player;
 
 public class ReplayCommand extends AbstractCommand {
 
-    @Localizable static final String _NOT_CONSOLE = "Console does not have quests.";
     @Localizable static final String _NOT_FOUND = "Quest named '{0}' not found.";
     @Localizable static final String _FAIL_IN_PROGRESS = "Quest is in progress and cannot be cleared.";
     @Localizable static final String _OP_IN_PROGRESS = "Quest is in progress but is being cleared anyways since you are Opped.";
     @Localizable static final String _SUCCESS = "Quest cleared and ready to replay.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args)
-            throws InvalidArgumentException, InvalidCommandSenderException {
+    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
+        CommandException.assertNotConsole(this, sender);
 
         String questName = args.getName("questName", 48);
 

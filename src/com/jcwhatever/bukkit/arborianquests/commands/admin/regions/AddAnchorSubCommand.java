@@ -25,16 +25,15 @@
 package com.jcwhatever.bukkit.arborianquests.commands.admin.regions;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
 import com.jcwhatever.bukkit.generic.commands.CommandInfo;
 import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidCommandSenderException.CommandSenderType;
-import com.jcwhatever.bukkit.generic.commands.exceptions.InvalidArgumentException;
-import com.jcwhatever.bukkit.arborianquests.Lang;
+import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
 import com.jcwhatever.bukkit.generic.language.Localizable;
+
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -47,17 +46,14 @@ import org.bukkit.entity.Player;
 
 public class AddAnchorSubCommand extends AbstractCommand {
 
-    @Localizable
-    static final String _NOT_CONSOLE = "Console has no location.";
     @Localizable static final String _REGION_ALREADY_EXISTS = "There is already a region with the name '{0}'.";
     @Localizable static final String _FAILED = "Failed to add quest region.";
     @Localizable static final String _SUCCESS = "Quest region '{0}' created.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args)
-            throws InvalidArgumentException, InvalidCommandSenderException {
+    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
 
-        InvalidCommandSenderException.check(sender, CommandSenderType.PLAYER, Lang.get(_NOT_CONSOLE));
+        CommandException.assertNotConsole(this, sender);
 
         String regionName = args.getName("regionName", 48);
         int diameter = args.getInteger("diameter");
