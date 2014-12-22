@@ -44,7 +44,6 @@ import org.bukkit.entity.Player;
         parent="regions",
         command = "add",
         staticParams = { "regionName" },
-        usage = "/{plugin-command} regions add <regionName>",
         description = "Add a new quest region using your current region selection.")
 
 public class AddSubCommand extends AbstractCommand {

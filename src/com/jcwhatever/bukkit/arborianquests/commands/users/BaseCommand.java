@@ -27,6 +27,10 @@ package com.jcwhatever.bukkit.arborianquests.commands.users;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
+import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
+import com.jcwhatever.bukkit.arborianquests.commands.admin.items.ItemsCommand;
+import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
+import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
@@ -49,7 +53,6 @@ import java.util.List;
 
 @CommandInfo(
         command={"quests"},
-        usage="/{plugin-command} quests",
         staticParams = { "page=1" },
         description="Get information about your quests.",
         permissionDefault= PermissionDefault.TRUE,
@@ -59,6 +62,16 @@ public class BaseCommand extends AbstractCommand {
     @Localizable static final String _NOT_CONSOLE = "Console does not have quests. Use '?' argument for list of commands.";
     @Localizable static final String _PAGINATOR_TITLE="My Current Quests";
     @Localizable static final String _HELP = "Type '/{plugin-command} ?' for a list of commands.";
+
+    public BaseCommand() {
+        super();
+
+        registerCommand(ReplayCommand.class);
+        registerCommand(ItemsCommand.class);
+        registerCommand(LocationsCommand.class);
+        registerCommand(RegionsCommand.class);
+        registerCommand(ListCommand.class);
+    }
 
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws InvalidArgumentException, InvalidCommandSenderException {

@@ -43,7 +43,6 @@ import java.util.List;
         parent="regions",
         command = "list",
         staticParams = { "page=1" },
-        usage = "/{plugin-command} regions list [page]",
         description = "List all quest regions.")
 
 public class ListSubCommand extends AbstractCommand {

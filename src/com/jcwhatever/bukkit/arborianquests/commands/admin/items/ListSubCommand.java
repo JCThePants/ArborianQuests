@@ -46,7 +46,6 @@ import java.util.List;
         parent="items",
         command = "list",
         staticParams = { "page=1" },
-        usage = "/{plugin-command} {command} list [page]",
         description = "List all quest items.")
 
 public class ListSubCommand extends AbstractCommand {

@@ -31,26 +31,20 @@ import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCo
 import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.users.ReplayCommand;
-import com.jcwhatever.bukkit.generic.commands.AbstractCommandHandler;
+import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
 
-public class CommandHandler extends AbstractCommandHandler{
+public class QuestsCommandDispatcher extends CommandDispatcher {
 
     /**
      * Constructor
      */
-    public CommandHandler() {
+    public QuestsCommandDispatcher() {
         super(ArborianQuests.getPlugin());
     }
 
     @Override
     protected void registerCommands() {
 
-        setBaseCommand(BaseCommand.class);
-
-        registerCommand(ReplayCommand.class);
-        registerCommand(ItemsCommand.class);
-        registerCommand(LocationsCommand.class);
-        registerCommand(RegionsCommand.class);
-        registerCommand(ListCommand.class);
+        registerCommand(BaseCommand.class);
     }
 }

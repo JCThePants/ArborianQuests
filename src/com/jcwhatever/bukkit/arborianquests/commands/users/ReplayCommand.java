@@ -43,7 +43,6 @@ import org.bukkit.entity.Player;
 @CommandInfo(
         command = "replay",
         staticParams = { "questName" },
-        usage = "/{plugin-command} replay <questName>",
         description = "Clears all data for a specified quest so it can be replayed.")
 
 public class ReplayCommand extends AbstractCommand {

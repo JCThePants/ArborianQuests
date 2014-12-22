@@ -44,7 +44,6 @@ import org.bukkit.entity.Player;
         parent="locations",
         command = "add",
         staticParams = { "locationName", "location" },
-        usage = "/{plugin-command} {command} add <locationName> <location>",
         description = "Add a new quest location.")
 
 public class AddSubCommand extends AbstractCommand {

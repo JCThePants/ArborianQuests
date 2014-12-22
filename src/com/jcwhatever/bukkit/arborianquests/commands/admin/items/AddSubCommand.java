@@ -42,7 +42,6 @@ import org.bukkit.inventory.ItemStack;
         parent="items",
         command = "add",
         staticParams = { "itemName", "item" },
-        usage = "/{plugin-command} {command} add <itemName> <item>",
         description = "Add a new quest item.")
 
 public class AddSubCommand extends AbstractCommand {

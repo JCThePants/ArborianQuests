@@ -44,7 +44,6 @@ import org.bukkit.entity.Player;
         parent="regions",
         command = "redefine",
         staticParams = { "regionName" },
-        usage = "/{plugin-command} regions redefine <regionName>",
         description = "Redefine quest region coordinates using your current region selection.")
 
 public class RedefineSubCommand extends AbstractCommand {

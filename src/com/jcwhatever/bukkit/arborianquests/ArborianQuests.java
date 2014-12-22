@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.arborianquests;
 
-import com.jcwhatever.bukkit.arborianquests.commands.CommandHandler;
+import com.jcwhatever.bukkit.arborianquests.commands.QuestsCommandDispatcher;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
@@ -111,7 +111,7 @@ public class ArborianQuests extends GenericsPlugin {
         _scriptLocationManager = new ScriptLocationManager(locationNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);
 
-        registerCommands(new CommandHandler());
+        registerCommands(new QuestsCommandDispatcher());
 
         GenericsLib.getScriptApiRepo().registerApiType(this, QuestsApi.class);
     }

@@ -40,7 +40,6 @@ import org.bukkit.command.CommandSender;
         parent="regions",
         command = "del",
         staticParams = { "regionName" },
-        usage = "/{plugin-command} regions del <regionName>",
         description = "Remove a quest region.")
 
 public class DelSubCommand extends AbstractCommand {

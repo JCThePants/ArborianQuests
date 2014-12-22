@@ -43,7 +43,6 @@ import java.util.List;
 @CommandInfo(
         command = "list",
         staticParams = { "page=1" },
-        usage = "/{plugin-command} list [page]",
         description = "List all registered quests.")
 
 public class ListCommand extends AbstractCommand {

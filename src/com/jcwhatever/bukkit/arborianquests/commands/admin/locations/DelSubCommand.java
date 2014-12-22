@@ -39,7 +39,6 @@ import org.bukkit.command.CommandSender;
         parent="locations",
         command = "del",
         staticParams = { "locationName" },
-        usage = "/{plugin-command} {command} del <locationName>",
         description = "Remove a quest location.")
 
 public class DelSubCommand extends AbstractCommand {

@@ -40,7 +40,6 @@ import org.bukkit.command.CommandSender;
         parent="items",
         command = "del",
         staticParams = { "itemName" },
-        usage = "/{plugin-command} {command} del <itemName>",
         description = "Remove a quest item.")
 
 public class DelSubCommand extends AbstractCommand {

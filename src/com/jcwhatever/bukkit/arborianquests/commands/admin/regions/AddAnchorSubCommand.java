@@ -43,7 +43,6 @@ import org.bukkit.entity.Player;
         parent="regions",
         command = "addanchor",
         staticParams = { "regionName", "diameter" },
-        usage = "/{plugin-command} regions addanchor <regionName> <diameter>",
         description = "Add a new quest region using your current location as an anchor.")
 
 public class AddAnchorSubCommand extends AbstractCommand {
