@@ -40,10 +40,13 @@ import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.ScriptApiInfo;
 import com.jcwhatever.bukkit.generic.scripting.api.GenericsScriptApi;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.bukkit.generic.utils.PlayerUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import javax.annotation.Nullable;
 
 /**
  * Provide scripts with API for quests.
@@ -147,12 +150,17 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Determine if a player has accepted a quest.
          *
+         * @param player    The player to check.
          * @param questName The name of the quest.
-         * @return
+         *
+         * @return  True if the player is in the quest.
          */
-        public boolean isInQuest(Player p, String questName) {
-            PreCon.notNull(p);
+        public boolean isInQuest(Object player , String questName) {
+            PreCon.notNull(player);
             PreCon.notNullOrEmpty(questName);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             Quest quest = ArborianQuests.getQuestManager().get(questName);
             return quest != null && quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS;
@@ -161,13 +169,15 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Determine if a player has already completed a quest.
          *
-         * @param p
-         * @param questName
-         * @return
+         * @param player     The player to check.
+         * @param questName  The name of the quest.
          */
-        public boolean hasCompleted(Player p, String questName) {
-            PreCon.notNull(p);
+        public boolean hasCompleted(Object player, String questName) {
+            PreCon.notNull(player);
             PreCon.notNullOrEmpty(questName);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             Quest quest = ArborianQuests.getQuestManager().get(questName);
             return quest != null && quest.getStatus(p).getCompletionStatus() == QuestCompletionStatus.COMPLETED;
@@ -176,13 +186,17 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Mark a players quest status as complete.
          *
-         * @param p         The player.
-         * @param questName The name of the quest.
+         * @param player     The player.
+         * @param questName  The name of the quest.
+         *
          * @return True if the player quest is completed.
          */
-        public boolean complete(Player p, String questName) {
-            PreCon.notNull(p);
+        public boolean complete(Object player, String questName) {
+            PreCon.notNull(player);
             PreCon.notNullOrEmpty(questName);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
@@ -201,11 +215,17 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Join player to a quest.
          *
-         * @param p         The player.
-         * @param questName The name of the quest.
+         * @param player      The player.
+         * @param questName   The name of the quest.
+         *
          * @return True if quest was found and player joined.
          */
-        public boolean joinQuest(Player p, String questName) {
+        public boolean joinQuest(Object player, String questName) {
+            PreCon.notNull(player);
+            PreCon.notNullOrEmpty(questName);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             final Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
@@ -219,11 +239,16 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Ask the player to accept a quest.
          *
-         * @param p         The player to ask.
-         * @param questName The name of the quest.
-         * @param onAccept  Runnable to run if the player accepts.
+         * @param player     The player to ask.
+         * @param questName  The name of the quest.
+         * @param onAccept   Runnable to run if the player accepts.
          */
-        public void queryQuest(final Player p, String questName, final Runnable onAccept) {
+        public void queryQuest(Object player, String questName, @Nullable final Runnable onAccept) {
+            PreCon.notNull(player);
+            PreCon.notNullOrEmpty(questName);
+
+            final Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             final Quest quest = ArborianQuests.getQuestManager().get(questName);
             if (quest == null)
@@ -257,16 +282,19 @@ public class QuestsApi extends GenericsScriptApi {
         /**
          * Ask the player a question.
          *
-         * @param p        The player to ask.
-         * @param context  The name of the context.
-         * @param question The question to ask the player.
-         * @param onAccept Runnable to run if the player accepts.
+         * @param player    The player to ask.
+         * @param context   The name of the context.
+         * @param question  The question to ask the player.
+         * @param onAccept  Runnable to run if the player accepts.
          */
-        public void query(final Player p, String context, String question, final Runnable onAccept) {
-            PreCon.notNull(p);
+        public void query(Object player, String context, String question, @Nullable final Runnable onAccept) {
+            PreCon.notNull(player);
             PreCon.notNullOrEmpty(context);
             PreCon.notNull(question);
             PreCon.notNull(onAccept);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.notNull(p);
 
             IResponseHandler handler = new IResponseHandler() {
 
