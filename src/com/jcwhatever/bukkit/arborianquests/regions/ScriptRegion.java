@@ -26,10 +26,10 @@ package com.jcwhatever.bukkit.arborianquests.regions;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.bukkit.generic.collections.StackedHashMap;
-import com.jcwhatever.bukkit.generic.regions.Region;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.collections.StackedHashMap;
+import com.jcwhatever.generic.regions.Region;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.PreCon;
 
 import org.bukkit.entity.Player;
 

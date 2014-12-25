@@ -25,13 +25,8 @@
 package com.jcwhatever.bukkit.arborianquests.commands;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.items.ItemsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
-import com.jcwhatever.bukkit.arborianquests.commands.users.ReplayCommand;
-import com.jcwhatever.bukkit.generic.commands.CommandDispatcher;
+import com.jcwhatever.generic.commands.CommandDispatcher;
 
 public class QuestsCommandDispatcher extends CommandDispatcher {
 

@@ -26,16 +26,16 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
-import com.jcwhatever.bukkit.generic.items.floating.FloatingItem;
-import com.jcwhatever.bukkit.generic.items.floating.FloatingItem.PickupHandler;
-import com.jcwhatever.bukkit.generic.items.floating.FloatingItemManager;
-import com.jcwhatever.bukkit.generic.items.floating.IFloatingItem;
-import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.storage.DataPath;
-import com.jcwhatever.bukkit.generic.storage.DataStorage;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.floatingitems.FloatingItem;
+import com.jcwhatever.generic.floatingitems.FloatingItem.PickupHandler;
+import com.jcwhatever.generic.floatingitems.FloatingItemManager;
+import com.jcwhatever.generic.floatingitems.IFloatingItem;
+import com.jcwhatever.generic.scripting.IEvaluatedScript;
+import com.jcwhatever.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.generic.storage.DataPath;
+import com.jcwhatever.generic.storage.DataStorage;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.PreCon;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

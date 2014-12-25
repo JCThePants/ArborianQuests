@@ -26,9 +26,9 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
-import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.scripting.IEvaluatedScript;
+import com.jcwhatever.generic.scripting.api.IScriptApiObject;
+import com.jcwhatever.generic.utils.PreCon;
 
 import org.bukkit.Location;
 

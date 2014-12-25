@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.arborianquests.locations;
 
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.PreCon;
 import org.bukkit.Location;
 
 import javax.annotation.Nullable;

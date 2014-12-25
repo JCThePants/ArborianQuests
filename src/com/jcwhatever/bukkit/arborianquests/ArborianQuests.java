@@ -30,12 +30,12 @@ import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scripting.QuestsApi;
-import com.jcwhatever.bukkit.generic.GenericsLib;
-import com.jcwhatever.bukkit.generic.GenericsPlugin;
-import com.jcwhatever.bukkit.generic.storage.DataStorage;
-import com.jcwhatever.bukkit.generic.storage.DataPath;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.text.TextColor;
+import com.jcwhatever.generic.GenericsLib;
+import com.jcwhatever.generic.GenericsPlugin;
+import com.jcwhatever.generic.storage.DataStorage;
+import com.jcwhatever.generic.storage.DataPath;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.text.TextColor;
 
 public class ArborianQuests extends GenericsPlugin {
 

@@ -24,10 +24,10 @@
 
 package com.jcwhatever.bukkit.arborianquests.locations;
 
-import com.jcwhatever.bukkit.generic.mixins.INamedLocation;
-import com.jcwhatever.bukkit.generic.mixins.INamedLocationDistance;
-import com.jcwhatever.bukkit.generic.mixins.implemented.NamedLocationDistance;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
+import com.jcwhatever.generic.mixins.INamedLocation;
+import com.jcwhatever.generic.mixins.INamedLocationDistance;
+import com.jcwhatever.generic.mixins.implemented.NamedLocationDistance;
+import com.jcwhatever.generic.utils.PreCon;
 import org.bukkit.Location;
 
 public class ScriptLocation implements INamedLocation {

@@ -27,10 +27,10 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.CollectionUtils;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.Utils;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.CollectionUtils;
+import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.Utils;
 
 import org.bukkit.entity.Player;
 

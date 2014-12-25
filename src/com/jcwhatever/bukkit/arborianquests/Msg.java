@@ -24,9 +24,9 @@
 
 package com.jcwhatever.bukkit.arborianquests;
 
-import com.jcwhatever.bukkit.generic.messaging.ChatPaginator;
-import com.jcwhatever.bukkit.generic.messaging.IMessenger;
-import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
+import com.jcwhatever.generic.messaging.ChatPaginator;
+import com.jcwhatever.generic.messaging.IMessenger;
+import com.jcwhatever.generic.utils.text.TextUtils;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

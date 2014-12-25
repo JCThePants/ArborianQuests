@@ -24,8 +24,8 @@
 
 package com.jcwhatever.bukkit.arborianquests.commands.admin.locations;
 
-import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.CommandInfo;
+import com.jcwhatever.generic.commands.AbstractCommand;
+import com.jcwhatever.generic.commands.CommandInfo;
 
 @CommandInfo(
         command={"locations"},

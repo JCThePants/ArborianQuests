@@ -28,12 +28,12 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
-import com.jcwhatever.bukkit.generic.commands.AbstractCommand;
-import com.jcwhatever.bukkit.generic.commands.CommandInfo;
-import com.jcwhatever.bukkit.generic.commands.arguments.CommandArguments;
-import com.jcwhatever.bukkit.generic.commands.arguments.LocationResponse;
-import com.jcwhatever.bukkit.generic.commands.exceptions.CommandException;
-import com.jcwhatever.bukkit.generic.language.Localizable;
+import com.jcwhatever.generic.commands.AbstractCommand;
+import com.jcwhatever.generic.commands.CommandInfo;
+import com.jcwhatever.generic.commands.arguments.CommandArguments;
+import com.jcwhatever.generic.commands.arguments.LocationResponse;
+import com.jcwhatever.generic.commands.exceptions.CommandException;
+import com.jcwhatever.generic.language.Localizable;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;

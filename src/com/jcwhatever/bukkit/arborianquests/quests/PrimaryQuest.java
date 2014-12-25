@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.arborianquests.quests;
 
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
+import com.jcwhatever.generic.storage.IDataNode;
 
 /*
  * 

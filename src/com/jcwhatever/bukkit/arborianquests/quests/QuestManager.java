@@ -25,11 +25,11 @@
 package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
-import com.jcwhatever.bukkit.generic.storage.DataStorage;
-import com.jcwhatever.bukkit.generic.storage.DataPath;
-import com.jcwhatever.bukkit.generic.storage.IDataNode;
-import com.jcwhatever.bukkit.generic.utils.PreCon;
-import com.jcwhatever.bukkit.generic.utils.text.TextUtils;
+import com.jcwhatever.generic.storage.DataStorage;
+import com.jcwhatever.generic.storage.DataPath;
+import com.jcwhatever.generic.storage.IDataNode;
+import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.generic.utils.text.TextUtils;
 
 import org.bukkit.plugin.Plugin;
 
