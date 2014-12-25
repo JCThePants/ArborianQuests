@@ -29,10 +29,11 @@ import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItem;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItem.PickupHandler;
 import com.jcwhatever.bukkit.generic.items.floating.FloatingItemManager;
+import com.jcwhatever.bukkit.generic.items.floating.IFloatingItem;
 import com.jcwhatever.bukkit.generic.scripting.IEvaluatedScript;
 import com.jcwhatever.bukkit.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.DataPath;
+import com.jcwhatever.bukkit.generic.storage.DataStorage;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 
@@ -60,11 +61,11 @@ public class Items {
 
         _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
 
-        List<FloatingItem> floatingItems = _manager.getItems();
+        List<IFloatingItem> floatingItems = _manager.getItems();
 
         // remove all items, ensures items are removed if
         // the server is not shut down properly.
-        for (FloatingItem item : floatingItems) {
+        for (IFloatingItem item : floatingItems) {
             _manager.remove(item.getName());
         }
 
@@ -77,7 +78,7 @@ public class Items {
 
     public static class ApiObject implements IScriptApiObject {
 
-        private Map<FloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
+        private Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
         private LinkedList<PickupWrapper> _pickupCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _spawnCallbacks = new LinkedList<>();
         private LinkedList<CallbackWrapper> _despawnCallbacks = new LinkedList<>();
@@ -96,10 +97,10 @@ public class Items {
         @Override
         public void dispose() {
 
-            Iterator<FloatingItem> iterator = _floatingItems.keySet().iterator();
+            Iterator<IFloatingItem> iterator = _floatingItems.keySet().iterator();
 
             while (iterator.hasNext()) {
-                FloatingItem item = iterator.next();
+                IFloatingItem item = iterator.next();
                 _manager.remove(item.getName());
                 iterator.remove();
             }
@@ -143,11 +144,11 @@ public class Items {
          * @param location   The location the item will spawn in.
          */
         @Nullable
-        public FloatingItem createFloatingItem(ItemStack itemStack, Location location) {
+        public IFloatingItem createFloatingItem(ItemStack itemStack, Location location) {
             PreCon.notNull(itemStack);
             PreCon.notNull(location);
 
-            FloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
+            IFloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
                     itemStack.clone(), location);
 
             if (floatingItem != null)
