@@ -24,8 +24,9 @@
 
 package com.jcwhatever.bukkit.arborianquests.quests;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
-import com.jcwhatever.bukkit.generic.collections.HashSetMap;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Utils;
@@ -34,6 +35,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,7 +47,8 @@ import javax.annotation.Nullable;
  */
 public abstract class Quest {
 
-    private static HashSetMap<UUID, Quest> _playerQuests = new HashSetMap<>(100);
+    private static Multimap<UUID, Quest> _playerQuests =
+            MultimapBuilder.hashKeys(100).hashSetValues().build();
 
     private final String _questName;
     private String _displayName;
@@ -56,7 +59,7 @@ public abstract class Quest {
 
     @Nullable
     public static Set<Quest> getPlayerQuests(Player p) {
-        return _playerQuests.getAll(p.getUniqueId());
+        return new HashSet<>(_playerQuests.get(p.getUniqueId()));
     }
 
     public Quest(String questName, String displayName, IDataNode dataNode) {
@@ -300,7 +303,7 @@ public abstract class Quest {
         }
 
         if (status.getCurrentStatus() == CurrentQuestStatus.NONE) {
-            _playerQuests.removeValue(playerId, this);
+            _playerQuests.remove(playerId, this);
         }
         else if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS) {
             _playerQuests.put(playerId, this);
