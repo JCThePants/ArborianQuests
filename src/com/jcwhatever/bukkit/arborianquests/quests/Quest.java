@@ -28,6 +28,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.generic.storage.IDataNode;
+import com.jcwhatever.bukkit.generic.utils.CollectionUtils;
 import com.jcwhatever.bukkit.generic.utils.PreCon;
 import com.jcwhatever.bukkit.generic.utils.Utils;
 
@@ -35,7 +36,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,9 +57,14 @@ public abstract class Quest {
     private final IDataNode _questNode;
     private final Map<String, SubQuest> _subQuests = new HashMap<>(5);
 
-    @Nullable
+    /**
+     * Get an unmodifiable {@code Set} of {@code Quest}'s that
+     * the player is in
+     * .
+     * @param p  The player.
+     */
     public static Set<Quest> getPlayerQuests(Player p) {
-        return new HashSet<>(_playerQuests.get(p.getUniqueId()));
+        return CollectionUtils.unmodifiableSet(_playerQuests.get(p.getUniqueId()));
     }
 
     public Quest(String questName, String displayName, IDataNode dataNode) {
