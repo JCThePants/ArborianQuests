@@ -74,7 +74,7 @@ public class BaseCommand extends AbstractCommand {
     @Override
     public void execute(CommandSender sender, CommandArguments args) throws CommandException {
 
-        CommandException.assertNotConsole(this, sender);
+        CommandException.checkNotConsole(this, sender);
 
         int page = args.getInteger("page");
         Player p = (Player)sender;

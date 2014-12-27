@@ -55,7 +55,7 @@ public class AddSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws CommandException {
 
-        CommandException.assertNotConsole(this, sender);
+        CommandException.checkNotConsole(this, sender);
 
         final String locationName = args.getName("locationName", 48);
 

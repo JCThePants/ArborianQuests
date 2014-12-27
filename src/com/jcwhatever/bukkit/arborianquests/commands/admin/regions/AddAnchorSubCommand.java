@@ -53,7 +53,7 @@ public class AddAnchorSubCommand extends AbstractCommand {
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws CommandException {
 
-        CommandException.assertNotConsole(this, sender);
+        CommandException.checkNotConsole(this, sender);
 
         String regionName = args.getName("regionName", 48);
         int diameter = args.getInteger("diameter");
