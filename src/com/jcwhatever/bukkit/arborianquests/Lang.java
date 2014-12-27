@@ -24,7 +24,7 @@
 
 package com.jcwhatever.bukkit.arborianquests;
 
-import com.jcwhatever.generic.language.Localized;
+import com.jcwhatever.nucleus.language.Localized;
 
 public class Lang {
 

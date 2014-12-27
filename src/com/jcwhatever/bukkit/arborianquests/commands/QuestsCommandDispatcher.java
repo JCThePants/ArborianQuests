@@ -26,7 +26,7 @@ package com.jcwhatever.bukkit.arborianquests.commands;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.commands.users.BaseCommand;
-import com.jcwhatever.generic.commands.CommandDispatcher;
+import com.jcwhatever.nucleus.commands.CommandDispatcher;
 
 public class QuestsCommandDispatcher extends CommandDispatcher {
 

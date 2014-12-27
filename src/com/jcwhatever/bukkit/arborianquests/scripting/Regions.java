@@ -27,9 +27,9 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.regions.IScriptRegionResult;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
-import com.jcwhatever.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.PreCon;
 
 import java.util.HashSet;
 import java.util.Set;

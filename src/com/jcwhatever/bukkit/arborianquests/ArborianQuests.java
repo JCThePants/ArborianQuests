@@ -30,14 +30,14 @@ import com.jcwhatever.bukkit.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestManager;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.bukkit.arborianquests.scripting.QuestsApi;
-import com.jcwhatever.generic.GenericsLib;
-import com.jcwhatever.generic.GenericsPlugin;
-import com.jcwhatever.generic.storage.DataStorage;
-import com.jcwhatever.generic.storage.DataPath;
-import com.jcwhatever.generic.storage.IDataNode;
-import com.jcwhatever.generic.utils.text.TextColor;
+import com.jcwhatever.nucleus.Nucleus;
+import com.jcwhatever.nucleus.NucleusPlugin;
+import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.text.TextColor;
 
-public class ArborianQuests extends GenericsPlugin {
+public class ArborianQuests extends NucleusPlugin {
 
     private static ArborianQuests _instance;
 
@@ -113,12 +113,12 @@ public class ArborianQuests extends GenericsPlugin {
 
         registerCommands(new QuestsCommandDispatcher());
 
-        GenericsLib.getScriptApiRepo().registerApiType(this, QuestsApi.class);
+        Nucleus.getScriptApiRepo().registerApiType(this, QuestsApi.class);
     }
 
     @Override
     protected void onDisablePlugin() {
 
-        GenericsLib.getScriptApiRepo().unregisterApiType(this, QuestsApi.class);
+        Nucleus.getScriptApiRepo().unregisterApiType(this, QuestsApi.class);
     }
 }

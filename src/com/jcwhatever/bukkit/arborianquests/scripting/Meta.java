@@ -1,8 +1,8 @@
 package com.jcwhatever.bukkit.arborianquests.scripting;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
-import com.jcwhatever.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.generic.scripting.api.ScriptApiMeta;
+import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
+import com.jcwhatever.nucleus.scripting.api.ScriptApiMeta;
 
 import org.bukkit.plugin.Plugin;
 

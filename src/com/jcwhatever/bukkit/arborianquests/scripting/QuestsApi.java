@@ -30,18 +30,18 @@ import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionStatus;
-import com.jcwhatever.generic.collections.timed.LifespanEndAction;
-import com.jcwhatever.generic.collections.timed.TimedHashSet;
-import com.jcwhatever.generic.commands.response.CommandRequests;
-import com.jcwhatever.generic.commands.response.IResponseHandler;
-import com.jcwhatever.generic.commands.response.ResponseRequest;
-import com.jcwhatever.generic.commands.response.ResponseType;
-import com.jcwhatever.generic.scripting.IEvaluatedScript;
-import com.jcwhatever.generic.scripting.ScriptApiInfo;
-import com.jcwhatever.generic.scripting.api.GenericsScriptApi;
-import com.jcwhatever.generic.scripting.api.IScriptApiObject;
-import com.jcwhatever.generic.utils.player.PlayerUtils;
-import com.jcwhatever.generic.utils.PreCon;
+import com.jcwhatever.nucleus.collections.timed.LifespanEndAction;
+import com.jcwhatever.nucleus.collections.timed.TimedHashSet;
+import com.jcwhatever.nucleus.commands.response.CommandRequests;
+import com.jcwhatever.nucleus.commands.response.IResponseHandler;
+import com.jcwhatever.nucleus.commands.response.ResponseRequest;
+import com.jcwhatever.nucleus.commands.response.ResponseType;
+import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
+import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
+import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
+import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -54,7 +54,7 @@ import javax.annotation.Nullable;
 @ScriptApiInfo(
         variableName = "quests",
         description = "Provide scripts API access for quests.")
-public class QuestsApi extends GenericsScriptApi {
+public class QuestsApi extends NucleusScriptApi {
 
     private static TimedHashSet<ResponseRequest> _requests = new TimedHashSet<ResponseRequest>(20, 600);
 

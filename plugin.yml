@@ -2,17 +2,10 @@ name: ArborianQuests
 author: JCThePants
 main: com.jcwhatever.bukkit.arborianquests.ArborianQuests
 version: 0.0-beta
-depend: [GenericsLib]
+depend: [NucleusFramework]
 commands:
     quest:
-        description: Base command for Arborian Quests
-        usage: |
-            ERROR!
-    quests:
-        description: Base command for Arborian Quests
-        usage: |
-            ERROR!
-    arborianquests:
+        aliases: [quests, arborianquests]
         description: Base command for Arborian Quests
         usage: |
             ERROR!
