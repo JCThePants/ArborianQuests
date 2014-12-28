@@ -57,7 +57,6 @@ import java.util.List;
         isHelpVisible=false)
 public class BaseCommand extends AbstractCommand {
 
-    @Localizable static final String _NOT_CONSOLE = "Console does not have quests. Use '?' argument for list of commands.";
     @Localizable static final String _PAGINATOR_TITLE="My Current Quests";
     @Localizable static final String _HELP = "Type '/{plugin-command} ?' for a list of commands.";
 
