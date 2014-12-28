@@ -4,8 +4,8 @@ main: com.jcwhatever.bukkit.arborianquests.ArborianQuests
 version: 0.0-beta
 depend: [NucleusFramework]
 commands:
-    quest:
-        aliases: [quests, arborianquests]
+    quests:
+        aliases: [quest, arborianquests]
         description: Base command for Arborian Quests
         usage: |
             ERROR!
