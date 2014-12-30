@@ -57,7 +57,7 @@ public class ReplayCommand extends AbstractCommand {
 
         String questName = args.getName("questName", 48);
 
-        Quest quest = ArborianQuests.getQuestManager().get(questName);
+        Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
         if (quest == null) {
             tellError(sender, Lang.get(_NOT_FOUND), questName);
             return; // finished

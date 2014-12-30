@@ -95,7 +95,7 @@ public class ScriptRegion extends Region {
 
         questName = questName.toLowerCase();
 
-        Quest quest = ArborianQuests.getQuestManager().get(questName);
+        Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
         if (quest == null)
             return false;
 
@@ -128,7 +128,7 @@ public class ScriptRegion extends Region {
 
         questName = questName.toLowerCase();
 
-        Quest quest = ArborianQuests.getQuestManager().get(questName);
+        Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
         if (quest == null)
             return false;
 

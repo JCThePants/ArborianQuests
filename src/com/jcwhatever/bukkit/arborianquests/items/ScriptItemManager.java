@@ -42,7 +42,7 @@ public class ScriptItemManager extends NamedInsensitiveDataManager<ScriptItem> {
      * @param dataNode  The data node where {@code ItemStacks are stored.}
      */
     public ScriptItemManager(IDataNode dataNode) {
-        super(dataNode);
+        super(dataNode, true);
     }
 
     /**

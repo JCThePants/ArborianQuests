@@ -39,7 +39,7 @@ public class ScriptLocationManager extends NamedInsensitiveDataManager<ScriptLoc
      * @param dataNode  The data node where locations are stored.
      */
     public ScriptLocationManager(IDataNode dataNode) {
-        super(dataNode);
+        super(dataNode, true);
     }
 
     /**

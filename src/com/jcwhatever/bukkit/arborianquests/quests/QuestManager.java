@@ -66,7 +66,7 @@ public class QuestManager implements IPluginOwned {
         return _dataNode;
     }
 
-    public Quest create(String questName, String displayName) {
+    public Quest createPrimary(String questName, String displayName) {
         PreCon.notNullOrEmpty(questName);
         PreCon.notNull(displayName);
 
@@ -112,7 +112,7 @@ public class QuestManager implements IPluginOwned {
     }
 
     @Nullable
-    public Quest get(String questName) {
+    public Quest getPrimary(String questName) {
         PreCon.notNullOrEmpty(questName);
 
         if (questName.indexOf('.') != -1) {
@@ -164,7 +164,7 @@ public class QuestManager implements IPluginOwned {
 
         String[] names = TextUtils.PATTERN_DOT.split(questName);
 
-        Quest current = get(names[0]);
+        Quest current = getPrimary(names[0]);
         if (current == null)
             return null;
 

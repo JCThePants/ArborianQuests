@@ -58,7 +58,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = ArborianQuests.getQuestManager().get(questName);
+            Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
             return quest != null && quest.hasFlag(p.getUniqueId(), flagName);
         }
 
@@ -77,7 +77,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = ArborianQuests.getQuestManager().get(questName);
+            Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
             if (quest == null)
                 return false;
 
@@ -100,7 +100,7 @@ public class Flags {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.notNull(p);
 
-            Quest quest = ArborianQuests.getQuestManager().get(questName);
+            Quest quest = ArborianQuests.getQuestManager().getPrimary(questName);
             if (quest == null)
                 return false;
 

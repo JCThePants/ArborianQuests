@@ -24,9 +24,12 @@
 
 package com.jcwhatever.bukkit.arborianquests.regions;
 
+import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.nucleus.regions.RegionManager;
+import com.jcwhatever.nucleus.regions.selection.IRegionSelection;
+import com.jcwhatever.nucleus.regions.selection.RegionSelection;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.managers.NamedInsensitiveDataManager;
 
 import org.bukkit.Location;
 
@@ -35,7 +38,7 @@ import javax.annotation.Nullable;
 /**
  * Manages quest scripting regions.
  */
-public class ScriptRegionManager extends NamedInsensitiveDataManager<ScriptRegion> {
+public class ScriptRegionManager extends RegionManager<ScriptRegion> {
 
     /**
      * Constructor.
@@ -43,35 +46,7 @@ public class ScriptRegionManager extends NamedInsensitiveDataManager<ScriptRegio
      * @param dataNode  The data node to load and store settings.
      */
     public ScriptRegionManager(IDataNode dataNode) {
-        super(dataNode);
-    }
-
-    /**
-     * Add a scripting region.
-     *
-     * @param name  The name of the region.
-     * @param p1    The first region point.
-     * @param p2    The second region point.
-     *
-     * @return  The newly created {@code ScriptRegion} or null if failed.
-     */
-    @Nullable
-    public ScriptRegion add(String name, Location p1, Location p2) {
-        PreCon.notNullOrEmpty(name);
-        PreCon.notNull(p1);
-        PreCon.notNull(p2);
-
-        if (contains(name))
-            return null;
-
-        IDataNode regionNode = _dataNode.getNode(name);
-
-        ScriptRegion region = new ScriptRegion(name, regionNode);
-        region.setCoords(p1, p2);
-
-        add(region);
-
-        return region;
+        super(ArborianQuests.getPlugin(), dataNode, true);
     }
 
     /**
@@ -99,7 +74,7 @@ public class ScriptRegionManager extends NamedInsensitiveDataManager<ScriptRegio
                 anchor.getBlockY() - diameter,
                 anchor.getBlockZ() - diameter);
 
-        return add(name, p1, p2);
+        return add(name, new RegionSelection(p1, p2));
     }
 
     @Nullable
@@ -112,5 +87,13 @@ public class ScriptRegionManager extends NamedInsensitiveDataManager<ScriptRegio
     @Override
     protected void save(ScriptRegion item, IDataNode itemNode) {
         // do nothing
+    }
+
+    @Override
+    protected ScriptRegion create(String name, @Nullable IDataNode dataNode, IRegionSelection selection) {
+        ScriptRegion region = new ScriptRegion(name, dataNode);
+        region.setCoords(selection.getP1(), selection.getP2());
+
+        return region;
     }
 }

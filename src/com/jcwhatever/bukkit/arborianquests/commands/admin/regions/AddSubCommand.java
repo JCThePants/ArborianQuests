@@ -71,7 +71,7 @@ public class AddSubCommand extends AbstractCommand {
             return; // finished
 
         //noinspection ConstantConditions
-        region = regionManager.add(regionName, selection.getP1(), selection.getP2());
+        region = regionManager.add(regionName, selection);
         if (region == null) {
             tellError(sender, Lang.get(_FAILED));
             return; // finished
