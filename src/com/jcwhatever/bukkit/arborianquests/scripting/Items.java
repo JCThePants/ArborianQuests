@@ -61,7 +61,7 @@ public class Items {
 
         _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
 
-        List<IFloatingItem> floatingItems = _manager.getItems();
+        List<IFloatingItem> floatingItems = _manager.getAll();
 
         // remove all items, ensures items are removed if
         // the server is not shut down properly.
