@@ -25,85 +25,61 @@
 package com.jcwhatever.bukkit.arborianquests.items;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.managers.NamedInsensitiveDataManager;
 
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.annotation.Nullable;
 
-/*
- * 
+/**
+ * Manages {@code ScriptItem}'s
  */
-public class ScriptItemManager {
+public class ScriptItemManager extends NamedInsensitiveDataManager<ScriptItem> {
 
-    private final IDataNode _dataNode;
-    private final Map<String, ScriptItem> _items = new HashMap<>(30);
-
+    /**
+     * Constructor.
+     *
+     * @param dataNode  The data node where {@code ItemStacks are stored.}
+     */
     public ScriptItemManager(IDataNode dataNode) {
-        PreCon.notNull(dataNode);
-
-        _dataNode = dataNode;
-
-        loadSettings();
+        super(dataNode);
     }
 
+    /**
+     * Add a scripted {@code ItemStack}.
+     *
+     * @param name  The name of the {@code ItemStack}.
+     * @param item  The {@code ItemStack}.
+     *
+     * @return  The created {@code ScriptItem} or null if the name is already in use.
+     */
     @Nullable
-    public ScriptItem addItem(String name, ItemStack item) {
+    public ScriptItem add(String name, ItemStack item) {
 
-        if (_items.containsKey(name.toLowerCase()))
+        if (contains(name))
             return null;
 
         ScriptItem scriptItem = new ScriptItem(name, item);
 
-        _items.put(scriptItem.getSearchName(), scriptItem);
-
-        _dataNode.set(name, item);
-        _dataNode.saveAsync(null);
+        add(scriptItem);
 
         return scriptItem;
     }
 
-    public boolean removeItem(String name) {
+    @Nullable
+    @Override
+    protected ScriptItem load(String name, IDataNode itemNode) {
 
-        ScriptItem item = _items.remove(name.toLowerCase());
-        if (item == null)
-            return false;
+        ItemStack[] items = itemNode.getItemStacks("");
+        if (items == null || items.length == 0)
+            return null;
 
-        _dataNode.set(name, null);
-        _dataNode.saveAsync(null);
-
-        return true;
+        return new ScriptItem(name, items[0]);
     }
 
     @Nullable
-    public ScriptItem getItem(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        return _items.get(name.toLowerCase());
+    @Override
+    protected void save(ScriptItem item, IDataNode itemNode) {
+        itemNode.set("", item.getItem());
     }
-
-    public List<ScriptItem> getItems() {
-        return new ArrayList<>(_items.values());
-    }
-
-    private void loadSettings() {
-
-        Set<String> names = _dataNode.getSubNodeNames();
-
-        for (String name : names) {
-
-            ItemStack[] items = _dataNode.getItemStacks(name);
-            if (items == null || items.length == 0)
-                continue;
-
-            ScriptItem scriptItem = new ScriptItem(name, items[0]);
-            _items.put(scriptItem.getSearchName(), scriptItem);
-        }
-    }
-
 }

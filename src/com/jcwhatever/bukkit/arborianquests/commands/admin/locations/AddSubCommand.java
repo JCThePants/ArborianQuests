@@ -61,7 +61,7 @@ public class AddSubCommand extends AbstractCommand {
 
         final ScriptLocationManager manager = ArborianQuests.getScriptLocationManager();
 
-        ScriptLocation scriptLocation = manager.getLocation(locationName);
+        ScriptLocation scriptLocation = manager.get(locationName);
         if (scriptLocation != null) {
             tellError(sender, Lang.get(_LOCATION_ALREADY_EXISTS), locationName);
             return; // finished
@@ -72,7 +72,7 @@ public class AddSubCommand extends AbstractCommand {
             @Override
             public void onLocationRetrieved(Player p, Location result) {
 
-                ScriptLocation scriptLocation = manager.addLocation(locationName, result);
+                ScriptLocation scriptLocation = manager.add(locationName, result);
                 if (scriptLocation == null) {
                     tellError(p, Lang.get(_FAILED));
                 }

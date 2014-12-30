@@ -26,23 +26,16 @@ package com.jcwhatever.bukkit.arborianquests.regions;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.managers.NamedInsensitiveDataManager;
 
 import org.bukkit.Location;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.annotation.Nullable;
 
 /**
  * Manages quest scripting regions.
  */
-public class ScriptRegionManager {
-
-    private Map<String, ScriptRegion> _scriptRegions = new HashMap<>(20);
-    private IDataNode _dataNode;
+public class ScriptRegionManager extends NamedInsensitiveDataManager<ScriptRegion> {
 
     /**
      * Constructor.
@@ -50,28 +43,7 @@ public class ScriptRegionManager {
      * @param dataNode  The data node to load and store settings.
      */
     public ScriptRegionManager(IDataNode dataNode) {
-        _dataNode = dataNode;
-
-        loadSettings();
-    }
-
-    /**
-     * Get a scripting region by name.
-     *
-     * @param name  The name of the region.
-     */
-    @Nullable
-    public ScriptRegion getRegion(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        return _scriptRegions.get(name.toLowerCase());
-    }
-
-    /**
-     * Get all scripting regions.
-     */
-    public List<ScriptRegion> getRegions() {
-        return new ArrayList<>(_scriptRegions.values());
+        super(dataNode);
     }
 
     /**
@@ -84,21 +56,20 @@ public class ScriptRegionManager {
      * @return  The newly created {@code ScriptRegion} or null if failed.
      */
     @Nullable
-    public ScriptRegion addRegion(String name, Location p1, Location p2) {
+    public ScriptRegion add(String name, Location p1, Location p2) {
         PreCon.notNullOrEmpty(name);
         PreCon.notNull(p1);
         PreCon.notNull(p2);
 
-        ScriptRegion region = _scriptRegions.get(name.toLowerCase());
-        if (region != null)
+        if (contains(name))
             return null;
 
         IDataNode regionNode = _dataNode.getNode(name);
 
-        region = new ScriptRegion(name, regionNode);
+        ScriptRegion region = new ScriptRegion(name, regionNode);
         region.setCoords(p1, p2);
 
-        _scriptRegions.put(region.getSearchName(), region);
+        add(region);
 
         return region;
     }
@@ -128,48 +99,18 @@ public class ScriptRegionManager {
                 anchor.getBlockY() - diameter,
                 anchor.getBlockZ() - diameter);
 
-        return addRegion(name, p1, p2);
+        return add(name, p1, p2);
     }
 
-    /**
-     * Remove a region by name.
-     *
-     * @param name  The name of the region.
-     *
-     * @return  True if successful.
-     */
-    public boolean removeRegion(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        ScriptRegion region = _scriptRegions.remove(name.toLowerCase());
-        if (region == null)
-            return false;
-
-        IDataNode regionNode = _dataNode.getNode(name);
-        regionNode.remove();
-        regionNode.saveAsync(null);
-
-        region.dispose();
-
-        return true;
+    @Nullable
+    @Override
+    protected ScriptRegion load(String name, IDataNode itemNode) {
+        return new ScriptRegion(name, itemNode);
     }
 
-
-    private void loadSettings() {
-
-        Set<String> regionNames = _dataNode.getSubNodeNames();
-        if (regionNames != null && !regionNames.isEmpty()) {
-
-            for (String regionName : regionNames) {
-
-                IDataNode regionNode = _dataNode.getNode(regionName);
-
-                ScriptRegion region = new ScriptRegion(regionName, regionNode);
-
-                _scriptRegions.put(region.getSearchName(), region);
-            }
-        }
+    @Nullable
+    @Override
+    protected void save(ScriptRegion item, IDataNode itemNode) {
+        // do nothing
     }
-
-
 }

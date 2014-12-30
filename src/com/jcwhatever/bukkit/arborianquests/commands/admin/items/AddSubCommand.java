@@ -65,13 +65,13 @@ public class AddSubCommand extends AbstractCommand {
 
         ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
-        ScriptItem item = manager.getItem(itemName);
+        ScriptItem item = manager.get(itemName);
         if (item != null) {
             tellError(sender, Lang.get(_ITEM_ALREADY_EXISTS, item.getName()));
             return; // finished
         }
 
-        if (manager.addItem(itemName, items[0]) == null) {
+        if (manager.add(itemName, items[0]) == null) {
             tellError(sender, Lang.get(_FAILED));
             return; // finished
         }

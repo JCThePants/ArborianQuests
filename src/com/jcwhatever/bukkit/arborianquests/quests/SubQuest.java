@@ -29,8 +29,8 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import java.util.LinkedList;
 
-/*
- * 
+/**
+ * A child quest of a a parent quest.
  */
 public class SubQuest extends Quest {
 
@@ -38,6 +38,14 @@ public class SubQuest extends Quest {
     private LinkedList<Quest> _fullPath;
     private String fullName;
 
+    /**
+     * Constructor.
+     *
+     * @param parent       The parent quest.
+     * @param questName    The quest name.
+     * @param displayName  The display name.
+     * @param dataNode     The quests data node.
+     */
     public SubQuest(Quest parent, String questName, String displayName, IDataNode dataNode) {
         super(questName, displayName, dataNode);
 
@@ -46,10 +54,16 @@ public class SubQuest extends Quest {
         _parent = parent;
     }
 
+    /**
+     * Get the parent quest.
+     */
     public Quest getParent() {
         return _parent;
     }
 
+    /**
+     * Get an object path of the quests parent hierarchy.
+     */
     public LinkedList<Quest> getFullPath() {
 
         if (_fullPath == null) {

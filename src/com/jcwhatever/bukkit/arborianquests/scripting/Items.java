@@ -130,7 +130,7 @@ public class Items {
         public ItemStack getItem(String name) {
             PreCon.notNullOrEmpty(name);
 
-            ScriptItem item = ArborianQuests.getScriptItemManager().getItem(name);
+            ScriptItem item = ArborianQuests.getScriptItemManager().get(name);
             if (item == null)
                 return null;
 

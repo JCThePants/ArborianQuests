@@ -60,7 +60,7 @@ public class AddSubCommand extends AbstractCommand {
 
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
-        ScriptRegion region = regionManager.getRegion(regionName);
+        ScriptRegion region = regionManager.get(regionName);
         if (region != null) {
             tellError(sender, Lang.get(_REGION_ALREADY_EXISTS), regionName);
             return; // finished
@@ -71,7 +71,7 @@ public class AddSubCommand extends AbstractCommand {
             return; // finished
 
         //noinspection ConstantConditions
-        region = regionManager.addRegion(regionName, selection.getP1(), selection.getP2());
+        region = regionManager.add(regionName, selection.getP1(), selection.getP2());
         if (region == null) {
             tellError(sender, Lang.get(_FAILED));
             return; // finished

@@ -55,14 +55,14 @@ public class DelSubCommand extends AbstractCommand {
 
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
-        ScriptRegion region = regionManager.getRegion(regionName);
+        ScriptRegion region = regionManager.get(regionName);
         if (region == null) {
             tellError(sender, Lang.get(_REGION_NOT_FOUND), regionName);
             return; // finished
         }
 
 
-        if (!regionManager.removeRegion(regionName)) {
+        if (!regionManager.remove(regionName)) {
             tellError(sender, Lang.get(_FAILED));
             return; // finished
         }

@@ -60,7 +60,7 @@ public class AddAnchorSubCommand extends AbstractCommand {
 
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
-        ScriptRegion region = regionManager.getRegion(regionName);
+        ScriptRegion region = regionManager.get(regionName);
         if (region != null) {
             tellError(sender, Lang.get(_REGION_ALREADY_EXISTS), regionName);
             return; // finished

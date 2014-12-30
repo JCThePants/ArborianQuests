@@ -25,6 +25,7 @@
 package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.nucleus.mixins.IPluginOwned;
 import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.IDataNode;
@@ -39,7 +40,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 
-public class QuestManager {
+public class QuestManager implements IPluginOwned {
 
     private final Plugin _plugin;
     private final IDataNode _dataNode;
@@ -56,6 +57,7 @@ public class QuestManager {
         loadSettings();
     }
 
+    @Override
     public Plugin getPlugin() {
         return _plugin;
     }
@@ -174,6 +176,4 @@ public class QuestManager {
 
         return current;
     }
-
-
 }

@@ -71,7 +71,7 @@ public class Regions {
         public ScriptRegion getRegion(String name) {
             PreCon.notNullOrEmpty(name);
 
-            return ArborianQuests.getScriptRegionManager().getRegion(name);
+            return ArborianQuests.getScriptRegionManager().get(name);
         }
 
         /**
@@ -84,7 +84,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onEnter);
 
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
             if (region == null) {
                 throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
@@ -106,7 +106,7 @@ public class Regions {
             PreCon.notNullOrEmpty(questName);
             PreCon.notNull(onEnter);
 
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
             if (region == null) {
                 throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
@@ -128,7 +128,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
             if (region == null) {
                 throw new RuntimeException("Failed to find quest region named:" + regionName);
             }
@@ -149,7 +149,7 @@ public class Regions {
             PreCon.notNullOrEmpty(regionName);
             PreCon.notNull(onLeave);
 
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().getRegion(regionName);
+            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
             if (region == null) {
                 throw new RuntimeException("Failed to find quest region named:" + regionName);
             }

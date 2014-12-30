@@ -58,7 +58,7 @@ public class RedefineSubCommand extends AbstractCommand {
 
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
-        ScriptRegion region = regionManager.getRegion(regionName);
+        ScriptRegion region = regionManager.get(regionName);
         if (region == null) {
             tellError(sender, Lang.get(_REGION_NOT_FOUND), regionName);
             return; // finished

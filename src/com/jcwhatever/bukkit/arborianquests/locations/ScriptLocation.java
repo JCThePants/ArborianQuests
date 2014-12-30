@@ -30,12 +30,21 @@ import com.jcwhatever.nucleus.mixins.implemented.NamedLocationDistance;
 import com.jcwhatever.nucleus.utils.PreCon;
 import org.bukkit.Location;
 
+/**
+ * A named location that can be retrieved by scripts.
+ */
 public class ScriptLocation implements INamedLocation {
 
     private final String _name;
     private final String _searchName;
     private final Location _location;
 
+    /**
+     * Constructor.
+     *
+     * @param name      The name of the location.
+     * @param location  The location.
+     */
     public ScriptLocation(String name, Location location) {
         PreCon.notNullOrEmpty(name);
         PreCon.notNull(location);

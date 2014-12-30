@@ -24,32 +24,47 @@
 
 package com.jcwhatever.bukkit.arborianquests.items;
 
+import com.jcwhatever.nucleus.mixins.INamedInsensitive;
+
 import org.bukkit.inventory.ItemStack;
 
-/*
- * 
+/**
+ * A named {@code ItemStack} that can be retrieved from scripts
  */
-public class ScriptItem {
+public class ScriptItem implements INamedInsensitive {
 
     private final String _name;
     private final String _searchName;
     private final ItemStack _itemStack;
 
+    /**
+     * Constructor.
+     *
+     * @param name       The name of the {@code ItemStack}
+     * @param itemStack  The {@code ItemStack}
+     */
     public ScriptItem(String name, ItemStack itemStack) {
         _name = name;
         _itemStack = itemStack;
         _searchName = name.toLowerCase();
     }
 
+    @Override
     public String getName() {
         return _name;
     }
 
-    public ItemStack getItem() {
-        return _itemStack;
-    }
-
+    @Override
     public String getSearchName() {
         return _searchName;
+    }
+
+    /**
+     * Get the item stack.
+     *
+     * @return  A clone of the {@code ItemStack}.
+     */
+    public ItemStack getItem() {
+        return _itemStack.clone();
     }
 }

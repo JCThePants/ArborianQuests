@@ -25,81 +25,57 @@
 package com.jcwhatever.bukkit.arborianquests.locations;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
-import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.managers.NamedInsensitiveDataManager;
+
 import org.bukkit.Location;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-public class ScriptLocationManager {
+public class ScriptLocationManager extends NamedInsensitiveDataManager<ScriptLocation> {
 
-    private final IDataNode _dataNode;
-    private final Map<String, ScriptLocation> _locations = new HashMap<>(30);
-
+    /**
+     * Constructor.
+     *
+     * @param dataNode  The data node where locations are stored.
+     */
     public ScriptLocationManager(IDataNode dataNode) {
-        PreCon.notNull(dataNode);
-
-        _dataNode = dataNode;
-
-        loadSettings();
+        super(dataNode);
     }
 
+    /**
+     * Add a scripted location.
+     *
+     * @param name      The name of the location.
+     * @param location  The location.
+     *
+     * @return  The new {@code ScriptLocation} or null if the name is already in use.
+     */
     @Nullable
-    public ScriptLocation addLocation(String name, Location location) {
+    public ScriptLocation add(String name, Location location) {
 
-        if (_locations.containsKey(name.toLowerCase()))
+        if (contains(name))
             return null;
 
         ScriptLocation scriptLocation = new ScriptLocation(name, location);
 
-        _locations.put(scriptLocation.getSearchName(), scriptLocation);
-
-        _dataNode.set(name, location);
-        _dataNode.saveAsync(null);
+        add(scriptLocation);
 
         return scriptLocation;
     }
 
-    public boolean removeLocation(String name) {
-
-        ScriptLocation location = _locations.remove(name.toLowerCase());
+    @Nullable
+    @Override
+    protected ScriptLocation load(String name, IDataNode itemNode) {
+        Location location = itemNode.getLocation("");
         if (location == null)
-            return false;
+            return null;
 
-        _dataNode.set(name, null);
-        _dataNode.saveAsync(null);
-
-        return true;
+        return new ScriptLocation(name, location);
     }
 
     @Nullable
-    public ScriptLocation getLocation(String name) {
-        PreCon.notNullOrEmpty(name);
-
-        return _locations.get(name.toLowerCase());
+    @Override
+    protected void save(ScriptLocation item, IDataNode itemNode) {
+        itemNode.set("", item.getLocation());
     }
-
-    public List<ScriptLocation> getLocations() {
-        return new ArrayList<>(_locations.values());
-    }
-
-    private void loadSettings() {
-
-        Set<String> names = _dataNode.getSubNodeNames();
-
-        for (String name : names) {
-
-            Location location = _dataNode.getLocation(name);
-            if (location == null)
-                continue;
-
-            ScriptLocation scriptLocation = new ScriptLocation(name, location);
-            _locations.put(scriptLocation.getSearchName(), scriptLocation);
-        }
-    }
-
 }

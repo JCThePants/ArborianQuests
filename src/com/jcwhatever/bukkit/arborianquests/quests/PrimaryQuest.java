@@ -26,8 +26,8 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 
-/*
- * 
+/**
+ * A top level quest that can have sub quests.
  */
 public class PrimaryQuest extends Quest {
 

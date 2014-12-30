@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
+import com.jcwhatever.nucleus.mixins.INamed;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -45,7 +46,7 @@ import javax.annotation.Nullable;
 /**
  * Represents a quest and players within the quest.
  */
-public abstract class Quest {
+public abstract class Quest implements INamed {
 
     private static Multimap<UUID, Quest> _playerQuests =
             MultimapBuilder.hashKeys(100).hashSetValues().build();
@@ -67,6 +68,13 @@ public abstract class Quest {
         return CollectionUtils.unmodifiableSet(_playerQuests.get(p.getUniqueId()));
     }
 
+    /**
+     * Constructor.
+     *
+     * @param questName    The name of the quest.
+     * @param displayName  The quest display name.
+     * @param dataNode     The quest data node.
+     */
     public Quest(String questName, String displayName, IDataNode dataNode) {
         PreCon.notNullOrEmpty(questName);
         PreCon.notNullOrEmpty(displayName);
@@ -79,6 +87,7 @@ public abstract class Quest {
         _questNode = dataNode.getNode("quests");
     }
 
+    @Override
     public String getName() {
         return _questName;
     }
@@ -159,20 +168,40 @@ public abstract class Quest {
         return true;
     }
 
+    /**
+     * Get a players current status in the quest.
+     *
+     * @param p  The player to check.
+     */
     public QuestStatus getStatus(Player p) {
         //noinspection ConstantConditions
         return getStatus(p.getUniqueId());
     }
 
+    /**
+     * Get a players current status in the quest.
+     *
+     * @param playerId  The id of the player to check.
+     */
     public QuestStatus getStatus(UUID playerId) {
         //noinspection ConstantConditions
         return _playerNode.getEnum(playerId.toString() + ".status", QuestStatus.NONE, QuestStatus.class);
     }
 
+    /**
+     * Accept the player into the quest.
+     *
+     * @param p  The player to accept.
+     */
     public void accept(Player p) {
         accept(p.getUniqueId());
     }
 
+    /**
+     * Accept the player into the quest.
+     *
+     * @param playerId  The id of the player.
+     */
     public void accept(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
@@ -194,10 +223,20 @@ public abstract class Quest {
         }
     }
 
+    /**
+     * Flag a player as having completed the quest.
+     *
+     * @param p  The player to flag.
+     */
     public void finish(Player p) {
         finish(p.getUniqueId());
     }
 
+    /**
+     * Flag a player as having completed the quest.
+     *
+     * @param playerId  The id of the player to flag.
+     */
     public void finish(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
@@ -218,10 +257,20 @@ public abstract class Quest {
         }
     }
 
+    /**
+     * Cancel the quest for a player.
+     *
+     * @param p  The player.
+     */
     public void cancel(Player p) {
         cancel(p.getUniqueId());
     }
 
+    /**
+     * Cancel the quest for a player.
+     *
+     * @param playerId  The id of the player.
+     */
     public void cancel(UUID playerId) {
 
         QuestStatus status = getStatus(playerId);
@@ -298,6 +347,7 @@ public abstract class Quest {
         _playerNode.saveAsync(null);
     }
 
+    // Set the quest status of a player
     private void setStatus(UUID playerId, QuestStatus status) {
 
         if (status == QuestStatus.NONE) {
@@ -317,6 +367,7 @@ public abstract class Quest {
         _playerNode.saveAsync(null);
     }
 
+    // intitial settings load
     private void loadSettings() {
 
         // load players

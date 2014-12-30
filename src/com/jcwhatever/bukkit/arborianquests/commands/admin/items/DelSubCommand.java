@@ -55,13 +55,13 @@ public class DelSubCommand extends AbstractCommand {
 
         ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
-        ScriptItem scriptItem = manager.getItem(itemName);
+        ScriptItem scriptItem = manager.get(itemName);
         if (scriptItem == null) {
             tellError(sender, Lang.get(_LOCATION_NOT_FOUND), itemName);
             return; // finished
         }
 
-        if (!manager.removeItem(itemName)) {
+        if (!manager.remove(itemName)) {
             tellError(sender, Lang.get(_FAILED));
             return; // finished
         }
