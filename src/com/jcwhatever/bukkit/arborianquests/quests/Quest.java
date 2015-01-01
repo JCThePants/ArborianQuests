@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
+import com.jcwhatever.nucleus.mixins.IHierarchyNode;
 import com.jcwhatever.nucleus.mixins.INamed;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
@@ -46,7 +47,7 @@ import javax.annotation.Nullable;
 /**
  * Represents a quest and players within the quest.
  */
-public abstract class Quest implements INamed {
+public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
     private static Multimap<UUID, Quest> _playerQuests =
             MultimapBuilder.hashKeys(100).hashSetValues().build();
@@ -56,7 +57,7 @@ public abstract class Quest implements INamed {
     private final IDataNode _dataNode;
     private final IDataNode _playerNode;
     private final IDataNode _questNode;
-    private final Map<String, SubQuest> _subQuests = new HashMap<>(5);
+    private final Map<String, Quest> _subQuests = new HashMap<>(5);
 
     /**
      * Get an unmodifiable {@code Set} of {@code Quest}'s that
@@ -110,7 +111,7 @@ public abstract class Quest implements INamed {
      * @param questName  The name of the sub quest.
      */
     @Nullable
-    public SubQuest getQuest(String questName) {
+    public Quest getQuest(String questName) {
         PreCon.notNullOrEmpty(questName);
 
         return _subQuests.get(questName.toLowerCase());
@@ -119,7 +120,7 @@ public abstract class Quest implements INamed {
     /**
      * Get all sub quests.
      */
-    public List<SubQuest> getQuests() {
+    public List<Quest> getQuests() {
         return new ArrayList<>(_subQuests.values());
     }
 
@@ -135,7 +136,7 @@ public abstract class Quest implements INamed {
 
         questName = questName.toLowerCase();
 
-        SubQuest quest = _subQuests.get(questName);
+        Quest quest = _subQuests.get(questName);
         if (quest != null) {
             quest.setDisplayName(displayName);
             return quest;
@@ -157,7 +158,7 @@ public abstract class Quest implements INamed {
 
         questName = questName.toLowerCase();
 
-        SubQuest quest = _subQuests.remove(questName);
+        Quest quest = _subQuests.remove(questName);
         if (quest == null)
             return false;
 

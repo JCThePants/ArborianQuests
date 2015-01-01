@@ -26,6 +26,9 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.jcwhatever.nucleus.storage.IDataNode;
 
+import java.util.Collection;
+import javax.annotation.Nullable;
+
 /**
  * A top level quest that can have sub quests.
  */
@@ -33,5 +36,24 @@ public class PrimaryQuest extends Quest {
 
     public PrimaryQuest(String questName, String displayName, IDataNode dataNode) {
         super(questName, displayName, dataNode);
+    }
+
+    /**
+     * Get the parent node.
+     *
+     * @return  Null if the node is a top level node.
+     */
+    @Nullable
+    @Override
+    public Quest getParent() {
+        return null;
+    }
+
+    /**
+     * Get the nodes children.
+     */
+    @Override
+    public Collection<Quest> getChildren() {
+        return getQuests();
     }
 }

@@ -31,15 +31,21 @@ import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.items.ItemsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
+import com.jcwhatever.bukkit.arborianquests.quests.PrimaryQuest;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
+import com.jcwhatever.nucleus.collections.HierarchyNode;
+import com.jcwhatever.nucleus.collections.TreeNode;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.language.Localizable;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.messaging.ChatTree;
+import com.jcwhatever.nucleus.messaging.ChatTree.NodeLineWriter;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
@@ -47,6 +53,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @CommandInfo(
@@ -81,19 +88,48 @@ public class BaseCommand extends AbstractCommand {
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
         List<Quest> quests = ArborianQuests.getQuestManager().getQuests();
-        List<Quest> myQuests = new ArrayList<>(quests.size());
+        List<HierarchyNode<Quest>> nodes = new ArrayList<>(quests.size());
 
         for (Quest quest : quests) {
+
+            // make sure the player is in the quest
             QuestStatus status = quest.getStatus(p);
-            if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS)
-                myQuests.add(quest);
+            if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS) {
+
+                // check all sub nodes an remove quests the player is not in
+                HierarchyNode<Quest> node = new HierarchyNode<>(quest);
+                Iterator<TreeNode<Quest>> iterator = node.iterator();
+
+                while (iterator.hasNext()) {
+
+                    TreeNode<Quest> questNode = iterator.next();
+                    status = questNode.getValue().getStatus(p);
+
+                    if (status.getCurrentStatus() != CurrentQuestStatus.IN_PROGRESS) {
+                        iterator.remove();
+                    }
+                }
+
+                nodes.add(node);
+            }
         }
 
-        for (Quest quest : myQuests) {
-            pagin.add(quest.getName(), quest.getDisplayName());
-        }
+        // Create a chat hierarchy
+        ChatTree<Quest> questTree = new ChatTree<>(ArborianQuests.getPlugin());
+        questTree.addAllRootNodes(nodes);
 
-        pagin.show(p, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
+        // add chat hierarchy to paginator
+        pagin.addAll(questTree.toChatLines(new NodeLineWriter<Quest>() {
+            @Override
+            public String write(Quest quest) {
+                return quest instanceof PrimaryQuest
+                        ? TextUtils.format(FormatTemplate.LIST_ITEM_DESCRIPTION,
+                        quest.getName(), quest.getDisplayName())
+                        : TextUtils.format("{GRAY}{0}", quest.getName());
+            }
+        }));
+
+        pagin.show(p, page, FormatTemplate.RAW);
 
         tell(sender, Lang.get(_HELP));
     }

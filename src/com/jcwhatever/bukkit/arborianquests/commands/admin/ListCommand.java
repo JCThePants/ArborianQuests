@@ -27,6 +27,7 @@ package com.jcwhatever.bukkit.arborianquests.commands.admin;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
+import com.jcwhatever.bukkit.arborianquests.quests.PrimaryQuest;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
@@ -34,6 +35,9 @@ import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.nucleus.language.Localizable;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.messaging.ChatTree;
+import com.jcwhatever.nucleus.messaging.ChatTree.NodeLineWriter;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
@@ -47,8 +51,7 @@ import java.util.List;
 
 public class ListCommand extends AbstractCommand {
 
-    @Localizable
-    static final String _PAGINATOR_TITLE = "Quests";
+    @Localizable static final String _PAGINATOR_TITLE = "Quests";
 
     @Override
     public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
@@ -59,10 +62,18 @@ public class ListCommand extends AbstractCommand {
 
         List<Quest> quests = ArborianQuests.getQuestManager().getQuests();
 
-        for (Quest quest : quests) {
-            pagin.addFormatted(quest.getName(), quest.getDisplayName());
-        }
+        ChatTree<Quest> questTree = new ChatTree<>(ArborianQuests.getPlugin(), quests);
 
-        pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
+        pagin.addAll(questTree.toChatLines(new NodeLineWriter<Quest>() {
+            @Override
+            public String write(Quest quest) {
+                return quest instanceof PrimaryQuest
+                        ? TextUtils.format(FormatTemplate.LIST_ITEM_DESCRIPTION,
+                        quest.getName(), quest.getDisplayName())
+                        : TextUtils.format("{GRAY}{0}", quest.getName());
+            }
+        }));
+
+        pagin.show(sender, page, FormatTemplate.RAW);
     }
 }

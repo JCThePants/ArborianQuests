@@ -27,7 +27,9 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 
+import java.util.Collection;
 import java.util.LinkedList;
+import javax.annotation.Nullable;
 
 /**
  * A child quest of a a parent quest.
@@ -55,10 +57,22 @@ public class SubQuest extends Quest {
     }
 
     /**
-     * Get the parent quest.
+     * Get the parent node.
+     *
+     * @return  Null if the node is a top level node.
      */
+    @Nullable
+    @Override
     public Quest getParent() {
         return _parent;
+    }
+
+    /**
+     * Get the nodes children.
+     */
+    @Override
+    public Collection<Quest> getChildren() {
+        return getQuests();
     }
 
     /**
