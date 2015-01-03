@@ -29,6 +29,7 @@ import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.nucleus.mixins.IHierarchyNode;
 import com.jcwhatever.nucleus.mixins.INamed;
+import com.jcwhatever.nucleus.storage.DataBatchOperation;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -339,13 +340,23 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
      *
      * @param playerId  The ID of the player.
      */
-    public void clearFlags(UUID playerId) {
+    public void clearFlags(final UUID playerId) {
         PreCon.notNull(playerId);
 
         cancel(playerId);
 
-        _playerNode.remove(playerId.toString() + ".flags");
-        _playerNode.saveAsync(null);
+        _playerNode.runBatchOperation(new DataBatchOperation() {
+            @Override
+            public void run(IDataNode dataNode) {
+                _playerNode.remove(playerId.toString() + ".flags");
+                _playerNode.saveAsync(null);
+
+                for (Quest quest : _subQuests.values()) {
+                    quest.clearFlags(playerId);
+                    quest.setStatus(playerId, QuestStatus.NONE);
+                }
+            }
+        });
     }
 
     // Set the quest status of a player
