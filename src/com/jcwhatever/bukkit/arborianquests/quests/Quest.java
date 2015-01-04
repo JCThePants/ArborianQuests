@@ -89,21 +89,51 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         _questNode = dataNode.getNode("quests");
     }
 
+    /**
+     * Get the quests data node name.
+     */
     @Override
     public String getName() {
         return _questName;
     }
 
-    public String getFullName() {
+    public String getPathName() {
         return _questName;
     }
 
+    /**
+     * Get the quests display name.
+     */
     public String getDisplayName() {
         return _displayName;
     }
 
+    /**
+     * Set the quests display name.
+     *
+     * @param displayName  The display name.
+     */
     public void setDisplayName(String displayName) {
         _displayName = displayName;
+    }
+
+    /**
+     * Get the current assignment description. This
+     * is used to explain what the player needs to
+     * do in order to complete their current objective.
+     */
+    @Nullable
+    public String getAssignment() {
+        return _dataNode.getString("assignment");
+    }
+
+    /**
+     * Set the current assignment description.
+     *
+     * @param assignment  The assignment description.
+     */
+    public void setAssignment(@Nullable String assignment) {
+        _dataNode.set("assignment", assignment);
     }
 
     /**

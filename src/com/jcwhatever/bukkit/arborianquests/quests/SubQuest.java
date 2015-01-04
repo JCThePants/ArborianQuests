@@ -103,7 +103,7 @@ public class SubQuest extends Quest {
     }
 
     @Override
-    public String getFullName() {
+    public String getPathName() {
         if (fullName == null) {
             LinkedList<Quest> quests = getFullPath();
 

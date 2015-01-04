@@ -39,14 +39,17 @@ import com.jcwhatever.nucleus.commands.response.ResponseRequest;
 import com.jcwhatever.nucleus.commands.response.ResponseType;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
-import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 /**
@@ -58,6 +61,7 @@ import javax.annotation.Nullable;
 public class QuestsApi extends NucleusScriptApi {
 
     private static TimedHashSet<ResponseRequest> _requests = new TimedHashSet<ResponseRequest>(20, 600);
+    private static Map<String, Quest> _pathCache = new HashMap<>(10);
 
     private static Flags _flagsApi = new Flags();
     private static Items _itemsApi = new Items();
@@ -79,6 +83,31 @@ public class QuestsApi extends NucleusScriptApi {
     @Override
     public IScriptApiObject getApiObject(IEvaluatedScript script) {
         return new ApiObject(script);
+    }
+
+    public static Quest getQuest(String questPath, boolean isNullAllowed) {
+        PreCon.notNullOrEmpty(questPath, "questPath");
+
+        Quest quest = _pathCache.get(questPath);
+        if (quest != null)
+            return quest;
+
+        String[] pathComponents = TextUtils.PATTERN_DOT.split(questPath);
+
+        quest = ArborianQuests.getQuestManager().getPrimary(pathComponents[0]);
+        PreCon.isValid(isNullAllowed || quest != null, "Quest named '{0}' not found.", pathComponents[0]);
+        if (quest == null)
+            return null;
+
+        for (int i=1; i < pathComponents.length; i++) {
+            quest = quest.getQuest(pathComponents[i]);
+            if (quest == null && isNullAllowed)
+                return null;
+
+            PreCon.isValid(quest != null, "Quest named '{0}' not found.", pathComponents[i]);
+        }
+
+        return quest;
     }
 
     public static class ApiObject implements IScriptApiObject {
@@ -122,6 +151,8 @@ public class QuestsApi extends NucleusScriptApi {
             meta.dispose();
             regions.dispose();
 
+            _pathCache.clear();
+
             _isDisposed = true;
         }
 
@@ -142,19 +173,43 @@ public class QuestsApi extends NucleusScriptApi {
         /**
          * Create a sub quest of a primary quest.
          *
-         * @param primaryQuestName  The primary quest name.
-         * @param subQuestName      The sub quest name.
-         * @param displayName       The sub quest display name.
+         * @param parentQuestPath  The path to the parent quest.
+         * @param subQuestName     The sub quest name.
+         * @param displayName      The sub quest display name.
          */
-        public Quest createSub(String primaryQuestName, String subQuestName, String displayName) {
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+        public Quest createSub(String parentQuestPath, String subQuestName, String displayName) {
+            PreCon.notNullOrEmpty(parentQuestPath, "parentQuestPath");
             PreCon.notNullOrEmpty(subQuestName, "subQuestName");
             PreCon.notNullOrEmpty(displayName, "displayName");
 
-            Quest primary = ArborianQuests.getQuestManager().getPrimary(primaryQuestName);
-            PreCon.isValid(primary != null, "Primary quest '{0}' not found.", primaryQuestName);
+            Quest parent = getQuest(parentQuestPath, false);
+            return parent.createQuest(subQuestName, displayName);
+        }
 
-            return primary.createQuest(subQuestName, displayName);
+        /**
+         * Get the current assignment description for the specified quest.
+         *
+         * @param questPath  The quests path name.
+         */
+        @Nullable
+        public String getAssignment(String questPath) {
+            PreCon.notNullOrEmpty(questPath, "questPath");
+
+            Quest quest = getQuest(questPath, false);
+            return quest.getAssignment();
+        }
+
+        /**
+         * Set the current assignment description for the specified quest.
+         *
+         * @param questPath   The quests path name.
+         * @param assignment  The assignment description to set.
+         */
+        public void setAssignment(String questPath, @Nullable String assignment) {
+            PreCon.notNullOrEmpty(questPath, "questPath");
+
+            Quest quest = getQuest(questPath, false);
+            quest.setAssignment(assignment);
         }
 
         /**
@@ -171,19 +226,19 @@ public class QuestsApi extends NucleusScriptApi {
         /**
          * Determine if a player has accepted a quest.
          *
-         * @param player    The player to check.
-         * @param primaryQuestName The name of the quest.
+         * @param player     The player to check.
+         * @param questPath  The name of the quest.
          *
          * @return  True if the player is in the quest.
          */
-        public boolean isInQuest(Object player , String primaryQuestName, @Nullable String subQuestName) {
+        public boolean isInQuest(Object player , String questPath) {
             PreCon.notNull(player, "player");
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+            PreCon.notNullOrEmpty(questPath, "questPath");
 
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            Quest quest = getQuest(primaryQuestName, subQuestName, true);
+            Quest quest = getQuest(questPath, true);
             return quest != null && quest.getStatus(p).getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS;
         }
 
@@ -191,16 +246,16 @@ public class QuestsApi extends NucleusScriptApi {
          * Determine if a player has already completed a quest.
          *
          * @param player     The player to check.
-         * @param primaryQuestName  The name of the quest.
+         * @param questPath  The path name of the quest.
          */
-        public boolean hasCompleted(Object player, String primaryQuestName, @Nullable String subQuestName) {
+        public boolean hasCompleted(Object player, String questPath) {
             PreCon.notNull(player, "player");
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+            PreCon.notNullOrEmpty(questPath, "questPath");
 
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            Quest quest = getQuest(primaryQuestName, subQuestName, true);
+            Quest quest = getQuest(questPath, true);
             return quest != null && quest.getStatus(p).getCompletionStatus() == QuestCompletionStatus.COMPLETED;
         }
 
@@ -208,18 +263,18 @@ public class QuestsApi extends NucleusScriptApi {
          * Mark a players quest status as complete.
          *
          * @param player     The player.
-         * @param primaryQuestName  The name of the quest.
+         * @param questPath  The path name of the quest.
          *
          * @return True if the player quest is completed.
          */
-        public boolean complete(Object player, String primaryQuestName, @Nullable String subQuestName) {
+        public boolean complete(Object player, String questPath) {
             PreCon.notNull(player, "player");
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+            PreCon.notNullOrEmpty(questPath, "questPath");
 
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            Quest quest = getQuest(primaryQuestName, subQuestName, false);
+            Quest quest = getQuest(questPath, false);
 
             QuestStatus status = quest.getStatus(p);
 
@@ -234,19 +289,19 @@ public class QuestsApi extends NucleusScriptApi {
         /**
          * Join player to a quest.
          *
-         * @param player      The player.
-         * @param primaryQuestName   The name of the quest.
+         * @param player     The player.
+         * @param questPath  The path name of the quest.
          *
          * @return True if quest was found and player joined.
          */
-        public boolean joinQuest(Object player, String primaryQuestName, @Nullable String subQuestName) {
+        public boolean joinQuest(Object player, String questPath) {
             PreCon.notNull(player, "player");
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+            PreCon.notNullOrEmpty(questPath, "questPath");
 
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            Quest quest = getQuest(primaryQuestName, subQuestName, false);
+            Quest quest = getQuest(questPath, false);
 
             if (quest instanceof SubQuest) {
                 QuestStatus status = ((SubQuest) quest).getParent().getStatus(p);
@@ -263,18 +318,18 @@ public class QuestsApi extends NucleusScriptApi {
          * Ask the player to accept a quest.
          *
          * @param player     The player to ask.
-         * @param primaryQuestName  The name of the quest.
+         * @param questPath  The path name of the quest.
          * @param onAccept   Runnable to run if the player accepts.
          */
-        public void queryQuest(Object player, String primaryQuestName, @Nullable String subQuestName, final Runnable onAccept) {
+        public void queryQuest(Object player, String questPath, final Runnable onAccept) {
             PreCon.notNull(player, "player");
-            PreCon.notNullOrEmpty(primaryQuestName, "primaryQuestName");
+            PreCon.notNullOrEmpty(questPath, "questPath");
             PreCon.notNull(onAccept, "onAccept");
 
             final Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            final Quest quest = getQuest(primaryQuestName, subQuestName, false);
+            final Quest quest = getQuest(questPath, false);
 
             if (quest instanceof SubQuest) {
                 QuestStatus status = ((SubQuest) quest).getParent().getStatus(p);
@@ -296,7 +351,7 @@ public class QuestsApi extends NucleusScriptApi {
             };
 
             ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                    primaryQuestName, p, handler, ResponseType.ACCEPT);
+                    questPath, p, handler, ResponseType.ACCEPT);
 
             _requests.add(request);
 
@@ -342,19 +397,6 @@ public class QuestsApi extends NucleusScriptApi {
             Msg.tell(p, "Expires in 30 seconds.");
         }
 
-        private Quest getQuest(String primaryQuestName, @Nullable String subQuestName, boolean isNullAllowed) {
-            Quest quest = ArborianQuests.getQuestManager().getPrimary(primaryQuestName);
-            PreCon.isValid(isNullAllowed || quest != null, "Quest named '{0}' not found.", primaryQuestName);
-            if (quest == null)
-                return null;
 
-            if (subQuestName != null) {
-                quest = quest.getQuest(subQuestName);
-                PreCon.isValid(isNullAllowed || quest != null, "Subquest named '{0}' not found in quest '{1}'.",
-                        subQuestName, primaryQuestName);
-            }
-
-            return quest;
-        }
     }
 }
