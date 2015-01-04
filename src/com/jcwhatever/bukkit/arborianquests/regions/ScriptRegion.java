@@ -24,9 +24,10 @@
 
 package com.jcwhatever.bukkit.arborianquests.regions;
 
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.MultimapBuilder;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.Quest;
-import com.jcwhatever.nucleus.collections.StackedHashMap;
 import com.jcwhatever.nucleus.regions.Region;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -34,8 +35,8 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,8 +46,12 @@ public class ScriptRegion extends Region {
 
     private List<IScriptRegionResult> _onEnter = new ArrayList<>(10);
     private List<IScriptRegionResult> _onLeave = new ArrayList<>(10);
-    private Map<Quest, IScriptRegionResult> _onQuestEnter = new StackedHashMap<>(30);
-    private Map<Quest, IScriptRegionResult> _onQuestLeave = new StackedHashMap<>(30);
+
+    private ListMultimap<Quest, IScriptRegionResult> _onQuestEnter =
+            MultimapBuilder.hashKeys(30).linkedListValues().build();
+
+    private ListMultimap<Quest, IScriptRegionResult> _onQuestLeave =
+            MultimapBuilder.hashKeys(30).linkedListValues().build();
 
     /**
      * Constructor.
@@ -151,9 +156,10 @@ public class ScriptRegion extends Region {
         if (quests != null && !quests.isEmpty()) {
 
             for (Quest quest : quests) {
-                IScriptRegionResult handler = _onQuestEnter.get(quest);
-                if (handler != null) {
-                    handler.call(p, this);
+                LinkedList<IScriptRegionResult> handler = (LinkedList<IScriptRegionResult>)_onQuestEnter.get(quest);
+                if (!handler.isEmpty()) {
+
+                    handler.getLast().call(p, this);
                     break;
                 }
             }
@@ -173,9 +179,9 @@ public class ScriptRegion extends Region {
         if (quests != null && !quests.isEmpty()) {
 
             for (Quest quest : quests) {
-                IScriptRegionResult handler = _onQuestLeave.get(quest);
-                if (handler != null) {
-                    handler.call(p, this);
+                LinkedList<IScriptRegionResult> handlers = (LinkedList<IScriptRegionResult>)_onQuestLeave.get(quest);
+                if (!handlers.isEmpty()) {
+                    handlers.getLast().call(p, this);
                     break;
                 }
             }
