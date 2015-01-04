@@ -26,6 +26,7 @@ package com.jcwhatever.bukkit.arborianquests.quests;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.nucleus.mixins.IHierarchyNode;
 import com.jcwhatever.nucleus.mixins.INamed;
@@ -34,6 +35,7 @@ import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Utils;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
 
@@ -68,6 +70,25 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
      */
     public static Set<Quest> getPlayerQuests(Player p) {
         return CollectionUtils.unmodifiableSet(_playerQuests.get(p.getUniqueId()));
+    }
+
+    @Nullable
+    public static Quest getQuestFromPath(String questPath) {
+        PreCon.notNull(questPath, "questPath");
+
+        String[] pathComponents = TextUtils.PATTERN_DOT.split(questPath);
+
+        Quest quest = ArborianQuests.getQuestManager().getPrimary(pathComponents[0]);
+        if (quest == null)
+            return null;
+
+        for (int i=1; i < pathComponents.length; i++) {
+            quest = quest.getQuest(pathComponents[i]);
+            if (quest == null)
+                return null;
+        }
+
+        return quest;
     }
 
     /**
@@ -387,6 +408,20 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
                 }
             }
         });
+    }
+
+    /**
+     * Get the flags set on a player.
+     *
+     * @param playerId  The unique ID of the player.
+     */
+    public Set<String> getFlags(UUID playerId) {
+        PreCon.notNull(playerId);
+
+        IDataNode flagNode = _playerNode.getNode(playerId.toString() + ".flags");
+
+        Set<String> flagNames = flagNode.getSubNodeNames();
+        return CollectionUtils.unmodifiableSet(flagNames);
     }
 
     // Set the quest status of a player

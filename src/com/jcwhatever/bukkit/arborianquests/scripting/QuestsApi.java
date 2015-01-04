@@ -43,7 +43,6 @@ import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
-import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -92,20 +91,13 @@ public class QuestsApi extends NucleusScriptApi {
         if (quest != null)
             return quest;
 
-        String[] pathComponents = TextUtils.PATTERN_DOT.split(questPath);
-
-        quest = ArborianQuests.getQuestManager().getPrimary(pathComponents[0]);
-        PreCon.isValid(isNullAllowed || quest != null, "Quest named '{0}' not found.", pathComponents[0]);
-        if (quest == null)
+        quest = Quest.getQuestFromPath(questPath);
+        if (quest == null && isNullAllowed)
             return null;
 
-        for (int i=1; i < pathComponents.length; i++) {
-            quest = quest.getQuest(pathComponents[i]);
-            if (quest == null && isNullAllowed)
-                return null;
+        PreCon.isValid(quest != null, "Quest path '{0}' not found.", questPath);
 
-            PreCon.isValid(quest != null, "Quest named '{0}' not found.", pathComponents[i]);
-        }
+        _pathCache.put(questPath, quest);
 
         return quest;
     }

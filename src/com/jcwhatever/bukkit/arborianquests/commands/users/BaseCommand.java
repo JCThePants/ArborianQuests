@@ -28,6 +28,7 @@ import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.ListCommand;
+import com.jcwhatever.bukkit.arborianquests.commands.admin.flags.FlagsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.items.ItemsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.locations.LocationsCommand;
 import com.jcwhatever.bukkit.arborianquests.commands.admin.regions.RegionsCommand;
@@ -70,6 +71,7 @@ public class BaseCommand extends AbstractCommand {
     public BaseCommand() {
         super();
 
+        registerCommand(FlagsCommand.class);
         registerCommand(ReplayCommand.class);
         registerCommand(ItemsCommand.class);
         registerCommand(LocationsCommand.class);
