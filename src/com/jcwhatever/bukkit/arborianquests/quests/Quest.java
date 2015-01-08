@@ -34,7 +34,6 @@ import com.jcwhatever.nucleus.storage.DataBatchOperation;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Utils;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.entity.Player;
@@ -444,14 +443,14 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         _playerNode.saveAsync(null);
     }
 
-    // intitial settings load
+    // initial settings load
     private void loadSettings() {
 
         // load players
         Set<String> rawPlayerIds = _playerNode.getSubNodeNames();
 
         for (String rawId : rawPlayerIds) {
-            UUID id = Utils.getId(rawId);
+            UUID id = TextUtils.parseUUID(rawId);
             if (id == null)
                 continue;
 
