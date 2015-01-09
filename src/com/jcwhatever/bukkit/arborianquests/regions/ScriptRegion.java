@@ -35,7 +35,6 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.Set;
 
@@ -156,10 +155,10 @@ public class ScriptRegion extends Region {
         if (quests != null && !quests.isEmpty()) {
 
             for (Quest quest : quests) {
-                Deque<IScriptRegionResult> handler = (Deque<IScriptRegionResult>)_onQuestEnter.get(quest);
+                List<IScriptRegionResult> handler = _onQuestEnter.get(quest);
                 if (!handler.isEmpty()) {
 
-                    handler.getLast().call(p, this);
+                    handler.get(handler.size() - 1).call(p, this);
                     break;
                 }
             }
@@ -179,9 +178,9 @@ public class ScriptRegion extends Region {
         if (quests != null && !quests.isEmpty()) {
 
             for (Quest quest : quests) {
-                Deque<IScriptRegionResult> handlers = (Deque<IScriptRegionResult>)_onQuestLeave.get(quest);
+                List<IScriptRegionResult> handlers = _onQuestLeave.get(quest);
                 if (!handlers.isEmpty()) {
-                    handlers.getLast().call(p, this);
+                    handlers.get(handlers.size() - 1).call(p, this);
                     break;
                 }
             }
