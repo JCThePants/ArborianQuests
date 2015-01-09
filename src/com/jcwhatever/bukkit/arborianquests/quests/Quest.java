@@ -57,8 +57,8 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     private final String _questName;
     private String _displayName;
     private final IDataNode _dataNode;
-    private final IDataNode _playerNode;
-    private final IDataNode _questNode;
+    private final IDataNode _playerNodes;
+    private final IDataNode _questNodes;
     private final Map<String, Quest> _subQuests = new HashMap<>(5);
 
     /**
@@ -105,8 +105,8 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         _questName = questName;
         _displayName = displayName;
         _dataNode = dataNode;
-        _playerNode = dataNode.getNode("players");
-        _questNode = dataNode.getNode("quests");
+        _playerNodes = dataNode.getNode("players");
+        _questNodes = dataNode.getNode("quests");
     }
 
     /**
@@ -237,7 +237,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
      */
     public QuestStatus getStatus(UUID playerId) {
         //noinspection ConstantConditions
-        return _playerNode.getEnum(playerId.toString() + ".status", QuestStatus.NONE, QuestStatus.class);
+        return _playerNodes.getEnum(playerId.toString() + ".status", QuestStatus.NONE, QuestStatus.class);
     }
 
     /**
@@ -354,7 +354,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        return _playerNode.getBoolean(playerId.toString() + ".flags." + flagName, false);
+        return _playerNodes.getBoolean(playerId.toString() + ".flags." + flagName, false);
     }
 
     /**
@@ -367,8 +367,8 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        _playerNode.set(playerId.toString() + ".flags." + flagName, true);
-        _playerNode.saveAsync(null);
+        _playerNodes.set(playerId.toString() + ".flags." + flagName, true);
+        _playerNodes.saveAsync(null);
     }
 
     /**
@@ -381,8 +381,8 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(flagName);
 
-        _playerNode.remove(playerId.toString() + ".flags." + flagName);
-        _playerNode.saveAsync(null);
+        _playerNodes.remove(playerId.toString() + ".flags." + flagName);
+        _playerNodes.saveAsync(null);
     }
 
     /**
@@ -395,11 +395,11 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
         cancel(playerId);
 
-        _playerNode.runBatchOperation(new DataBatchOperation() {
+        _playerNodes.runBatchOperation(new DataBatchOperation() {
             @Override
             public void run(IDataNode dataNode) {
-                _playerNode.remove(playerId.toString() + ".flags");
-                _playerNode.saveAsync(null);
+                _playerNodes.remove(playerId.toString() + ".flags");
+                _playerNodes.saveAsync(null);
 
                 for (Quest quest : _subQuests.values()) {
                     quest.clearFlags(playerId);
@@ -417,7 +417,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     public Set<String> getFlags(UUID playerId) {
         PreCon.notNull(playerId);
 
-        IDataNode flagNode = _playerNode.getNode(playerId.toString() + ".flags");
+        IDataNode flagNode = _playerNodes.getNode(playerId.toString() + ".flags");
 
         Set<String> flagNames = flagNode.getSubNodeNames();
         return CollectionUtils.unmodifiableSet(flagNames);
@@ -427,10 +427,10 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     private void setStatus(UUID playerId, QuestStatus status) {
 
         if (status == QuestStatus.NONE) {
-            _playerNode.remove(playerId.toString() + ".status");
+            _playerNodes.remove(playerId.toString() + ".status");
         }
         else {
-            _playerNode.set(playerId.toString() + ".status", status);
+            _playerNodes.set(playerId.toString() + ".status", status);
         }
 
         if (status.getCurrentStatus() == CurrentQuestStatus.NONE) {
@@ -440,21 +440,19 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
             _playerQuests.put(playerId, this);
         }
 
-        _playerNode.saveAsync(null);
+        _playerNodes.saveAsync(null);
     }
 
     // initial settings load
     private void loadSettings() {
 
         // load players
-        Set<String> rawPlayerIds = _playerNode.getSubNodeNames();
-
-        for (String rawId : rawPlayerIds) {
-            UUID id = TextUtils.parseUUID(rawId);
+        for (IDataNode playerNode : _playerNodes) {
+            UUID id = TextUtils.parseUUID(playerNode.getName());
             if (id == null)
                 continue;
 
-            QuestStatus status = _playerNode.getEnum(rawId, QuestStatus.NONE, QuestStatus.class);
+            QuestStatus status = playerNode.getEnum("", QuestStatus.NONE, QuestStatus.class);
             //noinspection ConstantConditions
             if (status.getCurrentStatus() != CurrentQuestStatus.IN_PROGRESS)
                 continue;
@@ -463,17 +461,17 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         }
 
         // load sub quests
-        Set<String> questNames = _questNode.getSubNodeNames();
+        for (IDataNode questNode : _questNodes) {
 
-        for (String questName : questNames) {
+            String questName = questNode.getName();
 
-            IDataNode node = _questNode.getNode(questName);
+            assert questName != null;
 
-            String displayName = node.getString("display", questName);
+            String displayName = questNode.getString("display", questName);
             if (displayName == null)
                 throw new AssertionError();
 
-            SubQuest quest = new SubQuest(this, questName, displayName, node);
+            SubQuest quest = new SubQuest(this, questName, displayName, questNode);
 
             _subQuests.put(questName.toLowerCase(), quest);
         }
