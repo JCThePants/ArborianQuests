@@ -76,7 +76,7 @@ public class QuestManager implements IPluginOwned {
         if (quest != null)
             return quest;
 
-        IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
+        IDataNode dataNode = DataStorage.get(ArborianQuests.getPlugin(), new DataPath("quests." + questName));
         dataNode.load();
 
         dataNode.set("display", displayName);
@@ -95,7 +95,7 @@ public class QuestManager implements IPluginOwned {
 
         if (quest instanceof PrimaryQuest) {
 
-            DataStorage.removeStorage(ArborianQuests.getPlugin(), new DataPath("quests." + quest.getName()));
+            DataStorage.remove(ArborianQuests.getPlugin(), new DataPath("quests." + quest.getName()));
             _created.remove(quest.getName());
             return _quests.remove(quest.getName()) != null;
         }
@@ -145,7 +145,7 @@ public class QuestManager implements IPluginOwned {
 
             for (String questName : questNames) {
 
-                IDataNode node = DataStorage.getStorage(_plugin, new DataPath("quests." + questName));
+                IDataNode node = DataStorage.get(_plugin, new DataPath("quests." + questName));
                 node.load();
 
                 String displayName = node.getString("display", questName);

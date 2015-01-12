@@ -56,7 +56,7 @@ public class Items {
 
     static {
 
-        IDataNode dataNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("floating-items"));
+        IDataNode dataNode = DataStorage.get(ArborianQuests.getPlugin(), new DataPath("floating-items"));
         dataNode.load();
 
         _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);

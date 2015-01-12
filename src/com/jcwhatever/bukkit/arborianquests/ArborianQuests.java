@@ -94,16 +94,16 @@ public class ArborianQuests extends NucleusPlugin {
     @Override
     protected void onEnablePlugin() {
 
-        _metaNode = DataStorage.getStorage(ArborianQuests.getPlugin(), new DataPath("meta"));
+        _metaNode = DataStorage.get(ArborianQuests.getPlugin(), new DataPath("meta"));
         _metaNode.load();
 
-        IDataNode regionNode = DataStorage.getStorage(this, new DataPath("regions"));
+        IDataNode regionNode = DataStorage.get(this, new DataPath("regions"));
         regionNode.load();
 
-        IDataNode locationNode = DataStorage.getStorage(this, new DataPath("locations"));
+        IDataNode locationNode = DataStorage.get(this, new DataPath("locations"));
         locationNode.load();
 
-        IDataNode itemsNode = DataStorage.getStorage(this, new DataPath("items"));
+        IDataNode itemsNode = DataStorage.get(this, new DataPath("items"));
         itemsNode.load();
 
         _questManager = new QuestManager(this, getDataNode());
