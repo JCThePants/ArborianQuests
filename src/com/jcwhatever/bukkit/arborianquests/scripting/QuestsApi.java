@@ -31,7 +31,6 @@ import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.bukkit.arborianquests.quests.SubQuest;
-import com.jcwhatever.nucleus.collections.timed.LifespanEndAction;
 import com.jcwhatever.nucleus.collections.timed.TimedHashSet;
 import com.jcwhatever.nucleus.commands.response.CommandRequests;
 import com.jcwhatever.nucleus.commands.response.IResponseHandler;
@@ -42,6 +41,7 @@ import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 
 import org.bukkit.entity.Player;
@@ -59,7 +59,9 @@ import javax.annotation.Nullable;
         description = "Provide scripts API access for quests.")
 public class QuestsApi extends NucleusScriptApi {
 
-    private static TimedHashSet<ResponseRequest> _requests = new TimedHashSet<ResponseRequest>(20, 600);
+    private static TimedHashSet<ResponseRequest> _requests
+            = new TimedHashSet<ResponseRequest>(ArborianQuests.getPlugin(), 20, 600);
+
     private static Map<String, Quest> _pathCache = new HashMap<>(10);
 
     private static Flags _flagsApi = new Flags();
@@ -113,10 +115,10 @@ public class QuestsApi extends NucleusScriptApi {
         public final IScriptApiObject regions;
 
         ApiObject(IEvaluatedScript script) {
-            _requests.addOnLifespanEnd(new LifespanEndAction<ResponseRequest>() {
+            _requests.onLifespanEnd(new UpdateSubscriber<ResponseRequest>() {
                 @Override
-                public void onEnd(ResponseRequest item) {
-                    CommandRequests.cancel(item);
+                public void on(ResponseRequest request) {
+                    CommandRequests.cancel(request);
                 }
             });
 
