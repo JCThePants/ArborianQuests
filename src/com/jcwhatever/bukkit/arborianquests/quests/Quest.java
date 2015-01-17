@@ -197,7 +197,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
         quest = new SubQuest(this, questName, displayName, node);
         node.set("display", displayName);
-        node.saveAsync(null);
+        node.save();
 
         _subQuests.put(questName, quest);
 
@@ -215,7 +215,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
         IDataNode node = _dataNode.getNode("quests." + questName);
         node.remove();
-        node.saveAsync(null);
+        node.save();
 
         return true;
     }
@@ -368,7 +368,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         PreCon.notNullOrEmpty(flagName);
 
         _playerNodes.set(playerId.toString() + ".flags." + flagName, true);
-        _playerNodes.saveAsync(null);
+        _playerNodes.save();
     }
 
     /**
@@ -382,7 +382,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         PreCon.notNullOrEmpty(flagName);
 
         _playerNodes.remove(playerId.toString() + ".flags." + flagName);
-        _playerNodes.saveAsync(null);
+        _playerNodes.save();
     }
 
     /**
@@ -399,7 +399,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
             @Override
             public void run(IDataNode dataNode) {
                 _playerNodes.remove(playerId.toString() + ".flags");
-                _playerNodes.saveAsync(null);
+                _playerNodes.save();
 
                 for (Quest quest : _subQuests.values()) {
                     quest.clearFlags(playerId);
@@ -440,7 +440,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
             _playerQuests.put(playerId, this);
         }
 
-        _playerNodes.saveAsync(null);
+        _playerNodes.save();
     }
 
     // initial settings load

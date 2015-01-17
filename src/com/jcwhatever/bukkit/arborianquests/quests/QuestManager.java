@@ -80,7 +80,7 @@ public class QuestManager implements IPluginOwned {
         dataNode.load();
 
         dataNode.set("display", displayName);
-        dataNode.saveAsync(null);
+        dataNode.save();
 
         quest = new PrimaryQuest(questName, displayName, dataNode);
 
