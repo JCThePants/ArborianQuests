@@ -33,7 +33,6 @@ import com.jcwhatever.bukkit.arborianquests.quests.QuestStatus.QuestCompletionSt
 import com.jcwhatever.bukkit.arborianquests.quests.SubQuest;
 import com.jcwhatever.nucleus.collections.timed.TimedHashSet;
 import com.jcwhatever.nucleus.commands.response.CommandRequests;
-import com.jcwhatever.nucleus.commands.response.IResponseHandler;
 import com.jcwhatever.nucleus.commands.response.ResponseRequest;
 import com.jcwhatever.nucleus.commands.response.ResponseType;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
@@ -41,6 +40,8 @@ import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.nucleus.scripting.api.NucleusScriptApi;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
+import com.jcwhatever.nucleus.utils.observer.result.Result;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 
@@ -298,7 +299,10 @@ public class QuestsApi extends NucleusScriptApi {
             Quest quest = getQuest(questPath, false);
 
             if (quest instanceof SubQuest) {
-                QuestStatus status = ((SubQuest) quest).getParent().getStatus(p);
+
+                SubQuest subQuest = (SubQuest)quest;
+                QuestStatus status = subQuest.getParent().getStatus(p);
+
                 PreCon.isValid(status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS,
                         "Cannot join a sub quest unless already joined to the parent quest.");
             }
@@ -326,26 +330,23 @@ public class QuestsApi extends NucleusScriptApi {
             final Quest quest = getQuest(questPath, false);
 
             if (quest instanceof SubQuest) {
-                QuestStatus status = ((SubQuest) quest).getParent().getStatus(p);
+
+                SubQuest subQuest = (SubQuest)quest;
+                QuestStatus status = subQuest.getParent().getStatus(p);
+
                 PreCon.isValid(status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS,
                         "Cannot join a sub quest unless already joined to the parent quest.");
             }
 
-            IResponseHandler handler = new IResponseHandler() {
-
-                @Override
-                public void onResponse(ResponseType response) {
-
-                    if (response == ResponseType.ACCEPT) {
-
-                        quest.accept(p);
-                        onAccept.run();
-                    }
-                }
-            };
-
             ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                    questPath, p, handler, ResponseType.ACCEPT);
+                    questPath, p, ResponseType.ACCEPT)
+                    .onSuccess(new FutureSubscriber<ResponseType>() {
+                        @Override
+                        public void on(Result<ResponseType> result) {
+                            quest.accept(p);
+                            onAccept.run();
+                        }
+                    });
 
             _requests.add(request);
 
@@ -370,19 +371,14 @@ public class QuestsApi extends NucleusScriptApi {
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player");
 
-            IResponseHandler handler = new IResponseHandler() {
-
-                @Override
-                public void onResponse(ResponseType response) {
-
-                    if (response == ResponseType.YES) {
-                        onAccept.run();
-                    }
-                }
-            };
-
             ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                    context, p, handler, ResponseType.YES);
+                    context, p, ResponseType.YES)
+                    .onSuccess(new FutureSubscriber<ResponseType>() {
+                        @Override
+                        public void on(Result<ResponseType> result) {
+                            onAccept.run();
+                        }
+                    });
 
             _requests.add(request);
 

@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
 /**
  * A child quest of a a parent quest.
@@ -61,7 +61,7 @@ public class SubQuest extends Quest {
      *
      * @return  Null if the node is a top level node.
      */
-    @Nullable
+    @Nonnull
     @Override
     public Quest getParent() {
         return _parent;
