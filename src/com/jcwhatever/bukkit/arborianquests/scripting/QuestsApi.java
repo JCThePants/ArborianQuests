@@ -60,16 +60,16 @@ import javax.annotation.Nullable;
         description = "Provide scripts API access for quests.")
 public class QuestsApi extends NucleusScriptApi {
 
-    private static TimedHashSet<ResponseRequest> _requests
+    private static final TimedHashSet<ResponseRequest> _requests
             = new TimedHashSet<ResponseRequest>(ArborianQuests.getPlugin(), 20, 600);
 
-    private static Map<String, Quest> _pathCache = new HashMap<>(10);
+    private static final Map<String, Quest> _pathCache = new HashMap<>(10);
 
-    private static Flags _flagsApi = new Flags();
-    private static Items _itemsApi = new Items();
-    private static Locations _locationsApi = new Locations();
-    private static Meta _metaApi = new Meta(ArborianQuests.getPlugin());
-    private static Regions _regionsApi = new Regions();
+    private static final Flags _flagsApi = new Flags();
+    private static final Items _itemsApi = new Items();
+    private static final Locations _locationsApi = new Locations();
+    private static final Meta _metaApi = new Meta(ArborianQuests.getPlugin());
+    private static final Regions _regionsApi = new Regions();
 
     /**
      * Constructor.
@@ -137,8 +137,11 @@ public class QuestsApi extends NucleusScriptApi {
 
         @Override
         public void dispose() {
-            for (ResponseRequest request : _requests)
-                CommandRequests.cancel(request);
+
+            synchronized (_requests) {
+                for (ResponseRequest request : _requests)
+                    CommandRequests.cancel(request);
+            }
 
             flags.dispose();
             items.dispose();
