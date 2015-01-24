@@ -25,19 +25,20 @@
 package com.jcwhatever.bukkit.arborianquests.commands.admin.regions;
 
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
+import com.jcwhatever.bukkit.arborianquests.Lang;
 import com.jcwhatever.bukkit.arborianquests.Msg;
 import com.jcwhatever.bukkit.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
-import com.jcwhatever.bukkit.arborianquests.Lang;
-import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
+
 import org.bukkit.command.CommandSender;
 
-import java.util.List;
+import java.util.Collection;
 
 @CommandInfo(
         parent="regions",
@@ -57,7 +58,7 @@ public class ListSubCommand extends AbstractCommand {
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
-        List<ScriptRegion> regions = ArborianQuests.getScriptRegionManager().getAll();
+        Collection<ScriptRegion> regions = ArborianQuests.getScriptRegionManager().getAll();
 
         for (ScriptRegion region : regions) {
             //noinspection ConstantConditions

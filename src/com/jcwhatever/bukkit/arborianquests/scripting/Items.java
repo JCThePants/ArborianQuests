@@ -27,9 +27,6 @@ package com.jcwhatever.bukkit.arborianquests.scripting;
 import com.jcwhatever.bukkit.arborianquests.ArborianQuests;
 import com.jcwhatever.bukkit.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
-import com.jcwhatever.nucleus.utils.floatingitems.FloatingItem;
-import com.jcwhatever.nucleus.utils.floatingitems.FloatingItemManager;
-import com.jcwhatever.nucleus.utils.floatingitems.IFloatingItem;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
 import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber;
@@ -38,6 +35,9 @@ import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.floatingitems.FloatingItem;
+import com.jcwhatever.nucleus.utils.floatingitems.FloatingItemManager;
+import com.jcwhatever.nucleus.utils.floatingitems.IFloatingItem;
 import com.jcwhatever.nucleus.utils.observer.ISubscriber;
 
 import org.bukkit.Location;
@@ -45,8 +45,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
@@ -64,7 +65,7 @@ public class Items {
 
         _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
 
-        List<IFloatingItem> floatingItems = _manager.getAll();
+        Collection<IFloatingItem> floatingItems = new ArrayList<>(_manager.getAll());
 
         // remove all items, ensures items are removed if
         // the server is not shut down properly.

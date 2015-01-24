@@ -32,7 +32,7 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
 
-import java.util.List;
+import java.util.Collection;
 import javax.annotation.Nullable;
 
 public class Locations {
@@ -72,7 +72,7 @@ public class Locations {
         /**
          * Get all script location objects.
          */
-        public List<ScriptLocation> getScriptLocations() {
+        public Collection<ScriptLocation> getScriptLocations() {
             return ArborianQuests.getScriptLocationManager().getAll();
         }
     }
