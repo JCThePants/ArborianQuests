@@ -1,6 +1,6 @@
 name: ArborianQuests
 author: JCThePants
-main: com.jcwhatever.bukkit.arborianquests.ArborianQuests
+main: com.jcwhatever.arborianquests.ArborianQuests
 version: 0.0-beta
 depend: [NucleusFramework]
 commands:
