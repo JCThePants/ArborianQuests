@@ -398,7 +398,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         _playerNodes.runBatchOperation(new DataBatchOperation() {
             @Override
             public void run(IDataNode dataNode) {
-                _playerNodes.remove(playerId.toString() + ".flags");
+                _playerNodes.remove(playerId.toString());
                 _playerNodes.save();
 
                 for (Quest quest : _subQuests.values()) {
