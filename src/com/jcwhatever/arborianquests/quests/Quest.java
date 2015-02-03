@@ -63,14 +63,21 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
     /**
      * Get an unmodifiable {@code Set} of {@code Quest}'s that
-     * the player is in
-     * .
-     * @param p  The player.
+     * the player is in.
+     *
+     * @param player  The player.
      */
-    public static Set<Quest> getPlayerQuests(Player p) {
-        return CollectionUtils.unmodifiableSet(_playerQuests.get(p.getUniqueId()));
+    public static Set<Quest> getPlayerQuests(Player player) {
+        return CollectionUtils.unmodifiableSet(_playerQuests.get(player.getUniqueId()));
     }
 
+    /**
+     * Get a quest using a quest path.
+     *
+     * @param questPath  The quest path.
+     *
+     * @return  The quest or null if not found.
+     */
     @Nullable
     public static Quest getQuestFromPath(String questPath) {
         PreCon.notNull(questPath, "questPath");
@@ -204,6 +211,13 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         return quest;
     }
 
+    /**
+     * Remove a sub quest of the quest.
+     *
+     * @param questName The name of the quest to remove.
+     *
+     * @return  True if found and removed.
+     */
     public boolean removeQuest(String questName) {
         PreCon.notNullOrEmpty(questName);
 
@@ -223,11 +237,11 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     /**
      * Get a players current status in the quest.
      *
-     * @param p  The player to check.
+     * @param player  The player to check.
      */
-    public QuestStatus getStatus(Player p) {
+    public QuestStatus getStatus(Player player) {
         //noinspection ConstantConditions
-        return getStatus(p.getUniqueId());
+        return getStatus(player.getUniqueId());
     }
 
     /**
@@ -243,10 +257,10 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     /**
      * Accept the player into the quest.
      *
-     * @param p  The player to accept.
+     * @param player  The player to accept.
      */
-    public void accept(Player p) {
-        accept(p.getUniqueId());
+    public void accept(Player player) {
+        accept(player.getUniqueId());
     }
 
     /**
@@ -278,10 +292,10 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     /**
      * Flag a player as having completed the quest.
      *
-     * @param p  The player to flag.
+     * @param player  The player to flag.
      */
-    public void finish(Player p) {
-        finish(p.getUniqueId());
+    public void finish(Player player) {
+        finish(player.getUniqueId());
     }
 
     /**
@@ -312,10 +326,10 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     /**
      * Cancel the quest for a player.
      *
-     * @param p  The player.
+     * @param player  The player.
      */
-    public void cancel(Player p) {
-        cancel(p.getUniqueId());
+    public void cancel(Player player) {
+        cancel(player.getUniqueId());
     }
 
     /**
@@ -427,7 +441,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     private void setStatus(UUID playerId, QuestStatus status) {
 
         if (status == QuestStatus.NONE) {
-            _playerNodes.remove(playerId.toString() + ".status");
+            _playerNodes.remove(playerId.toString());
         }
         else {
             _playerNodes.set(playerId.toString() + ".status", status);
