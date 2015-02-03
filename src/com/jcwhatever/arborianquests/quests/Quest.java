@@ -299,11 +299,9 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
         switch (status) {
             case RERUN:
-                setStatus(playerId, QuestStatus.COMPLETED);
-                break;
-
+                // fall through
             case INCOMPLETE:
-                setStatus(playerId, QuestStatus.NONE);
+                setStatus(playerId, QuestStatus.COMPLETED);
                 break;
 
             case NONE:
