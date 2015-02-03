@@ -89,7 +89,7 @@ public class BaseCommand extends AbstractCommand {
         CommandException.checkNotConsole(this, sender);
 
         int page = args.getInteger("page");
-        Player p = (Player)sender;
+        final Player p = (Player)sender;
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
 
@@ -102,7 +102,7 @@ public class BaseCommand extends AbstractCommand {
             QuestStatus status = quest.getStatus(p);
             if (status.getCurrentStatus() == CurrentQuestStatus.IN_PROGRESS) {
 
-                // check all sub nodes an remove quests the player is not in
+                // check all sub nodes and remove quests the player is not in
                 HierarchyNode<Quest> node = new HierarchyNode<>(quest);
                 Iterator<TreeNode<Quest>> iterator = node.iterator();
 
@@ -111,7 +111,9 @@ public class BaseCommand extends AbstractCommand {
                     TreeNode<Quest> questNode = iterator.next();
                     status = questNode.getValue().getStatus(p);
 
-                    if (status.getCurrentStatus() != CurrentQuestStatus.IN_PROGRESS) {
+                    Msg.debug(questNode.getValue().getDisplayName());
+
+                    if (status.getCurrentStatus() == CurrentQuestStatus.NONE) {
                         iterator.remove();
                     }
                 }
@@ -128,10 +130,19 @@ public class BaseCommand extends AbstractCommand {
         pagin.addAll(questTree.toChatLines(new NodeLineWriter<Quest>() {
             @Override
             public String write(Quest quest) {
-                return quest instanceof PrimaryQuest
+
+                String line = quest instanceof PrimaryQuest
                         ? TextUtils.format(FormatTemplate.LIST_ITEM_DESCRIPTION,
-                        quest.getName(), quest.getDisplayName())
-                        : TextUtils.format("{GRAY}{0}", quest.getName());
+                        quest.getDisplayName(), quest.getName())
+                        : TextUtils.format("{WHITE}{0}", quest.getName());
+
+                String objective = quest.getObjectives().getPlayerObjective(p.getUniqueId());
+
+                if (objective != null) {
+                    line += "{GRAY} - " + objective;
+                }
+
+                return line;
             }
         }));
 

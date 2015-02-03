@@ -191,29 +191,67 @@ public class QuestsApi extends NucleusScriptApi {
         }
 
         /**
-         * Get the current assignment description for the specified quest.
+         * Get the players current objective description for the specified quest.
          *
+         * @param player     The player to check.
          * @param questPath  The quests path name.
          */
         @Nullable
-        public String getAssignment(String questPath) {
+        public String getObjective(Object player, String questPath) {
+            PreCon.notNull(player, "player");
             PreCon.notNullOrEmpty(questPath, "questPath");
 
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.isValid(p != null, "Invalid player object.");
+
             Quest quest = getQuest(questPath, false);
-            return quest.getAssignment();
+
+            return quest.getObjectives().getPlayerObjective(p.getUniqueId());
         }
 
         /**
          * Set the current assignment description for the specified quest.
          *
-         * @param questPath   The quests path name.
-         * @param assignment  The assignment description to set.
+         * @param player        The player to set objective text for.
+         * @param questPath     The quests path name.
+         * @param objectiveKey  The unique key that identifies the description to use.
          */
-        public void setAssignment(String questPath, @Nullable String assignment) {
+        public void setObjectiveKey(Object player, String questPath, String objectiveKey) {
+            PreCon.notNull(player, "player");
             PreCon.notNullOrEmpty(questPath, "questPath");
+            PreCon.notNullOrEmpty(objectiveKey, "objectiveKey");
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.isValid(p != null, "Invalid player object.");
 
             Quest quest = getQuest(questPath, false);
-            quest.setAssignment(assignment);
+
+            quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey);
+        }
+
+        /**
+         * Set the current assignment description for the specified quest.
+         *
+         * <p>Provide the description which will be added and retrieved using the specified
+         * objective key if it is not already set.</p>
+         *
+         * @param player        The player to set objective text for.
+         * @param questPath     The quests path name.
+         * @param objectiveKey  The unique key that identifies the description to use.
+         * @param description   The description to add if the objectiveKey does not yet exist.
+         */
+        public void setObjective(Object player, String questPath, String objectiveKey, String description) {
+            PreCon.notNull(player, "player");
+            PreCon.notNullOrEmpty(questPath, "questPath");
+            PreCon.notNullOrEmpty(objectiveKey, "objectiveKey");
+            PreCon.notNull(description);
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.isValid(p != null, "Invalid player object.");
+
+            Quest quest = getQuest(questPath, false);
+
+            quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey, description);
         }
 
         /**

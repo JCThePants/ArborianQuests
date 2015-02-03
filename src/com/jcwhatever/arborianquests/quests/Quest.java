@@ -59,6 +59,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     private final IDataNode _dataNode;
     private final IDataNode _playerNodes;
     private final IDataNode _questNodes;
+    private final ObjectiveDescriptions _objectives;
     private final Map<String, Quest> _subQuests = new HashMap<>(5);
 
     /**
@@ -114,6 +115,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
         _dataNode = dataNode;
         _playerNodes = dataNode.getNode("players");
         _questNodes = dataNode.getNode("quests");
+        _objectives = new ObjectiveDescriptions(dataNode.getNode("objectives"), _playerNodes);
     }
 
     /**
@@ -145,22 +147,10 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     }
 
     /**
-     * Get the current assignment description. This
-     * is used to explain what the player needs to
-     * do in order to complete their current objective.
+     * Get the quests objective descriptions manager.
      */
-    @Nullable
-    public String getAssignment() {
-        return _dataNode.getString("assignment");
-    }
-
-    /**
-     * Set the current assignment description.
-     *
-     * @param assignment  The assignment description.
-     */
-    public void setAssignment(@Nullable String assignment) {
-        _dataNode.set("assignment", assignment);
+    public ObjectiveDescriptions getObjectives() {
+        return _objectives;
     }
 
     /**
