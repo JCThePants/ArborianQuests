@@ -73,6 +73,19 @@ public class ObjectiveDescriptions {
     }
 
     /**
+     * Clear a players objective description.
+     *
+     * @param playerId  The ID of the player.
+     */
+    public void clearPlayerObjective(UUID playerId) {
+        PreCon.notNull(playerId);
+
+        IDataNode node = _playerNodes.getNode(playerId.toString());
+        node.set("assignment", null);
+        node.save();
+    }
+
+    /**
      * Get the current assignment description. This
      * is used to explain what the player needs to
      * do in order to complete their current objective.

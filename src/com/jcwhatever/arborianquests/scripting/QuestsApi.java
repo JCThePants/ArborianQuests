@@ -244,7 +244,7 @@ public class QuestsApi extends NucleusScriptApi {
             PreCon.notNull(player, "player");
             PreCon.notNullOrEmpty(questPath, "questPath");
             PreCon.notNullOrEmpty(objectiveKey, "objectiveKey");
-            PreCon.notNull(description);
+            PreCon.notNull(description, "description");
 
             Player p = PlayerUtils.getPlayer(player);
             PreCon.isValid(p != null, "Invalid player object.");
@@ -252,6 +252,24 @@ public class QuestsApi extends NucleusScriptApi {
             Quest quest = getQuest(questPath, false);
 
             quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey, description);
+        }
+
+        /**
+         * Clear a players objective description for the specified quest.
+         *
+         * @param player     The player.
+         * @param questPath  The path of the quest.
+         */
+        public void clearObjective(Object player, String questPath) {
+            PreCon.notNull(player, "player");
+            PreCon.notNullOrEmpty(questPath, "questPath");
+
+            Player p = PlayerUtils.getPlayer(player);
+            PreCon.isValid(p != null, "Invalid player object.");
+
+            Quest quest = getQuest(questPath, false);
+
+            quest.getObjectives().clearPlayerObjective(p.getUniqueId());
         }
 
         /**
