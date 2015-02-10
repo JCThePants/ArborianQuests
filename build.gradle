@@ -21,7 +21,7 @@ def providedDependsFiles = null
 def providedDepends = [
         'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT',
         'com.google.code.findbugs:jsr305:3.0.0',
-        'com.jcwhatever.bukkit:NucleusFramework:LATEST'
+        'com.jcwhatever.bukkit:NucleusFramework:+'
 ]
 
 // compile dependencies (compiled into output jar)
@@ -46,7 +46,7 @@ def testRuntimeDepends = null
 
 // dependencies that should always be downloaded (cached for 30 seconds)
 def snapshotDepends = [
-        'com.jcwhatever.bukkit:NucleusFramework:0.0-SNAPSHOT'
+        'com.jcwhatever.bukkit:NucleusFramework:+'
 ];
 
 // source directory
