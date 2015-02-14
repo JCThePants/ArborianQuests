@@ -28,8 +28,8 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber.IScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
 
 import java.util.HashSet;
 import java.util.Set;

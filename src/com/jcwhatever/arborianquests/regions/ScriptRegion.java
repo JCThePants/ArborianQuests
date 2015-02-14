@@ -26,10 +26,10 @@ package com.jcwhatever.arborianquests.regions;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.nucleus.regions.Region;
-import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber;
-import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber.IScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
+import com.jcwhatever.nucleus.utils.observer.script.ScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.update.NamedUpdateAgents;
 
 import org.bukkit.entity.Player;
@@ -64,7 +64,7 @@ public class ScriptRegion extends Region {
      *
      * @param subscriber  The enter event subscriber.
      */
-    public boolean onEnter(IScriptUpdateSubscriber subscriber) {
+    public boolean onEnter(IScriptUpdateSubscriber<Player> subscriber) {
         PreCon.notNull(subscriber, "subscriber");
 
         ScriptUpdateSubscriber<Player> updateSubscriber =
@@ -81,7 +81,7 @@ public class ScriptRegion extends Region {
      *
      * @param subscriber  The subscriber.
      */
-    public boolean onLeave(IScriptUpdateSubscriber subscriber) {
+    public boolean onLeave(IScriptUpdateSubscriber<Player> subscriber) {
         PreCon.notNull(subscriber);
 
         ScriptUpdateSubscriber<Player> updateSubscriber =

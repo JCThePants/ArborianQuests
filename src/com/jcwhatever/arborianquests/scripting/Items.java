@@ -29,8 +29,6 @@ import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber;
-import com.jcwhatever.nucleus.scripting.api.ScriptUpdateSubscriber.IScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
@@ -39,6 +37,8 @@ import com.jcwhatever.nucleus.utils.floatingitems.FloatingItem;
 import com.jcwhatever.nucleus.utils.floatingitems.FloatingItemManager;
 import com.jcwhatever.nucleus.utils.floatingitems.IFloatingItem;
 import com.jcwhatever.nucleus.utils.observer.ISubscriber;
+import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
+import com.jcwhatever.nucleus.utils.observer.script.ScriptUpdateSubscriber;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
