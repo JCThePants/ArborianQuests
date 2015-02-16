@@ -82,9 +82,9 @@ public enum QuestStatus {
      * Get the current quest status of the quest status.
      *
      * <p>The current quest status specifies if the quest status indicates that
-     * the player is at the current moment playing the quest ({@code IN_PROGRESS})
+     * the player is at the current moment playing the quest ({@link CurrentQuestStatus#IN_PROGRESS})
      * or that at the current moment the player is not playing the quest
-     * ({@code NONE}).
+     * ({@link CurrentQuestStatus#NONE}).
      */
     public CurrentQuestStatus getCurrentStatus() {
         return _currentStatus;
@@ -94,8 +94,8 @@ public enum QuestStatus {
      * Get the completion status of the quest status.
      *
      * <p>The completion status specifies if the quest status indicates that
-     * the player has completed the quest at least once ({@code COMPLETED})
-     * or the player has never completed the quest ({@code NOT_COMPLETED}).</p>
+     * the player has completed the quest at least once ({@link QuestCompletionStatus#COMPLETED})
+     * or the player has never completed the quest ({@link QuestCompletionStatus#NOT_COMPLETED}).</p>
      */
     public QuestCompletionStatus getCompletionStatus() {
         return _completionStatus;

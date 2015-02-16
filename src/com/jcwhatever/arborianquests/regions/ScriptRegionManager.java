@@ -60,7 +60,7 @@ public class ScriptRegionManager extends RegionManager<ScriptRegion> {
      * @param anchor  The anchor location.
      * @param radius  The radius.
      *
-     * @return  The newly created {@code ScriptRegion} or null if failed.
+     * @return  The newly created {@link ScriptRegion} or null if failed.
      */
     @Nullable
     public ScriptRegion addFromAnchor(String name, Location anchor, int radius) {

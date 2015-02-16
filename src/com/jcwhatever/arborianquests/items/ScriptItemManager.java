@@ -32,26 +32,26 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nullable;
 
 /**
- * Manages {@code ScriptItem}'s
+ * Manages {@link ScriptItem}'s
  */
 public class ScriptItemManager extends NamedInsensitiveDataManager<ScriptItem> {
 
     /**
      * Constructor.
      *
-     * @param dataNode  The data node where {@code ItemStacks are stored.}
+     * @param dataNode  The data node where {@link org.bukkit.inventory.ItemStack} are stored.
      */
     public ScriptItemManager(IDataNode dataNode) {
         super(dataNode, true);
     }
 
     /**
-     * Add a scripted {@code ItemStack}.
+     * Add a scripted {@link org.bukkit.inventory.ItemStack}.
      *
-     * @param name  The name of the {@code ItemStack}.
-     * @param item  The {@code ItemStack}.
+     * @param name  The name of the {@link org.bukkit.inventory.ItemStack}.
+     * @param item  The {@link org.bukkit.inventory.ItemStack}.
      *
-     * @return  The created {@code ScriptItem} or null if the name is already in use.
+     * @return  The created {@link ScriptItem} or null if the name is already in use.
      */
     @Nullable
     public ScriptItem add(String name, ItemStack item) {

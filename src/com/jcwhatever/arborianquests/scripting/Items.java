@@ -54,7 +54,7 @@ import java.util.WeakHashMap;
 import javax.annotation.Nullable;
 
 /**
- * Sub script API for named {@code ItemStack}'s that can be retrieved by scripts.
+ * Sub script API for named {@link org.bukkit.inventory.ItemStack}'s that can be retrieved by scripts.
  */
 public class Items {
 

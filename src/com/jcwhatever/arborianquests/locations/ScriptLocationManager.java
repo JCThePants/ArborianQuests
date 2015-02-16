@@ -51,7 +51,7 @@ public class ScriptLocationManager extends NamedInsensitiveDataManager<ScriptLoc
      * @param name      The name of the location.
      * @param location  The location.
      *
-     * @return  The new {@code ScriptLocation} or null if the name is already in use.
+     * @return  The new {@link ScriptLocation} or null if the name is already in use.
      */
     @Nullable
     public ScriptLocation add(String name, Location location) {

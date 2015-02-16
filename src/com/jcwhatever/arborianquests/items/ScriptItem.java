@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.mixins.INamedInsensitive;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A named {@code ItemStack} that can be retrieved from scripts
+ * A named {@link org.bukkit.inventory.ItemStack} that can be retrieved from scripts
  */
 public class ScriptItem implements INamedInsensitive {
 
@@ -40,8 +40,8 @@ public class ScriptItem implements INamedInsensitive {
     /**
      * Constructor.
      *
-     * @param name       The name of the {@code ItemStack}
-     * @param itemStack  The {@code ItemStack}
+     * @param name       The name of the {@link org.bukkit.inventory.ItemStack}
+     * @param itemStack  The {@link org.bukkit.inventory.ItemStack}
      */
     public ScriptItem(String name, ItemStack itemStack) {
         _name = name;
@@ -62,7 +62,7 @@ public class ScriptItem implements INamedInsensitive {
     /**
      * Get the item stack.
      *
-     * @return  A clone of the {@code ItemStack}.
+     * @return  A clone of the {@link ItemStack}.
      */
     public ItemStack getItem() {
         return _itemStack.clone();

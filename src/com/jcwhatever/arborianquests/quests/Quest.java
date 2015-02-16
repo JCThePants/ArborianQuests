@@ -63,7 +63,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     private final Map<String, Quest> _subQuests = new HashMap<>(5);
 
     /**
-     * Get an unmodifiable {@code Set} of {@code Quest}'s that
+     * Get an unmodifiable {@link java.util.Set} of {@link Quest}'s that
      * the player is in.
      *
      * @param player  The player.

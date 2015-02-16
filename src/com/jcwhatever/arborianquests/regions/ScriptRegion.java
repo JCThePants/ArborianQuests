@@ -109,12 +109,12 @@ public class ScriptRegion extends Region {
     }
 
     @Override
-    protected boolean canDoPlayerEnter(Player p, EnterRegionReason reason) {
+    protected boolean canDoPlayerEnter(Player player, EnterRegionReason reason) {
         return _agents.hasAgent("onEnter");
     }
 
     @Override
-    protected boolean canDoPlayerLeave(Player p, LeaveRegionReason reason) {
+    protected boolean canDoPlayerLeave(Player player, LeaveRegionReason reason) {
         return _agents.hasAgent("onLeave");
     }
 }
