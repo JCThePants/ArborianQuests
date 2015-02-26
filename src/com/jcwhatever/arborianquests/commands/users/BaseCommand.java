@@ -32,6 +32,7 @@ import com.jcwhatever.arborianquests.commands.admin.flags.FlagsCommand;
 import com.jcwhatever.arborianquests.commands.admin.items.ItemsCommand;
 import com.jcwhatever.arborianquests.commands.admin.locations.LocationsCommand;
 import com.jcwhatever.arborianquests.commands.admin.regions.RegionsCommand;
+import com.jcwhatever.arborianquests.commands.admin.waypoints.WaypointsCommand;
 import com.jcwhatever.arborianquests.quests.PrimaryQuest;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.arborianquests.quests.QuestStatus;
@@ -80,6 +81,7 @@ public class BaseCommand extends AbstractCommand {
         registerCommand(ItemsCommand.class);
         registerCommand(LocationsCommand.class);
         registerCommand(RegionsCommand.class);
+        registerCommand(WaypointsCommand.class);
         registerCommand(ListCommand.class);
     }
 

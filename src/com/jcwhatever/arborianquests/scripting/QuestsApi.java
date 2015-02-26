@@ -68,6 +68,7 @@ public class QuestsApi extends NucleusScriptApi {
     private static final Flags _flagsApi = new Flags();
     private static final Items _itemsApi = new Items();
     private static final Locations _locationsApi = new Locations();
+    private static final Waypoints _waypointsApi = new Waypoints();
     private static final Meta _metaApi = new Meta(ArborianQuests.getPlugin());
     private static final Regions _regionsApi = new Regions();
 
@@ -118,6 +119,7 @@ public class QuestsApi extends NucleusScriptApi {
         public final IScriptApiObject flags;
         public final IScriptApiObject items;
         public final IScriptApiObject locations;
+        public final IScriptApiObject waypoints;
         public final IScriptApiObject meta;
         public final IScriptApiObject regions;
 
@@ -132,6 +134,7 @@ public class QuestsApi extends NucleusScriptApi {
             flags = _flagsApi.getApiObject(script);
             items = _itemsApi.getApiObject(script);
             locations = _locationsApi.getApiObject(script);
+            waypoints = _waypointsApi.getApiObject(script);
             meta = _metaApi.getApiObject(script);
             regions = _regionsApi.getApiObject(script);
         }
@@ -152,6 +155,7 @@ public class QuestsApi extends NucleusScriptApi {
             flags.dispose();
             items.dispose();
             locations.dispose();
+            waypoints.dispose();
             meta.dispose();
             regions.dispose();
 

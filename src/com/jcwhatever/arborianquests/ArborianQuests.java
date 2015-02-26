@@ -30,6 +30,7 @@ import com.jcwhatever.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.arborianquests.quests.QuestManager;
 import com.jcwhatever.arborianquests.regions.ScriptRegionManager;
 import com.jcwhatever.arborianquests.scripting.QuestsApi;
+import com.jcwhatever.arborianquests.waypoints.WaypointsManager;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.storage.DataStorage;
@@ -62,6 +63,7 @@ public class ArborianQuests extends NucleusPlugin {
     private QuestManager _questManager;
     private ScriptRegionManager _scriptRegionManager;
     private ScriptLocationManager _scriptLocationManager;
+    private WaypointsManager _waypointsManager;
     private ScriptItemManager _scriptItemManager;
 
     private IDataNode _metaNode;
@@ -85,6 +87,13 @@ public class ArborianQuests extends NucleusPlugin {
      */
     public static ScriptLocationManager getScriptLocationManager() {
         return _instance._scriptLocationManager;
+    }
+
+    /**
+     * Get the waypoints manager.
+     */
+    public static WaypointsManager getWaypointsManager() {
+        return _instance._waypointsManager;
     }
 
     /**
@@ -127,12 +136,16 @@ public class ArborianQuests extends NucleusPlugin {
         IDataNode locationNode = DataStorage.get(this, new DataPath("locations"));
         locationNode.load();
 
+        IDataNode waypointsNode = DataStorage.get(this, new DataPath("waypoints"));
+        waypointsNode.load();
+
         IDataNode itemsNode = DataStorage.get(this, new DataPath("items"));
         itemsNode.load();
 
         _questManager = new QuestManager(this, getDataNode());
         _scriptRegionManager = new ScriptRegionManager(regionNode);
         _scriptLocationManager = new ScriptLocationManager(locationNode);
+        _waypointsManager = new WaypointsManager(waypointsNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);
 
         registerCommands(new QuestsCommandDispatcher());
