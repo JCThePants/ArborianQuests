@@ -26,6 +26,8 @@ package com.jcwhatever.arborianquests.regions;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.nucleus.regions.Region;
+import com.jcwhatever.nucleus.regions.options.EnterRegionReason;
+import com.jcwhatever.nucleus.regions.options.LeaveRegionReason;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
