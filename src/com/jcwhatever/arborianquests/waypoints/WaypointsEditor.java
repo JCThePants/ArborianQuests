@@ -120,7 +120,7 @@ public class WaypointsEditor {
             @Override
             public BlockSelectResult onBlockSelect(Player player, Block selectedBlock, Action clickAction) {
 
-                Location location = selectedBlock.getLocation();
+                Location location = selectedBlock.getLocation().add(0, 1, 0);
 
                 // add location
                 if (clickAction == Action.LEFT_CLICK_BLOCK) {
