@@ -32,8 +32,8 @@ import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
-import com.jcwhatever.nucleus.utils.LocationUtils;
 import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
@@ -67,7 +67,7 @@ public class ListSubCommand extends AbstractCommand {
             pagin.setSearchTerm(args.getString("search"));
 
         for (ScriptLocation location : locations) {
-            pagin.add(location.getName(), LocationUtils.locationToString(location.getLocation()));
+            pagin.add(location.getName(), TextUtils.formatLocation(location.getLocation(), true));
         }
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
