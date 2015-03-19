@@ -25,14 +25,13 @@
 package com.jcwhatever.arborianquests.commands.admin.flags;
 
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
-import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
@@ -45,11 +44,13 @@ import java.util.UUID;
         parent="flags",
         command = "list",
         staticParams = { "questPath", "playerName", "page=1" },
+        floatingParams = { "search=" },
         description = "List all quest flags set for the specified quest on the specified player.",
         paramDescriptions = {
                 "questPath= The path to the quest using dots as delimiters. i.e questName.subQuestName",
                 "playerName= The name of the player.",
-                "page= {PAGE}"
+                "page= {PAGE}",
+                "search= Optional. Use to show flags that contain the specified search text."
         })
 
 public class ListSubCommand extends AbstractCommand {
@@ -77,13 +78,16 @@ public class ListSubCommand extends AbstractCommand {
             return;
         }
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
 
         Set<String> flagNames = quest.getFlags(playerId);
 
         for (String flag : flagNames) {
             pagin.add(flag);
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM);
     }

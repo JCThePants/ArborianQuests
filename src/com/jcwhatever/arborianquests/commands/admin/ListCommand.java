@@ -26,7 +26,6 @@ package com.jcwhatever.arborianquests.commands.admin;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.quests.PrimaryQuest;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
@@ -47,9 +46,11 @@ import java.util.Collection;
 @CommandInfo(
         command = "list",
         staticParams = { "page=1" },
+        floatingParams = { "search=" },
         description = "List all registered quests.",
         paramDescriptions = {
-                "page= {PAGE}"
+                "page= {PAGE}",
+                "search= Optional. Use to show quests that contain the specified search text."
         })
 
 public class ListCommand extends AbstractCommand {
@@ -61,7 +62,7 @@ public class ListCommand extends AbstractCommand {
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
 
         Collection<Quest> quests = ArborianQuests.getQuestManager().getQuests();
 
@@ -76,6 +77,9 @@ public class ListCommand extends AbstractCommand {
                         : TextUtils.format("{GRAY}{0}", quest.getName());
             }
         }));
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.RAW);
     }

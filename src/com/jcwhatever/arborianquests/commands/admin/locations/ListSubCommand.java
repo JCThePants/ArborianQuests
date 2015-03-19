@@ -26,7 +26,6 @@ package com.jcwhatever.arborianquests.commands.admin.locations;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
@@ -45,9 +44,11 @@ import java.util.Collection;
         parent="locations",
         command = "list",
         staticParams = { "page=1" },
+        floatingParams = { "search=" },
         description = "List all quest locations.",
         paramDescriptions = {
-                "page= {PAGE}"
+                "page= {PAGE}",
+                "search= Optional. Use to show locations that contain the specified search text."
         })
 
 public class ListSubCommand extends AbstractCommand {
@@ -59,9 +60,11 @@ public class ListSubCommand extends AbstractCommand {
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
-
         Collection<ScriptLocation> locations = ArborianQuests.getScriptLocationManager().getAll();
+
+        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         for (ScriptLocation location : locations) {
             pagin.add(location.getName(), LocationUtils.locationToString(location.getLocation()));

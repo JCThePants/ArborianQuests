@@ -26,7 +26,6 @@ package com.jcwhatever.arborianquests.commands.admin.items;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
@@ -46,9 +45,11 @@ import java.util.Collection;
         parent="items",
         command = "list",
         staticParams = { "page=1" },
+        floatingParams = { "search="},
         description = "List all quest items.",
         paramDescriptions = {
-                "page= {PAGE}"
+                "page= {PAGE}",
+                "search= Optional. Use to show items that contain the specified search text."
         })
 
 public class ListSubCommand extends AbstractCommand {
@@ -60,13 +61,16 @@ public class ListSubCommand extends AbstractCommand {
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
 
         Collection<ScriptItem> items = ArborianQuests.getScriptItemManager().getAll();
 
         for (ScriptItem item : items) {
             pagin.add(item.getName(), ItemStackUtils.serializeToString(item.getItem(), SerializerOutputType.COLOR));
         }
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }

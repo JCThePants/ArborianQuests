@@ -47,11 +47,12 @@ import javax.annotation.Nullable;
         parent="waypoints",
         command = "list",
         staticParams = { "page=1" },
-        floatingParams = { "name=" },
+        floatingParams = { "name=", "search=" },
         description = "List all waypoints or locations in a waypoints list.",
         paramDescriptions = {
                 "page= {PAGE}",
-                "name= The name of the waypoints list to list locations from."
+                "name= The name of the waypoints list to list locations from.",
+                "search= Optional. Use to show waypoints that contain the specified search text."
         })
 
 public class ListSubCommand extends AbstractCommand {
@@ -77,6 +78,9 @@ public class ListSubCommand extends AbstractCommand {
 
         if (pagin == null)
             return; // finished
+
+        if (!args.isDefaultValue("search"))
+            pagin.setSearchTerm(args.getString("search"));
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);
     }
