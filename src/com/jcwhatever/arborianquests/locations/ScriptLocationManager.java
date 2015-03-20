@@ -79,6 +79,6 @@ public class ScriptLocationManager extends NamedInsensitiveDataManager<ScriptLoc
     @Nullable
     @Override
     protected void save(ScriptLocation item, IDataNode itemNode) {
-        itemNode.set("", item.getLocation());
+        itemNode.set("", item);
     }
 }

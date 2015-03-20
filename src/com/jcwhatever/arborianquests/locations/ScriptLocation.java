@@ -24,20 +24,14 @@
 
 package com.jcwhatever.arborianquests.locations;
 
-import com.jcwhatever.nucleus.mixins.INamedLocation;
-import com.jcwhatever.nucleus.mixins.INamedLocationDistance;
-import com.jcwhatever.nucleus.mixins.implemented.NamedLocationDistance;
-import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.NamedLocation;
+
 import org.bukkit.Location;
 
 /**
  * A named location that can be retrieved by scripts.
  */
-public class ScriptLocation implements INamedLocation {
-
-    private final String _name;
-    private final String _searchName;
-    private final Location _location;
+public class ScriptLocation extends NamedLocation {
 
     /**
      * Constructor.
@@ -46,31 +40,6 @@ public class ScriptLocation implements INamedLocation {
      * @param location  The location.
      */
     public ScriptLocation(String name, Location location) {
-        PreCon.notNullOrEmpty(name);
-        PreCon.notNull(location);
-
-        _name = name;
-        _searchName = name.toLowerCase();
-        _location = location;
-    }
-
-    @Override
-    public String getName() {
-        return _name;
-    }
-
-    @Override
-    public String getSearchName() {
-        return _searchName;
-    }
-
-    @Override
-    public Location getLocation() {
-        return _location;
-    }
-
-    @Override
-    public INamedLocationDistance getDistance(Location location) {
-        return new NamedLocationDistance(this, location);
+        super(name, location);
     }
 }

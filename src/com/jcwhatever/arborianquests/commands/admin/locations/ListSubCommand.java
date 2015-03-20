@@ -67,7 +67,7 @@ public class ListSubCommand extends AbstractCommand {
             pagin.setSearchTerm(args.getString("search"));
 
         for (ScriptLocation location : locations) {
-            pagin.add(location.getName(), TextUtils.formatLocation(location.getLocation(), true));
+            pagin.add(location.getName(), TextUtils.formatLocation(location, true));
         }
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);

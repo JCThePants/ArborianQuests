@@ -78,7 +78,7 @@ public class Locations {
             if (result == null)
                 return null;
 
-            return result.getLocation();
+            return result;
         }
 
         /**
