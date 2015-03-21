@@ -24,7 +24,7 @@
 
 package com.jcwhatever.arborianquests.locations;
 
-import com.jcwhatever.nucleus.utils.NamedLocation;
+import com.jcwhatever.nucleus.utils.coords.NamedLocation;
 
 import org.bukkit.Location;
 

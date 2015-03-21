@@ -29,7 +29,7 @@ import com.jcwhatever.arborianquests.waypoints.WaypointsList;
 import com.jcwhatever.nucleus.mixins.INamedInsensitive;
 import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.LocationUtils;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
