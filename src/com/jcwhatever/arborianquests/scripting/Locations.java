@@ -26,8 +26,7 @@ package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.locations.ScriptLocation;
-import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
@@ -38,54 +37,40 @@ import javax.annotation.Nullable;
 /**
  * Sub script API for named locations that can be retrieved by scripts.
  */
-public class Locations {
+public class Locations implements IDisposable {
 
-    /**
-     * Get a script API object for the specified script.
-     *
-     * @param script  The script to get the API object for.
-     */
-    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
-        return new ApiObject();
+    private boolean _isDisposed;
+
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    @Override
+    public void dispose() {
+        _isDisposed = true;
+    }
 
-        private boolean _isDisposed;
+    /**
+     * Get a quest script location by name.
+     *
+     * @param name  The name of the location.
+     */
+    @Nullable
+    public Location get(String name) {
+        PreCon.notNullOrEmpty(name);
 
-        ApiObject() {}
+        ScriptLocation result = ArborianQuests.getScriptLocationManager().get(name);
+        if (result == null)
+            return null;
 
-        @Override
-        public boolean isDisposed() {
-            return _isDisposed;
-        }
+        return result;
+    }
 
-        @Override
-        public void dispose() {
-            _isDisposed = true;
-        }
-
-        /**
-         * Get a quest script location by name.
-         *
-         * @param name  The name of the location.
-         */
-        @Nullable
-        public Location get(String name) {
-            PreCon.notNullOrEmpty(name);
-
-            ScriptLocation result = ArborianQuests.getScriptLocationManager().get(name);
-            if (result == null)
-                return null;
-
-            return result;
-        }
-
-        /**
-         * Get all script location objects.
-         */
-        public Collection<ScriptLocation> getScriptLocations() {
-            return ArborianQuests.getScriptLocationManager().getAll();
-        }
+    /**
+     * Get all script location objects.
+     */
+    public Collection<ScriptLocation> getScriptLocations() {
+        return ArborianQuests.getScriptLocationManager().getAll();
     }
 }

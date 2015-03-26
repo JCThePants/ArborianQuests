@@ -33,10 +33,17 @@ import com.jcwhatever.arborianquests.scripting.QuestsApi;
 import com.jcwhatever.arborianquests.waypoints.WaypointsManager;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
-import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
+import com.jcwhatever.nucleus.scripting.IScriptApi;
+import com.jcwhatever.nucleus.scripting.SimpleScriptApi;
+import com.jcwhatever.nucleus.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextColor;
+
+import org.bukkit.plugin.Plugin;
 
 /**
  * ArborianQuests plugin.
@@ -66,6 +73,7 @@ public class ArborianQuests extends NucleusPlugin {
     private WaypointsManager _waypointsManager;
     private ScriptItemManager _scriptItemManager;
 
+    private IScriptApi _scriptApi;
     private IDataNode _metaNode;
 
     /**
@@ -150,13 +158,20 @@ public class ArborianQuests extends NucleusPlugin {
 
         registerCommands(new QuestsCommandDispatcher());
 
-        Nucleus.getScriptApiRepo().registerApiType(this, QuestsApi.class);
+        _scriptApi = new SimpleScriptApi(this, "quests", new IApiObjectCreator() {
+            @Override
+            public IDisposable create(Plugin plugin, IEvaluatedScript script) {
+                return new QuestsApi();
+            }
+        });
+
+        Nucleus.getScriptApiRepo().registerApi(_scriptApi);
     }
 
     @Override
     protected void onDisablePlugin() {
 
-        Nucleus.getScriptApiRepo().unregisterApiType(this, QuestsApi.class);
+        Nucleus.getScriptApiRepo().unregisterApi(_scriptApi);
         _instance = null;
     }
 }

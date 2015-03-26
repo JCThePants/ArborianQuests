@@ -26,11 +26,10 @@ package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.waypoints.WaypointsList;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.mixins.INamedInsensitive;
-import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
-import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 
 import org.bukkit.Location;
 
@@ -43,90 +42,77 @@ import java.util.List;
  *
  * @see QuestsApi
  */
-public class Waypoints {
+public class Waypoints implements IDisposable {
 
-    /**
-     * Get a script API object for the specified script.
-     *
-     * @param script  The script to get the API object for.
-     */
-    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
-        return new ApiObject();
+    private boolean _isDisposed;
+
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    @Override
+    public void dispose() {
+        _isDisposed = true;
+    }
 
-        private boolean _isDisposed;
+    /**
+     * Get a waypoints list by name.
+     *
+     * @param name  The name of the waypoints list.
+     */
+    public List<Location> get(String name) {
+        PreCon.notNullOrEmpty(name, "name");
 
-        ApiObject() {}
+        WaypointsList waypoints = ArborianQuests.getWaypointsManager().get(name);
+        PreCon.isValid(waypoints != null, "Waypoints named {0} not found.", name);
 
-        @Override
-        public boolean isDisposed() {
-            return _isDisposed;
+        List<Location> results = new ArrayList<>(waypoints.size());
+
+        for (Location location : waypoints) {
+            results.add(LocationUtils.copy(location));
+        }
+
+        return results;
+    }
+
+    /**
+     * Get all script location objects.
+     */
+    public Collection<ScriptWaypoints> getWaypointLists() {
+        Collection<WaypointsList> waypoints = ArborianQuests.getWaypointsManager().getAll();
+
+        List<ScriptWaypoints> results = new ArrayList<>(waypoints.size());
+
+        for (WaypointsList list : waypoints) {
+            results.add(new ScriptWaypoints(list));
+        }
+
+        return results;
+    }
+
+    public static class ScriptWaypoints extends ArrayList<Location> implements INamedInsensitive {
+
+        private final String _name;
+        private final String _searchName;
+
+        ScriptWaypoints(WaypointsList list) {
+            _name = list.getName();
+            _searchName = list.getSearchName();
+
+            for (Location location : list)
+                add(LocationUtils.copy(location));
         }
 
         @Override
-        public void dispose() {
-            _isDisposed = true;
+        public String getSearchName() {
+            return _name;
         }
 
-        /**
-         * Get a waypoints list by name.
-         *
-         * @param name  The name of the waypoints list.
-         */
-        public List<Location> get(String name) {
-            PreCon.notNullOrEmpty(name, "name");
-
-            WaypointsList waypoints = ArborianQuests.getWaypointsManager().get(name);
-            PreCon.isValid(waypoints != null, "Waypoints named {0} not found.", name);
-
-            List<Location> results = new ArrayList<>(waypoints.size());
-
-            for (Location location : waypoints) {
-                results.add(LocationUtils.copy(location));
-            }
-
-            return results;
-        }
-
-        /**
-         * Get all script location objects.
-         */
-        public Collection<ScriptWaypoints> getWaypointLists() {
-            Collection<WaypointsList> waypoints = ArborianQuests.getWaypointsManager().getAll();
-
-            List<ScriptWaypoints> results = new ArrayList<>(waypoints.size());
-
-            for (WaypointsList list : waypoints) {
-                results.add(new ScriptWaypoints(list));
-            }
-
-            return results;
-        }
-
-        public static class ScriptWaypoints extends ArrayList<Location> implements INamedInsensitive {
-
-            private final String _name;
-            private final String _searchName;
-
-            ScriptWaypoints(WaypointsList list) {
-                _name = list.getName();
-                _searchName = list.getSearchName();
-
-                for (Location location : list)
-                    add(LocationUtils.copy(location));
-            }
-
-            @Override
-            public String getSearchName() {
-                return _name;
-            }
-
-            @Override
-            public String getName() {
-                return _searchName;
-            }
+        @Override
+        public String getName() {
+            return _searchName;
         }
     }
 }
+

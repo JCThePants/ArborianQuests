@@ -1,23 +1,16 @@
 package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
-import com.jcwhatever.nucleus.scripting.ScriptApiInfo;
-import com.jcwhatever.nucleus.scripting.api.ScriptApiMeta;
-
-import org.bukkit.plugin.Plugin;
+import com.jcwhatever.nucleus.scripting.api.SAPI_Meta;
 
 // annotation required but not used
-@ScriptApiInfo(
-        variableName = "questsScriptApiMeta",
-        description = "")
-public class Meta extends ScriptApiMeta {
+public class Meta extends SAPI_Meta {
 
     /**
      * Constructor. Automatically adds variable to script.
      *
-     * @param plugin   The owning plugin
      */
-    public Meta(Plugin plugin) {
-        super(plugin, ArborianQuests.getPlugin().getMetaDataNode());
+    public Meta() {
+        super(ArborianQuests.getPlugin().getMetaDataNode());
     }
 }

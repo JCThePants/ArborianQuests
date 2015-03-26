@@ -27,8 +27,7 @@ package com.jcwhatever.arborianquests.scripting;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
-import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
@@ -56,9 +55,8 @@ import javax.annotation.Nullable;
 /**
  * Sub script API for named {@link org.bukkit.inventory.ItemStack}'s that can be retrieved by scripts.
  */
-public class Items {
+public class Items implements IDisposable {
 
-    private static ApiObject _api;
     private static FloatingItemManager _manager;
 
     static {
@@ -75,136 +73,120 @@ public class Items {
         for (IFloatingItem item : floatingItems) {
             _manager.remove(item.getName());
         }
+    }
 
-        _api = new ApiObject();
+    private Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
+    private SubscriberLinkedList<ISubscriber> _subscribers = new SubscriberLinkedList<>();
+    private boolean _isDisposed;
+
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
+    }
+
+    @Override
+    public void dispose() {
+
+        Iterator<IFloatingItem> iterator = _floatingItems.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            IFloatingItem item = iterator.next();
+            _manager.remove(item.getName());
+            iterator.remove();
+        }
+
+        while (!_subscribers.isEmpty()) {
+            ISubscriber subscriber = _subscribers.remove();
+            subscriber.dispose();
+        }
+
+        _isDisposed = true;
+    }
+
+    @Nullable
+    public ItemStack getItem(String name) {
+        PreCon.notNullOrEmpty(name);
+
+        ScriptItem item = ArborianQuests.getScriptItemManager().get(name);
+        if (item == null)
+            return null;
+
+        return item.getItem();
     }
 
     /**
-     * Get an item API for the specified script.
+     * Create floating item from an item stack and location.
      *
-     * @param script  The script the API is for.
+     * @param itemStack  The item stack.
+     * @param location   The location the item will spawn in.
      */
-    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
-        return _api;
+    @Nullable
+    public IFloatingItem createFloatingItem(ItemStack itemStack, Location location) {
+        PreCon.notNull(itemStack);
+        PreCon.notNull(location);
+
+        IFloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
+                itemStack.clone(), location);
+
+        if (floatingItem != null)
+            _floatingItems.put(floatingItem, null);
+
+        return floatingItem;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    /**
+     * Dispose floating item.
+     *
+     * @param item  The item to remove and dispose.
+     *
+     * @return  True if successful.
+     */
+    public boolean disposeFloatingItem(FloatingItem item) {
+        return _manager.remove(item.getName());
+    }
 
-        private Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
-        private SubscriberLinkedList<ISubscriber> _subscribers = new SubscriberLinkedList<>();
-        private boolean _isDisposed;
+    /**
+     * Add an item pickup handler.
+     *
+     * @param item      The item to add the callback to.
+     * @param callback  The callback to run when the item is picked up.
+     */
+    public void onPickup(FloatingItem item, IScriptUpdateSubscriber<Player> callback) {
+        PreCon.notNull(item);
+        PreCon.notNull(callback);
 
-        public ApiObject () {}
+        ScriptUpdateSubscriber<Player> subscriber = new ScriptUpdateSubscriber<>(callback);
+        item.onPickup(subscriber);
+        _subscribers.add(subscriber);
+    }
 
-        @Override
-        public boolean isDisposed() {
-            return _isDisposed;
-        }
+    /**
+     * Add an item spawn handler.
+     *
+     * @param item      The name of the floating item.
+     * @param callback  The callback to run when the item is spawned.
+     */
+    public void onSpawn(FloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
+        PreCon.notNull(item);
+        PreCon.notNull(callback);
 
-        @Override
-        public void dispose() {
+        ScriptUpdateSubscriber<Entity> subscriber = new ScriptUpdateSubscriber<>(callback);
+        item.onSpawn(subscriber);
+        _subscribers.add(subscriber);
+    }
 
-            Iterator<IFloatingItem> iterator = _floatingItems.keySet().iterator();
+    /**
+     * Add an item despawn handler.
+     *
+     * @param item      The name of the floating item.
+     * @param callback  The callback to run when the item is despawned.
+     */
+    public void onDespawn(FloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
+        PreCon.notNull(item);
+        PreCon.notNull(callback);
 
-            while (iterator.hasNext()) {
-                IFloatingItem item = iterator.next();
-                _manager.remove(item.getName());
-                iterator.remove();
-            }
-
-            while (!_subscribers.isEmpty()) {
-                ISubscriber subscriber = _subscribers.remove();
-                subscriber.dispose();
-            }
-
-            _isDisposed = true;
-        }
-
-        @Nullable
-        public ItemStack getItem(String name) {
-            PreCon.notNullOrEmpty(name);
-
-            ScriptItem item = ArborianQuests.getScriptItemManager().get(name);
-            if (item == null)
-                return null;
-
-            return item.getItem();
-        }
-
-        /**
-         * Create floating item from an item stack and location.
-         *
-         * @param itemStack  The item stack.
-         * @param location   The location the item will spawn in.
-         */
-        @Nullable
-        public IFloatingItem createFloatingItem(ItemStack itemStack, Location location) {
-            PreCon.notNull(itemStack);
-            PreCon.notNull(location);
-
-            IFloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
-                    itemStack.clone(), location);
-
-            if (floatingItem != null)
-                _floatingItems.put(floatingItem, null);
-
-            return floatingItem;
-        }
-
-        /**
-         * Dispose floating item.
-         *
-         * @param item  The item to remove and dispose.
-         *
-         * @return  True if successful.
-         */
-        public boolean disposeFloatingItem(FloatingItem item) {
-            return _manager.remove(item.getName());
-        }
-
-        /**
-         * Add an item pickup handler.
-         *
-         * @param item      The item to add the callback to.
-         * @param callback  The callback to run when the item is picked up.
-         */
-        public void onPickup(FloatingItem item, IScriptUpdateSubscriber callback) {
-            PreCon.notNull(item);
-            PreCon.notNull(callback);
-
-            ScriptUpdateSubscriber<Player> subscriber = new ScriptUpdateSubscriber<>(callback);
-            item.onPickup(subscriber);
-            _subscribers.add(subscriber);
-        }
-
-        /**
-         * Add an item spawn handler.
-         *
-         * @param item      The name of the floating item.
-         * @param callback  The callback to run when the item is spawned.
-         */
-        public void onSpawn(FloatingItem item, IScriptUpdateSubscriber callback) {
-            PreCon.notNull(item);
-            PreCon.notNull(callback);
-
-            ScriptUpdateSubscriber<Entity> subscriber = new ScriptUpdateSubscriber<>(callback);
-            item.onSpawn(subscriber);
-            _subscribers.add(subscriber);
-        }
-
-        /**
-         * Add an item despawn handler.
-         *
-         * @param item      The name of the floating item.
-         * @param callback  The callback to run when the item is despawned.
-         */
-        public void onDespawn(FloatingItem item, IScriptUpdateSubscriber callback) {
-            PreCon.notNull(item);
-            PreCon.notNull(callback);
-
-            ScriptUpdateSubscriber<Entity> subscriber = new ScriptUpdateSubscriber<>(callback);
-            item.onDespawn(subscriber);
-            _subscribers.add(subscriber);
-        }
+        ScriptUpdateSubscriber<Entity> subscriber = new ScriptUpdateSubscriber<>(callback);
+        item.onDespawn(subscriber);
+        _subscribers.add(subscriber);
     }
 }

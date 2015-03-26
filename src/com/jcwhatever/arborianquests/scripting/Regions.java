@@ -26,10 +26,11 @@ package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.regions.ScriptRegion;
-import com.jcwhatever.nucleus.scripting.IEvaluatedScript;
-import com.jcwhatever.nucleus.scripting.api.IScriptApiObject;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
+
+import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,88 +39,72 @@ import javax.annotation.Nullable;
 /**
  * Sub script API for quest regions that can be retrieved by scripts.
  */
-public class Regions {
+public class Regions implements IDisposable {
 
-    private static ApiObject _api = new ApiObject();
+    private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
+    private boolean _isDisposed;
 
-    /**
-     * Get an API object for the specified script.
-     *
-     * @param script  The script to get an API object for.
-     */
-    public IScriptApiObject getApiObject(@SuppressWarnings("unused") IEvaluatedScript script) {
-        return _api;
+    @Override
+    public boolean isDisposed() {
+        return _isDisposed;
     }
 
-    public static class ApiObject implements IScriptApiObject {
+    @Override
+    public void dispose() {
+        for (ScriptRegion region : _referencedRegions) {
+            region.clearSubscribers();
+        }
+        _referencedRegions.clear();
+        _isDisposed = true;
+    }
 
-        private Set<ScriptRegion> _referencedRegions = new HashSet<>(15);
-        private boolean _isDisposed;
+    /**
+     * Get a quest region by name.
+     *
+     * @param name  The name of the region.
+     */
+    @Nullable
+    public ScriptRegion getRegion(String name) {
+        PreCon.notNullOrEmpty(name);
 
-        ApiObject() {}
+        return ArborianQuests.getScriptRegionManager().get(name);
+    }
 
-        @Override
-        public boolean isDisposed() {
-            return _isDisposed;
+    /**
+     * Add a handler to execute whenever a player enters a script region.
+     *
+     * @param regionName The name of the script region.
+     * @param onEnter    The handler.
+     */
+    public void onEnter(String regionName, IScriptUpdateSubscriber<Player> onEnter) {
+        PreCon.notNullOrEmpty(regionName);
+        PreCon.notNull(onEnter);
+
+        ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
+        if (region == null) {
+            throw new RuntimeException("Failed to find quest region named:" + regionName);
         }
 
-        @Override
-        public void dispose() {
-            for (ScriptRegion region : _referencedRegions) {
-                region.clearSubscribers();
-            }
-            _referencedRegions.clear();
-            _isDisposed = true;
+        region.onEnter(onEnter);
+        _referencedRegions.add(region);
+    }
+
+    /**
+     * Add a handler to execute whenever a player leaves a script region.
+     *
+     * @param regionName The name of the script region.
+     * @param onLeave    The handler.
+     */
+    public void onLeave(String regionName, IScriptUpdateSubscriber<Player> onLeave) {
+        PreCon.notNullOrEmpty(regionName);
+        PreCon.notNull(onLeave);
+
+        ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
+        if (region == null) {
+            throw new RuntimeException("Failed to find quest region named:" + regionName);
         }
 
-        /**
-         * Get a quest region by name.
-         *
-         * @param name  The name of the region.
-         */
-        @Nullable
-        public ScriptRegion getRegion(String name) {
-            PreCon.notNullOrEmpty(name);
-
-            return ArborianQuests.getScriptRegionManager().get(name);
-        }
-
-        /**
-         * Add a handler to execute whenever a player enters a script region.
-         *
-         * @param regionName The name of the script region.
-         * @param onEnter    The handler.
-         */
-        public void onEnter(String regionName, IScriptUpdateSubscriber onEnter) {
-            PreCon.notNullOrEmpty(regionName);
-            PreCon.notNull(onEnter);
-
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
-            if (region == null) {
-                throw new RuntimeException("Failed to find quest region named:" + regionName);
-            }
-
-            region.onEnter(onEnter);
-            _referencedRegions.add(region);
-        }
-
-        /**
-         * Add a handler to execute whenever a player leaves a script region.
-         *
-         * @param regionName The name of the script region.
-         * @param onLeave    The handler.
-         */
-        public void onLeave(String regionName, IScriptUpdateSubscriber onLeave) {
-            PreCon.notNullOrEmpty(regionName);
-            PreCon.notNull(onLeave);
-
-            ScriptRegion region = ArborianQuests.getScriptRegionManager().get(regionName);
-            if (region == null) {
-                throw new RuntimeException("Failed to find quest region named:" + regionName);
-            }
-
-            region.onLeave(onLeave);
-            _referencedRegions.add(region);
-        }
+        region.onLeave(onLeave);
+        _referencedRegions.add(region);
     }
 }
