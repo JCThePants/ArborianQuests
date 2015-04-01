@@ -30,7 +30,6 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.nucleus.mixins.IHierarchyNode;
 import com.jcwhatever.nucleus.mixins.INamed;
-import com.jcwhatever.nucleus.storage.DataBatchOperation;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.CollectionUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -397,18 +396,13 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
 
         cancel(playerId);
 
-        _playerNodes.runBatchOperation(new DataBatchOperation() {
-            @Override
-            public void run(IDataNode dataNode) {
-                _playerNodes.remove(playerId.toString());
-                _playerNodes.save();
+        _playerNodes.remove(playerId.toString());
+        _playerNodes.save();
 
-                for (Quest quest : _subQuests.values()) {
-                    quest.clearFlags(playerId);
-                    quest.setStatus(playerId, QuestStatus.NONE);
-                }
-            }
-        });
+        for (Quest quest : _subQuests.values()) {
+            quest.clearFlags(playerId);
+            quest.setStatus(playerId, QuestStatus.NONE);
+        }
     }
 
     /**
