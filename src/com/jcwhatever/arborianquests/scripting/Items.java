@@ -39,6 +39,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,9 +64,11 @@ public class Items implements IDisposable {
         }
     }
 
-    private Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
-    private SubscriberLinkedList<ISubscriber> _subscribers = new SubscriberLinkedList<>();
+    private final Plugin _plugin = ArborianQuests.getPlugin();
+    private final Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
+    private final SubscriberLinkedList<ISubscriber> _subscribers = new SubscriberLinkedList<>();
     private boolean _isDisposed;
+
 
     @Override
     public boolean isDisposed() {
@@ -79,7 +82,7 @@ public class Items implements IDisposable {
 
         while (iterator.hasNext()) {
             IFloatingItem item = iterator.next();
-            Nucleus.getFloatingItems().remove(ArborianQuests.getPlugin(), item.getName());
+            Nucleus.getFloatingItems().remove(_plugin, item.getName());
             iterator.remove();
         }
 
@@ -114,7 +117,7 @@ public class Items implements IDisposable {
         PreCon.notNull(location);
 
         IFloatingItem floatingItem = Nucleus.getFloatingItems().add(
-                ArborianQuests.getPlugin(), UUID.randomUUID().toString(),
+                _plugin, UUID.randomUUID().toString(),
                 itemStack.clone(), location);
 
         if (floatingItem != null)
