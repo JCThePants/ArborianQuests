@@ -26,14 +26,10 @@ package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.items.ScriptItem;
+import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
 import com.jcwhatever.nucleus.mixins.IDisposable;
-import com.jcwhatever.nucleus.storage.DataPath;
-import com.jcwhatever.nucleus.storage.DataStorage;
-import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.floatingitems.FloatingItem;
-import com.jcwhatever.nucleus.utils.floatingitems.FloatingItemManager;
 import com.jcwhatever.nucleus.utils.floatingitems.IFloatingItem;
 import com.jcwhatever.nucleus.utils.observer.ISubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
@@ -57,21 +53,13 @@ import javax.annotation.Nullable;
  */
 public class Items implements IDisposable {
 
-    private static FloatingItemManager _manager;
-
     static {
 
-        IDataNode dataNode = DataStorage.get(ArborianQuests.getPlugin(), new DataPath("floating-items"));
-        dataNode.load();
+        Collection<IFloatingItem> items = new ArrayList<>(
+                Nucleus.getFloatingItems().getAll(ArborianQuests.getPlugin()));
 
-        _manager = new FloatingItemManager(ArborianQuests.getPlugin(), dataNode);
-
-        Collection<IFloatingItem> floatingItems = new ArrayList<>(_manager.getAll());
-
-        // remove all items, ensures items are removed if
-        // the server is not shut down properly.
-        for (IFloatingItem item : floatingItems) {
-            _manager.remove(item.getName());
+        for (IFloatingItem item : items) {
+            Nucleus.getFloatingItems().remove(ArborianQuests.getPlugin(), item.getName());
         }
     }
 
@@ -91,7 +79,7 @@ public class Items implements IDisposable {
 
         while (iterator.hasNext()) {
             IFloatingItem item = iterator.next();
-            _manager.remove(item.getName());
+            Nucleus.getFloatingItems().remove(ArborianQuests.getPlugin(), item.getName());
             iterator.remove();
         }
 
@@ -125,7 +113,8 @@ public class Items implements IDisposable {
         PreCon.notNull(itemStack);
         PreCon.notNull(location);
 
-        IFloatingItem floatingItem = _manager.add(UUID.randomUUID().toString(),
+        IFloatingItem floatingItem = Nucleus.getFloatingItems().add(
+                ArborianQuests.getPlugin(), UUID.randomUUID().toString(),
                 itemStack.clone(), location);
 
         if (floatingItem != null)
@@ -141,8 +130,8 @@ public class Items implements IDisposable {
      *
      * @return  True if successful.
      */
-    public boolean disposeFloatingItem(FloatingItem item) {
-        return _manager.remove(item.getName());
+    public boolean disposeFloatingItem(IFloatingItem item) {
+        return Nucleus.getFloatingItems().remove(ArborianQuests.getPlugin(), item.getName());
     }
 
     /**
@@ -151,7 +140,7 @@ public class Items implements IDisposable {
      * @param item      The item to add the callback to.
      * @param callback  The callback to run when the item is picked up.
      */
-    public void onPickup(FloatingItem item, IScriptUpdateSubscriber<Player> callback) {
+    public void onPickup(IFloatingItem item, IScriptUpdateSubscriber<Player> callback) {
         PreCon.notNull(item);
         PreCon.notNull(callback);
 
@@ -166,7 +155,7 @@ public class Items implements IDisposable {
      * @param item      The name of the floating item.
      * @param callback  The callback to run when the item is spawned.
      */
-    public void onSpawn(FloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
+    public void onSpawn(IFloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
         PreCon.notNull(item);
         PreCon.notNull(callback);
 
@@ -181,7 +170,7 @@ public class Items implements IDisposable {
      * @param item      The name of the floating item.
      * @param callback  The callback to run when the item is despawned.
      */
-    public void onDespawn(FloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
+    public void onDespawn(IFloatingItem item, IScriptUpdateSubscriber<Entity> callback) {
         PreCon.notNull(item);
         PreCon.notNull(callback);
 
