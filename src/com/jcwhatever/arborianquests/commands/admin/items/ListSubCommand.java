@@ -66,7 +66,7 @@ public class ListSubCommand extends AbstractCommand {
         Collection<ScriptItem> items = ArborianQuests.getScriptItemManager().getAll();
 
         for (ScriptItem item : items) {
-            pagin.add(item.getName(), ItemStackUtils.serializeToString(item.getItem(), SerializerOutputType.COLOR));
+            pagin.add(item.getName(), ItemStackUtils.serialize(item.getItem(), SerializerOutputType.COLOR));
         }
 
         if (!args.isDefaultValue("search"))
