@@ -31,14 +31,13 @@ import com.jcwhatever.arborianquests.quests.QuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.arborianquests.quests.SubQuest;
-import com.jcwhatever.nucleus.collections.timed.TimedHashSet;
-import com.jcwhatever.nucleus.commands.response.CommandRequests;
-import com.jcwhatever.nucleus.commands.response.ResponseRequest;
+import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
+import com.jcwhatever.nucleus.commands.response.IRequestContext;
+import com.jcwhatever.nucleus.commands.response.ResponseRequestor;
 import com.jcwhatever.nucleus.commands.response.ResponseType;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.observer.result.FutureSubscriber;
-import com.jcwhatever.nucleus.utils.observer.result.Result;
+import com.jcwhatever.nucleus.utils.observer.update.IUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 
@@ -53,9 +52,7 @@ import javax.annotation.Nullable;
  */
 public class QuestsApi implements IDisposable {
 
-    private static final TimedHashSet<ResponseRequest> _requests
-            = new TimedHashSet<ResponseRequest>(ArborianQuests.getPlugin(), 20, 600);
-
+    private static SubscriberLinkedList<IUpdateSubscriber> _requests = new SubscriberLinkedList<>();
     private static final Map<String, Quest> _pathCache = new HashMap<>(10);
 
     /**
@@ -92,12 +89,6 @@ public class QuestsApi implements IDisposable {
     public final IDisposable regions;
 
     public QuestsApi() {
-        _requests.onLifespanEnd(new UpdateSubscriber<ResponseRequest>() {
-            @Override
-            public void on(ResponseRequest request) {
-                CommandRequests.cancel(request);
-            }
-        });
 
         flags = new Flags();
         items = new Items();
@@ -116,8 +107,9 @@ public class QuestsApi implements IDisposable {
     public void dispose() {
 
         synchronized (_requests) {
-            for (ResponseRequest request : _requests)
-                CommandRequests.cancel(request);
+            while (!_requests.isEmpty()) {
+                _requests.remove().dispose();
+            }
         }
 
         flags.dispose();
@@ -375,20 +367,26 @@ public class QuestsApi implements IDisposable {
                     "Cannot join a sub quest unless already joined to the parent quest.");
         }
 
-        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                questPath, p, ResponseType.ACCEPT)
-                .onSuccess(new FutureSubscriber<ResponseType>() {
-                    @Override
-                    public void on(Result<ResponseType> result) {
-                        quest.accept(p);
-                        onAccept.run();
-                    }
-                });
+        UpdateSubscriber<IRequestContext> subscriber = new UpdateSubscriber<IRequestContext>() {
+            @Override
+            public void on(IRequestContext argument) {
+                quest.accept(p);
+                onAccept.run();
+            }
+        };
 
-        _requests.add(request);
+        _requests.add(subscriber);
+
+        ResponseRequestor.contextBuilder(ArborianQuests.getPlugin())
+                .name(questPath)
+                .timeout(15)
+                .response(ResponseType.ACCEPT)
+                .build(p)
+                .onRespond(subscriber)
+                .sendRequest();
 
         Msg.tell(p, "{WHITE}Type '{YELLOW}/accept{WHITE}' to accept the quest.");
-        Msg.tell(p, "Expires in 30 seconds.");
+        Msg.tell(p, "Expires in 15 seconds.");
     }
 
     /**
@@ -408,20 +406,26 @@ public class QuestsApi implements IDisposable {
         Player p = PlayerUtils.getPlayer(player);
         PreCon.isValid(p != null, "Invalid player");
 
-        ResponseRequest request = CommandRequests.request(ArborianQuests.getPlugin(),
-                context, p, ResponseType.YES)
-                .onSuccess(new FutureSubscriber<ResponseType>() {
-                    @Override
-                    public void on(Result<ResponseType> result) {
-                        onAccept.run();
-                    }
-                });
+        UpdateSubscriber<IRequestContext> subscriber = new UpdateSubscriber<IRequestContext>() {
+            @Override
+            public void on(IRequestContext argument) {
+                onAccept.run();
+            }
+        };
 
-        _requests.add(request);
+        _requests.add(subscriber);
+
+        ResponseRequestor.contextBuilder(ArborianQuests.getPlugin())
+                .name(context)
+                .timeout(15)
+                .response(ResponseType.YES)
+                .build(p)
+                .onRespond(subscriber)
+                .sendRequest();
 
         Msg.tell(p, question);
         Msg.tell(p, "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.");
-        Msg.tell(p, "Expires in 30 seconds.");
+        Msg.tell(p, "Expires in 15 seconds.");
     }
 }
 
