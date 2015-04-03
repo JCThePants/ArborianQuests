@@ -27,12 +27,12 @@ package com.jcwhatever.arborianquests.waypoints;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.Msg;
+import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.collections.players.PlayerMap;
-import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.managed.blockselect.IBlockSelectHandler;
+import com.jcwhatever.nucleus.managed.blockselect.IBlockSelector.BlockSelectResult;
 import com.jcwhatever.nucleus.managed.language.Localizable;
-import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect;
-import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect.BlockSelectResult;
-import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect.PlayerBlockSelectHandler;
+import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
@@ -89,7 +89,7 @@ public class WaypointsEditor {
 
         WaypointsList waypoints = _editing.remove(player.getUniqueId());
         if (waypoints != null) {
-            PlayerBlockSelect.cancel(player);
+            Nucleus.getBlockSelector().cancel(player);
             Msg.tell(player, Lang.get(_FINISHED, waypoints.getName()));
         }
     }
@@ -115,7 +115,7 @@ public class WaypointsEditor {
         Msg.tell(player, Lang.get(_EDIT, waypoints.getName()));
 
         // query for a block selection
-        PlayerBlockSelect.query(player, new PlayerBlockSelectHandler() {
+        Nucleus.getBlockSelector().query(player, new IBlockSelectHandler() {
 
             @Override
             public BlockSelectResult onBlockSelect(Player player, Block selectedBlock, Action clickAction) {
