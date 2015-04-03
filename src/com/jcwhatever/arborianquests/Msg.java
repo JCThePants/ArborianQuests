@@ -24,8 +24,8 @@
 
 package com.jcwhatever.arborianquests;
 
-import com.jcwhatever.nucleus.messaging.ChatPaginator;
-import com.jcwhatever.nucleus.messaging.IMessenger;
+import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.managed.messaging.IMessenger;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.command.CommandSender;
