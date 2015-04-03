@@ -31,7 +31,7 @@ import com.jcwhatever.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.nucleus.commands.AbstractCommand;
 import com.jcwhatever.nucleus.commands.CommandInfo;
 import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.arguments.LocationResponse;
+import com.jcwhatever.nucleus.commands.arguments.ILocationHandler;
 import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
@@ -70,17 +70,17 @@ public class AddSubCommand extends AbstractCommand {
             return; // finished
         }
 
-        args.getLocation(sender, "location", new LocationResponse() {
+        args.getLocation(sender, "location", new ILocationHandler() {
 
             @Override
-            public void onLocationRetrieved(Player p, Location result) {
+            public void onLocationRetrieved(Player player, Location result) {
 
                 ScriptLocation scriptLocation = manager.add(locationName, result);
                 if (scriptLocation == null) {
-                    tellError(p, Lang.get(_FAILED));
+                    tellError(player, Lang.get(_FAILED));
                 }
                 else {
-                    tellSuccess(p, Lang.get(_SUCCESS), locationName);
+                    tellSuccess(player, Lang.get(_SUCCESS), locationName);
                 }
 
             }
