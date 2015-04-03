@@ -33,7 +33,6 @@ import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
 import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
 import com.jcwhatever.nucleus.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.items.ItemStackUtils;
-import com.jcwhatever.nucleus.utils.items.serializer.ItemStackSerializer.SerializerOutputType;
 import com.jcwhatever.nucleus.utils.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
@@ -66,7 +65,7 @@ public class ListSubCommand extends AbstractCommand {
         Collection<ScriptItem> items = ArborianQuests.getScriptItemManager().getAll();
 
         for (ScriptItem item : items) {
-            pagin.add(item.getName(), ItemStackUtils.serialize(item.getItem(), SerializerOutputType.COLOR));
+            pagin.add(item.getName(), ItemStackUtils.serialize(item.getItem()));
         }
 
         if (!args.isDefaultValue("search"))
