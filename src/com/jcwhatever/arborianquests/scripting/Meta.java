@@ -1,7 +1,7 @@
 package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
-import com.jcwhatever.nucleus.scripting.api.SAPI_Meta;
+import com.jcwhatever.nucleus.managed.scripting.api.SAPI_Meta;
 
 // annotation required but not used
 public class Meta extends SAPI_Meta {
