@@ -46,7 +46,7 @@ import com.jcwhatever.nucleus.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.managed.messaging.ChatTree;
 import com.jcwhatever.nucleus.managed.messaging.ChatTree.NodeLineWriter;
-import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 

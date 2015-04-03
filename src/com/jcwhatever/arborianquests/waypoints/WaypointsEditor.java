@@ -29,7 +29,7 @@ import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.nucleus.collections.players.PlayerMap;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.language.Localizable;
+import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect;
 import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect.BlockSelectResult;
 import com.jcwhatever.nucleus.utils.player.PlayerBlockSelect.PlayerBlockSelectHandler;
