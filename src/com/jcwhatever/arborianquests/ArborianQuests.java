@@ -39,7 +39,7 @@ import com.jcwhatever.nucleus.scripting.IScriptApi;
 import com.jcwhatever.nucleus.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.storage.DataPath;
-import com.jcwhatever.nucleus.storage.DataStorage;
+import com.jcwhatever.nucleus.providers.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 

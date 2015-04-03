@@ -26,7 +26,7 @@ package com.jcwhatever.arborianquests.regions;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.nucleus.regions.RegionManager;
-import com.jcwhatever.nucleus.regions.selection.IRegionSelection;
+import com.jcwhatever.nucleus.providers.regionselect.IRegionSelection;
 import com.jcwhatever.nucleus.regions.selection.RegionSelection;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
