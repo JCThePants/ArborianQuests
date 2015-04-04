@@ -27,7 +27,7 @@ package com.jcwhatever.arborianquests.regions;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.nucleus.regions.RegionManager;
 import com.jcwhatever.nucleus.providers.regionselect.IRegionSelection;
-import com.jcwhatever.nucleus.regions.selection.RegionSelection;
+import com.jcwhatever.nucleus.regions.SimpleRegionSelection;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 
@@ -78,7 +78,7 @@ public class ScriptRegionManager extends RegionManager<ScriptRegion> {
                 anchor.getBlockY() - radius,
                 anchor.getBlockZ() - radius);
 
-        return add(name, new RegionSelection(p1, p2));
+        return add(name, new SimpleRegionSelection(p1, p2));
     }
 
     @Nullable
