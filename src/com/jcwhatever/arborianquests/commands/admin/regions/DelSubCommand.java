@@ -61,15 +61,11 @@ public class DelSubCommand extends AbstractCommand implements IExecutableCommand
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.get(regionName);
-        if (region == null) {
-            tellError(sender, Lang.get(_REGION_NOT_FOUND), regionName);
-            return; // finished
-        }
+        if (region == null)
+            throw new CommandException(Lang.get(_REGION_NOT_FOUND), regionName);
 
-        if (!regionManager.remove(regionName)) {
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
-        }
+        if (!regionManager.remove(regionName))
+            throw new CommandException(Lang.get(_FAILED));
 
         tellSuccess(sender, Lang.get(_SUCCESS), region.getName());
     }

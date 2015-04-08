@@ -61,15 +61,11 @@ public class DelSubCommand extends AbstractCommand implements IExecutableCommand
         WaypointsManager manager = ArborianQuests.getWaypointsManager();
 
         WaypointsList waypoints = manager.get(name);
-        if (waypoints == null) {
-            tellError(sender, Lang.get(_WAYPOINTS_NOT_FOUND), name);
-            return; // finished
-        }
+        if (waypoints == null)
+            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND), name);
 
-        if (!manager.remove(name)) {
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
-        }
+        if (!manager.remove(name))
+            throw new CommandException(Lang.get(_FAILED));
 
         tellSuccess(sender, Lang.get(_SUCCESS), waypoints.getName());
     }

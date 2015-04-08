@@ -60,15 +60,11 @@ public class DelSubCommand extends AbstractCommand implements IExecutableCommand
         ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
         ScriptItem scriptItem = manager.get(itemName);
-        if (scriptItem == null) {
-            tellError(sender, Lang.get(_LOCATION_NOT_FOUND), itemName);
-            return; // finished
-        }
+        if (scriptItem == null)
+            throw new CommandException(Lang.get(_LOCATION_NOT_FOUND), itemName);
 
-        if (!manager.remove(itemName)) {
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
-        }
+        if (!manager.remove(itemName))
+            throw new CommandException(Lang.get(_FAILED));
 
         tellSuccess(sender, Lang.get(_SUCCESS), scriptItem.getName());
     }

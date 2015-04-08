@@ -61,23 +61,17 @@ public class AddSubCommand extends AbstractCommand implements IExecutableCommand
         String itemName = args.getName("itemName", 48);
         ItemStack[] items = args.getItemStack(sender, "item");
 
-        if (items.length != 1) {
-            tellError(sender, Lang.get(_ONE_ONLY));
-            return; // finished
-        }
+        if (items.length != 1)
+            throw new CommandException(Lang.get(_ONE_ONLY));
 
         ScriptItemManager manager = ArborianQuests.getScriptItemManager();
 
         ScriptItem item = manager.get(itemName);
-        if (item != null) {
-            tellError(sender, Lang.get(_ITEM_ALREADY_EXISTS, item.getName()));
-            return; // finished
-        }
+        if (item != null)
+            throw new CommandException(Lang.get(_ITEM_ALREADY_EXISTS, item.getName()));
 
-        if (manager.add(itemName, items[0]) == null) {
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
-        }
+        if (manager.add(itemName, items[0]) == null)
+            throw new CommandException(Lang.get(_FAILED));
 
         tellSuccess(sender, Lang.get(_SUCCESS, itemName));
     }

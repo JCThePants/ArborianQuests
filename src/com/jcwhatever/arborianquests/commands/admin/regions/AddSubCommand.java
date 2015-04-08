@@ -64,21 +64,15 @@ public class AddSubCommand extends AbstractCommand implements IExecutableCommand
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.get(regionName);
-        if (region != null) {
-            tellError(sender, Lang.get(_REGION_ALREADY_EXISTS), regionName);
-            return; // finished
-        }
+        if (region != null)
+            throw new CommandException(Lang.get(_REGION_ALREADY_EXISTS), regionName);
 
         IRegionSelection selection = getRegionSelection((Player) sender);
-        if (selection == null)
-            return; // finished
 
         //noinspection ConstantConditions
         region = regionManager.add(regionName, selection);
-        if (region == null) {
-            tellError(sender, Lang.get(_FAILED));
-            return; // finished
-        }
+        if (region == null)
+            throw new CommandException(Lang.get(_FAILED));
 
         tellSuccess(sender, Lang.get(_SUCCESS), region.getName());
     }

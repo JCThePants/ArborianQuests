@@ -63,14 +63,10 @@ public class RedefineSubCommand extends AbstractCommand implements IExecutableCo
         ScriptRegionManager regionManager = ArborianQuests.getScriptRegionManager();
 
         ScriptRegion region = regionManager.get(regionName);
-        if (region == null) {
-            tellError(sender, Lang.get(_REGION_NOT_FOUND), regionName);
-            return; // finished
-        }
+        if (region == null)
+            throw new CommandException(Lang.get(_REGION_NOT_FOUND), regionName);
 
         IRegionSelection selection = getRegionSelection((Player) sender);
-        if (selection == null)
-            return; // finished
 
         //noinspection ConstantConditions
         region.setCoords(selection.getP1(), selection.getP2());

@@ -28,7 +28,7 @@ import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.nucleus.managed.commands.CommandInfo;
 import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
-import com.jcwhatever.nucleus.managed.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
 import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
 import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
@@ -61,23 +61,19 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
     @Localizable static final String _PAGINATOR_TITLE = "Quest Items";
 
     @Override
-    public void execute (CommandSender sender, ICommandArguments args) throws InvalidArgumentException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
         String questPath = args.getString("questPath");
         String playerName = args.getString("playerName");
         int page = args.getInteger("page");
 
         Quest quest = Quest.getQuestFromPath(questPath);
-        if (quest == null){
-            tellError(sender, Lang.get(_PATH_NOT_FOUND, questPath));
-            return;
-        }
+        if (quest == null)
+            throw new CommandException(Lang.get(_PATH_NOT_FOUND, questPath));
 
         UUID playerId = PlayerUtils.getPlayerId(playerName);
-        if (playerId == null) {
-            tellError(sender, Lang.get(_PLAYER_NOT_FOUND, playerName));
-            return;
-        }
+        if (playerId == null)
+            throw new CommandException(Lang.get(_PLAYER_NOT_FOUND, playerName));
 
         ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
 

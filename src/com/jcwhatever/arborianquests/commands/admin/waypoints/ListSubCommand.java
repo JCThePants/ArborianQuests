@@ -90,15 +90,13 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
      *  Get list of locations in waypoints list.
      */
     @Nullable
-    private ChatPaginator listLocations(CommandSender sender, String waypointsName) {
+    private ChatPaginator listLocations(CommandSender sender, String waypointsName) throws CommandException {
 
         WaypointsManager manager = ArborianQuests.getWaypointsManager();
 
         WaypointsList waypoints = manager.get(waypointsName);
-        if (waypoints == null) {
-            tellError(sender, Lang.get(_WAYPOINTS_NOT_FOUND, waypointsName));
-            return null;
-        }
+        if (waypoints == null)
+            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND, waypointsName));
 
         ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE_LOCATIONS, waypoints.getName()));
 

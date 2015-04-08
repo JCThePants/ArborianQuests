@@ -68,10 +68,8 @@ public class AddSubCommand extends AbstractCommand implements IExecutableCommand
         final ScriptLocationManager manager = ArborianQuests.getScriptLocationManager();
 
         ScriptLocation scriptLocation = manager.get(locationName);
-        if (scriptLocation != null) {
-            tellError(sender, Lang.get(_LOCATION_ALREADY_EXISTS), locationName);
-            return; // finished
-        }
+        if (scriptLocation != null)
+            throw new CommandException(Lang.get(_LOCATION_ALREADY_EXISTS), locationName);
 
         args.getLocation(sender, "location", new ILocationHandler() {
 
@@ -85,7 +83,6 @@ public class AddSubCommand extends AbstractCommand implements IExecutableCommand
                 else {
                     tellSuccess(player, Lang.get(_SUCCESS), locationName);
                 }
-
             }
         });
 
