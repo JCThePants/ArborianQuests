@@ -28,11 +28,12 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.locations.ScriptLocation;
 import com.jcwhatever.arborianquests.locations.ScriptLocationManager;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.arguments.ILocationHandler;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.arguments.ILocationHandler;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
 import org.bukkit.Location;
@@ -49,16 +50,18 @@ import org.bukkit.entity.Player;
                 "location= The location. {LOCATION}"
         })
 
-public class AddSubCommand extends AbstractCommand {
+public class AddSubCommand extends AbstractCommand implements IExecutableCommand {
 
-    @Localizable static final String _LOCATION_ALREADY_EXISTS = "There is already a location with the name '{0}'.";
+    @Localizable static final String _LOCATION_ALREADY_EXISTS =
+            "There is already a location with the name '{0}'.";
+
     @Localizable static final String _FAILED = "Failed to add location.";
     @Localizable static final String _SUCCESS = "Quest location '{0}' created.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         final String locationName = args.getName("locationName", 48);
 

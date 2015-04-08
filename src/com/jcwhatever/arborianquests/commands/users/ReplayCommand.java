@@ -29,10 +29,11 @@ import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.arborianquests.quests.QuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.CurrentQuestStatus;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,7 @@ import org.bukkit.entity.Player;
                 "questName= The name of the quest to replay."
         })
 
-public class ReplayCommand extends AbstractCommand {
+public class ReplayCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _NOT_FOUND = "Quest named '{0}' not found.";
     @Localizable static final String _FAIL_IN_PROGRESS = "Quest is in progress and cannot be cleared.";
@@ -54,9 +55,9 @@ public class ReplayCommand extends AbstractCommand {
     @Localizable static final String _SUCCESS = "Quest cleared and ready to replay.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         String questName = args.getName("questName", 48);
 

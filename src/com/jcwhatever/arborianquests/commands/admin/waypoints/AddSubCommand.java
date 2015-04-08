@@ -26,13 +26,14 @@ package com.jcwhatever.arborianquests.commands.admin.waypoints;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.waypoints.WaypointsList;
 import com.jcwhatever.arborianquests.waypoints.WaypointsEditor;
+import com.jcwhatever.arborianquests.waypoints.WaypointsList;
 import com.jcwhatever.arborianquests.waypoints.WaypointsManager;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
 import org.bukkit.command.CommandSender;
@@ -47,7 +48,7 @@ import org.bukkit.entity.Player;
                 "name= The name of the waypoints list. {NAME}"
         })
 
-public class AddSubCommand extends AbstractCommand {
+public class AddSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _WAYPOINT_ALREADY_EXISTS =
             "There is already a waypoints list with the name '{0: waypoints list name}'.";
@@ -55,9 +56,9 @@ public class AddSubCommand extends AbstractCommand {
     @Localizable static final String _SUCCESS = "Waypoints list '{0: waypoints list name}' created.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         final String name = args.getName("name", 48);
 

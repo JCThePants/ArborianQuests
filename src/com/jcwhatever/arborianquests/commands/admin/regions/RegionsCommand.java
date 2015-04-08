@@ -24,8 +24,8 @@
 
 package com.jcwhatever.arborianquests.commands.admin.regions;
 
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
 
 @CommandInfo(
         command={"regions"},

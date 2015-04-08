@@ -26,10 +26,11 @@ package com.jcwhatever.arborianquests.commands.admin.flags;
 
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.quests.Quest;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
 
@@ -48,14 +49,14 @@ import java.util.UUID;
                 "flagName= The name of the flag to set. {NAME}"
         })
 
-public class SetSubCommand extends AbstractCommand {
+public class SetSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _PATH_NOT_FOUND = "Failed to find quest path '{0: quest path}'.";
     @Localizable static final String _PLAYER_NOT_FOUND = "A player named '{0}' was not found.";
     @Localizable static final String _SUCCESS = "Flag '{0}' set for player '{1}' in quest '{1}'.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute (CommandSender sender, ICommandArguments args) throws InvalidArgumentException {
 
         String questPath = args.getString("questPath");
         String playerName = args.getString("playerName");

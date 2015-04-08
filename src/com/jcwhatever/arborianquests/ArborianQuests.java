@@ -24,7 +24,7 @@
 
 package com.jcwhatever.arborianquests;
 
-import com.jcwhatever.arborianquests.commands.QuestsCommandDispatcher;
+import com.jcwhatever.arborianquests.commands.users.BaseCommand;
 import com.jcwhatever.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.arborianquests.locations.ScriptLocationManager;
 import com.jcwhatever.arborianquests.quests.QuestManager;
@@ -33,13 +33,13 @@ import com.jcwhatever.arborianquests.scripting.QuestsApi;
 import com.jcwhatever.arborianquests.waypoints.WaypointsManager;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
-import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.managed.scripting.IEvaluatedScript;
 import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi.IApiObjectCreator;
-import com.jcwhatever.nucleus.storage.DataPath;
+import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.providers.storage.DataStorage;
+import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextColor;
 
@@ -156,7 +156,7 @@ public class ArborianQuests extends NucleusPlugin {
         _waypointsManager = new WaypointsManager(waypointsNode);
         _scriptItemManager = new ScriptItemManager(itemsNode);
 
-        registerCommands(new QuestsCommandDispatcher());
+        registerCommand(BaseCommand.class);
 
         _scriptApi = new SimpleScriptApi(this, "quests", new IApiObjectCreator() {
             @Override

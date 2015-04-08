@@ -27,12 +27,13 @@ package com.jcwhatever.arborianquests.commands.admin.locations;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.locations.ScriptLocation;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
-import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
@@ -51,12 +52,12 @@ import java.util.Collection;
                 "search= Optional. Use to show locations that contain the specified search text."
         })
 
-public class ListSubCommand extends AbstractCommand {
+public class ListSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE = "Quest Locations";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
         int page = args.getInteger("page");
 

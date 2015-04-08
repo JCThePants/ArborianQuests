@@ -27,12 +27,13 @@ package com.jcwhatever.arborianquests.commands.admin.regions;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.regions.ScriptRegion;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
-import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
+import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
@@ -50,13 +51,13 @@ import java.util.Collection;
                 "search= Optional. Use to show regions that contain the specified search text."
         })
 
-public class ListSubCommand extends AbstractCommand {
+public class ListSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE = "Quest Regions";
     @Localizable static final String _UNDEFINED_REGION = "<undefined>";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute (CommandSender sender, ICommandArguments args) throws InvalidArgumentException {
 
         int page = args.getInteger("page");
 
@@ -68,7 +69,8 @@ public class ListSubCommand extends AbstractCommand {
 
         for (ScriptRegion region : regions) {
             //noinspection ConstantConditions
-            pagin.add(region.getName(), region.isDefined() ? region.getWorld().getName() : Lang.get(_UNDEFINED_REGION));
+            pagin.add(region.getName(),
+                    region.isDefined() ? region.getWorld().getName() : Lang.get(_UNDEFINED_REGION));
         }
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);

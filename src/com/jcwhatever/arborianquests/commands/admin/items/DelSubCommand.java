@@ -28,10 +28,11 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.arborianquests.items.ScriptItemManager;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.InvalidArgumentException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
 import org.bukkit.command.CommandSender;
@@ -45,14 +46,14 @@ import org.bukkit.command.CommandSender;
                 "itemName= The name of the item to delete."
         })
 
-public class DelSubCommand extends AbstractCommand {
+public class DelSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _LOCATION_NOT_FOUND = "A quest item named '{0}' was not found.";
     @Localizable static final String _FAILED = "Failed to remove quest item.";
     @Localizable static final String _SUCCESS = "Quest item '{0}' removed.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws InvalidArgumentException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
         String itemName = args.getName("itemName", 48);
 

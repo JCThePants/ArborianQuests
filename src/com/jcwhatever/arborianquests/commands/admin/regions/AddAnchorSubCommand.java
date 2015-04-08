@@ -28,10 +28,11 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.regions.ScriptRegion;
 import com.jcwhatever.arborianquests.regions.ScriptRegionManager;
-import com.jcwhatever.nucleus.commands.AbstractCommand;
-import com.jcwhatever.nucleus.commands.CommandInfo;
-import com.jcwhatever.nucleus.commands.arguments.CommandArguments;
-import com.jcwhatever.nucleus.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.CommandInfo;
+import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
+import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
+import com.jcwhatever.nucleus.managed.commands.mixins.IExecutableCommand;
+import com.jcwhatever.nucleus.managed.commands.utils.AbstractCommand;
 import com.jcwhatever.nucleus.managed.language.Localizable;
 
 import org.bukkit.Location;
@@ -49,16 +50,18 @@ import org.bukkit.entity.Player;
                         "resulting region will be a perfect cube."
         })
 
-public class AddAnchorSubCommand extends AbstractCommand {
+public class AddAnchorSubCommand extends AbstractCommand implements IExecutableCommand {
 
-    @Localizable static final String _REGION_ALREADY_EXISTS = "There is already a region with the name '{0}'.";
+    @Localizable static final String _REGION_ALREADY_EXISTS =
+            "There is already a region with the name '{0}'.";
+
     @Localizable static final String _FAILED = "Failed to add quest region.";
     @Localizable static final String _SUCCESS = "Quest region '{0}' created.";
 
     @Override
-    public void execute (CommandSender sender, CommandArguments args) throws CommandException {
+    public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
 
-        CommandException.checkNotConsole(this, sender);
+        CommandException.checkNotConsole(getPlugin(), this, sender);
 
         String regionName = args.getName("regionName", 48);
         int radius = args.getInteger("radius");
