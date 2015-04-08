@@ -72,7 +72,7 @@ public class ScriptRegion extends Region {
         ScriptUpdateSubscriber<Player> updateSubscriber =
                 new ScriptUpdateSubscriber<>(subscriber);
 
-        _agents.getAgent("onEnter").register(updateSubscriber);
+        _agents.getAgent("onEnter").addSubscriber(updateSubscriber);
         setEventListener(true);
 
         return true;
@@ -89,7 +89,7 @@ public class ScriptRegion extends Region {
         ScriptUpdateSubscriber<Player> updateSubscriber =
                 new ScriptUpdateSubscriber<>(subscriber);
 
-        _agents.getAgent("onLeave").register(updateSubscriber);
+        _agents.getAgent("onLeave").addSubscriber(updateSubscriber);
         setEventListener(true);
 
         return true;
