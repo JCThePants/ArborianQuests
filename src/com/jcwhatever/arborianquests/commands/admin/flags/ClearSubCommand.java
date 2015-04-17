@@ -53,7 +53,7 @@ public class ClearSubCommand extends AbstractCommand implements IExecutableComma
 
     @Localizable static final String _PATH_NOT_FOUND = "Failed to find quest path '{0: quest path}'.";
     @Localizable static final String _PLAYER_NOT_FOUND = "A player named '{0}' was not found.";
-    @Localizable static final String _SUCCESS = "Flag '{0}' cleared for player '{1}' in quest '{1}'.";
+    @Localizable static final String _SUCCESS = "Flag '{0}' cleared for player '{1}' in quest '{2}'.";
 
     @Override
     public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
