@@ -42,4 +42,8 @@ public class ScriptLocation extends NamedLocation {
     public ScriptLocation(String name, Location location) {
         super(name, location);
     }
+
+    public Location toBukkitLocation() {
+        return new Location(getWorld(), getX(), getY(), getZ(), getYaw(), getPitch());
+    }
 }

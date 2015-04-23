@@ -64,7 +64,7 @@ public class Locations implements IDisposable {
         if (result == null)
             return null;
 
-        return result;
+        return result.toBukkitLocation();
     }
 
     /**
