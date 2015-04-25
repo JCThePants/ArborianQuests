@@ -64,7 +64,7 @@ public class Regions implements IDisposable {
      * @param name  The name of the region.
      */
     @Nullable
-    public ScriptRegion getRegion(String name) {
+    public ScriptRegion get(String name) {
         PreCon.notNullOrEmpty(name);
 
         return ArborianQuests.getScriptRegionManager().get(name);
