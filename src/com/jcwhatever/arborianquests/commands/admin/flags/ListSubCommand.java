@@ -38,7 +38,7 @@ import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
 import org.bukkit.command.CommandSender;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
 
 @CommandInfo(
@@ -77,7 +77,7 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
 
         ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
 
-        Set<String> flagNames = quest.getFlags(playerId);
+        Collection<String> flagNames = quest.getFlags(playerId);
 
         for (String flag : flagNames) {
             pagin.add(flag);

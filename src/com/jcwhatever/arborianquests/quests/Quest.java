@@ -38,6 +38,7 @@ import com.jcwhatever.nucleus.utils.text.TextUtils;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -410,13 +411,26 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
      *
      * @param playerId  The unique ID of the player.
      */
-    public Set<String> getFlags(UUID playerId) {
+    public Collection<String> getFlags(UUID playerId) {
         PreCon.notNull(playerId);
 
         IDataNode flagNode = _playerNodes.getNode(playerId.toString() + ".flags");
 
-        Set<String> flagNames = flagNode.getSubNodeNames();
-        return CollectionUtils.unmodifiableSet(flagNames);
+        return flagNode.getSubNodeNames();
+    }
+
+    /**
+     * Get the flags set on a player.
+     *
+     * @param playerId  The unique ID of the player.
+     */
+    public <T extends Collection<String>> T getFlags(UUID playerId, T output) {
+        PreCon.notNull(playerId);
+        PreCon.notNull(output);
+
+        IDataNode flagNode = _playerNodes.getNode(playerId.toString() + ".flags");
+
+        return flagNode.getSubNodeNames(output);
     }
 
     // Set the quest status of a player
