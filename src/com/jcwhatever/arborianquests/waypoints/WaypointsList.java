@@ -27,6 +27,7 @@ package com.jcwhatever.arborianquests.waypoints;
 import com.jcwhatever.nucleus.collections.wrap.ListWrapper;
 import com.jcwhatever.nucleus.mixins.INamedInsensitive;
 import com.jcwhatever.nucleus.storage.IDataNode;
+import com.jcwhatever.nucleus.utils.text.TextUtils;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -34,6 +35,8 @@ import org.bukkit.World;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.regex.Matcher;
 import javax.annotation.Nullable;
 
 /**
@@ -58,9 +61,15 @@ public class WaypointsList extends ListWrapper<Location> implements INamedInsens
         _dataNode = dataNode;
 
         _list = new ArrayList<>(dataNode.size() + 5);
+        PriorityQueue<Waypoint> toSort = new PriorityQueue<>(dataNode.size());
 
         for (IDataNode locationNode : dataNode) {
-            _list.add(locationNode.getLocation(""));
+            toSort.add(new Waypoint(locationNode.getName(), locationNode.getLocation("")));
+        }
+
+        while (!toSort.isEmpty()) {
+            Waypoint waypoint = toSort.remove();
+            _list.add(waypoint.location);
         }
     }
 
@@ -124,5 +133,27 @@ public class WaypointsList extends ListWrapper<Location> implements INamedInsens
             _dataNode.set("l" + i, _list.get(i));
         }
         _dataNode.save();
+    }
+
+    private static class Waypoint implements Comparable<Waypoint> {
+
+        int order;
+        Location location;
+
+        Waypoint(String nodeName, Location location) {
+            Matcher matcher = TextUtils.PATTERN_NUMBERS.matcher(nodeName);
+
+            if (!matcher.find())
+                throw new IllegalStateException("Invalid waypoint data node name.");
+
+
+            this.order = TextUtils.parseInt(matcher.group(), 0);
+            this.location = location;
+        }
+
+        @Override
+        public int compareTo(Waypoint o) {
+            return Integer.compare(order, o.order);
+        }
     }
 }
