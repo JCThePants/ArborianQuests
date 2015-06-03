@@ -28,26 +28,20 @@ import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
+import com.jcwhatever.nucleus.managed.items.floating.IFloatingItem;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.managed.items.floating.IFloatingItem;
 import com.jcwhatever.nucleus.utils.observer.ISubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.script.ScriptUpdateSubscriber;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
-import java.util.WeakHashMap;
 import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Sub script API for named {@link org.bukkit.inventory.ItemStack}'s that can be retrieved by scripts.
@@ -149,6 +143,21 @@ public class Items implements IDisposable {
 
         ScriptUpdateSubscriber<Player> subscriber = new ScriptUpdateSubscriber<>(callback);
         item.onPickup(subscriber);
+        _subscribers.add(subscriber);
+    }
+
+    /**
+     * Add an item pickup handler.
+     *
+     * @param item      The item to add the callback to.
+     * @param callback  The callback to run when the item is picked up.
+     */
+    public void onTryPickup(IFloatingItem item, IScriptUpdateSubscriber<Player> callback) {
+        PreCon.notNull(item);
+        PreCon.notNull(callback);
+
+        ScriptUpdateSubscriber<Player> subscriber = new ScriptUpdateSubscriber<>(callback);
+        item.onTryPickup(subscriber);
         _subscribers.add(subscriber);
     }
 
