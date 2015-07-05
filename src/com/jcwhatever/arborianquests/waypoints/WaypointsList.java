@@ -28,16 +28,15 @@ import com.jcwhatever.nucleus.collections.wrap.ListWrapper;
 import com.jcwhatever.nucleus.mixins.INamedInsensitive;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.regex.Matcher;
-import javax.annotation.Nullable;
 
 /**
  * A list of locations.
@@ -144,7 +143,7 @@ public class WaypointsList extends ListWrapper<Location> implements INamedInsens
             Matcher matcher = TextUtils.PATTERN_NUMBERS.matcher(nodeName);
 
             if (!matcher.find())
-                throw new IllegalStateException("Invalid waypoint data node name.");
+                throw new IllegalStateException("Invalid waypoint data node name: " + nodeName);
 
 
             this.order = TextUtils.parseInt(matcher.group(), 0);
