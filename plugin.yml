@@ -5,7 +5,7 @@ version: 0.0-beta
 depend: [NucleusFramework]
 commands:
     quests:
-        aliases: [quest, arborianquests]
+        aliases: [q, quest, arborianquests]
         description: Base command for Arborian Quests
         usage: |
             ERROR!
