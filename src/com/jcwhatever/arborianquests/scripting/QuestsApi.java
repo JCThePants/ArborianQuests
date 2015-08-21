@@ -40,12 +40,11 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.update.IUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
-
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.annotation.Nullable;
 
 /**
  * Provide scripts with API for quests.
@@ -87,6 +86,7 @@ public class QuestsApi implements IDisposable {
     public final IDisposable waypoints;
     public final IDisposable meta;
     public final IDisposable regions;
+    public final IDisposable dialogs;
 
     public QuestsApi() {
 
@@ -96,6 +96,7 @@ public class QuestsApi implements IDisposable {
         waypoints = new Waypoints();
         meta = new Meta();
         regions = new Regions();
+        dialogs = new Dialog();
     }
 
     @Override
@@ -385,8 +386,10 @@ public class QuestsApi implements IDisposable {
                 .onRespond(subscriber)
                 .sendRequest();
 
+        Msg.tell(p, "{GREEN}------------------------------------------");
         Msg.tell(p, "{WHITE}Type '{YELLOW}/accept{WHITE}' to accept the quest.");
         Msg.tell(p, "Expires in 15 seconds.");
+        Msg.tell(p, "{GREEN}------------------------------------------");
     }
 
     /**
