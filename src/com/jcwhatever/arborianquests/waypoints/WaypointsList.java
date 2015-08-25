@@ -60,7 +60,7 @@ public class WaypointsList extends ListWrapper<Location> implements INamedInsens
         _dataNode = dataNode;
 
         _list = new ArrayList<>(dataNode.size() + 5);
-        PriorityQueue<Waypoint> toSort = new PriorityQueue<>(dataNode.size());
+        PriorityQueue<Waypoint> toSort = new PriorityQueue<>(Math.max(5, dataNode.size()));
 
         for (IDataNode locationNode : dataNode) {
             toSort.add(new Waypoint(locationNode.getName(), locationNode.getLocation("")));
