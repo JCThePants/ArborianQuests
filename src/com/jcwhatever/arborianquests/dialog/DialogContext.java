@@ -282,19 +282,24 @@ public class DialogContext implements IDialogContext {
                 return;
             }
 
+            if (!_player.isOnline()) {
+                end();
+                return;
+            }
+
             if (_padTicksLeft > 0)
                 _padTicksLeft--;
+
+            if (_ticksLeft > 0) {
+                _ticksLeft--;
+                return;
+            }
 
             if (_currentIndex >= _actions.size()) {
 
                 if (_padTicksLeft <= 0)
                     cancel();
 
-                return;
-            }
-
-            if (_ticksLeft > 0) {
-                _ticksLeft--;
                 return;
             }
 
