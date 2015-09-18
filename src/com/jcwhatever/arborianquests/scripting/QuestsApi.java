@@ -31,6 +31,7 @@ import com.jcwhatever.arborianquests.quests.QuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.arborianquests.quests.SubQuest;
+import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberArrayDeque;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
 import com.jcwhatever.nucleus.managed.commands.response.IRequestContext;
 import com.jcwhatever.nucleus.managed.commands.response.ResponseRequestor;
@@ -51,7 +52,7 @@ import java.util.Map;
  */
 public class QuestsApi implements IDisposable {
 
-    private static final SubscriberLinkedList<IUpdateSubscriber> _requests = new SubscriberLinkedList<>();
+    private static final SubscriberArrayDeque<IUpdateSubscriber> _requests = new SubscriberArrayDeque<>(10);
     private static final Map<String, Quest> _pathCache = new HashMap<>(10);
 
     /**

@@ -27,8 +27,9 @@ package com.jcwhatever.arborianquests.quests;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.PreCon;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.Deque;
 import javax.annotation.Nonnull;
 
 /**
@@ -37,7 +38,7 @@ import javax.annotation.Nonnull;
 public class SubQuest extends Quest {
 
     private final Quest _parent;
-    private LinkedList<Quest> _fullPath;
+    private Deque<Quest> _fullPath;
     private String fullName;
 
     /**
@@ -78,11 +79,11 @@ public class SubQuest extends Quest {
     /**
      * Get an object path of the quests parent hierarchy.
      */
-    public LinkedList<Quest> getFullPath() {
+    public Deque<Quest> getFullPath() {
 
         if (_fullPath == null) {
             Quest quest = this;
-            LinkedList<Quest> quests = new LinkedList<>();
+            Deque<Quest> quests = new ArrayDeque<>(5);
 
             while (quest != null) {
 
@@ -105,7 +106,7 @@ public class SubQuest extends Quest {
     @Override
     public String getPathName() {
         if (fullName == null) {
-            LinkedList<Quest> quests = getFullPath();
+            Deque<Quest> quests = getFullPath();
 
             StringBuilder sb = new StringBuilder(quests.size() * 15);
 

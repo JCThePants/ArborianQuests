@@ -27,7 +27,7 @@ package com.jcwhatever.arborianquests.scripting;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.items.ScriptItem;
 import com.jcwhatever.nucleus.Nucleus;
-import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
+import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberArrayDeque;
 import com.jcwhatever.nucleus.managed.items.floating.IFloatingItem;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -40,8 +40,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import javax.annotation.Nullable;
-import java.util.*;
 
 /**
  * Sub script API for named {@link org.bukkit.inventory.ItemStack}'s that can be retrieved by scripts.
@@ -60,7 +65,7 @@ public class Items implements IDisposable {
 
     private final Plugin _plugin = ArborianQuests.getPlugin();
     private final Map<IFloatingItem, Void> _floatingItems = new WeakHashMap<>(20);
-    private final SubscriberLinkedList<ISubscriber> _subscribers = new SubscriberLinkedList<>();
+    private final SubscriberArrayDeque<ISubscriber> _subscribers = new SubscriberArrayDeque<>(20);
     private boolean _isDisposed;
 
 
