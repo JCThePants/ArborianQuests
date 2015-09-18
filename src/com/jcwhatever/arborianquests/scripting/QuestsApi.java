@@ -51,7 +51,7 @@ import java.util.Map;
  */
 public class QuestsApi implements IDisposable {
 
-    private static SubscriberLinkedList<IUpdateSubscriber> _requests = new SubscriberLinkedList<>();
+    private static final SubscriberLinkedList<IUpdateSubscriber> _requests = new SubscriberLinkedList<>();
     private static final Map<String, Quest> _pathCache = new HashMap<>(10);
 
     /**
@@ -87,6 +87,7 @@ public class QuestsApi implements IDisposable {
     public final IDisposable meta;
     public final IDisposable regions;
     public final IDisposable dialogs;
+    public final IDisposable npcClick;
 
     public QuestsApi() {
 
@@ -97,6 +98,7 @@ public class QuestsApi implements IDisposable {
         meta = new Meta();
         regions = new Regions();
         dialogs = new Dialog();
+        npcClick = new NpcClick();
     }
 
     @Override
@@ -119,6 +121,7 @@ public class QuestsApi implements IDisposable {
         waypoints.dispose();
         meta.dispose();
         regions.dispose();
+        npcClick.dispose();
 
         _pathCache.clear();
 
@@ -180,8 +183,11 @@ public class QuestsApi implements IDisposable {
      * @param player        The player to set objective text for.
      * @param questPath     The quests path name.
      * @param objectiveKey  The unique key that identifies the description to use.
+     *
+     * @return  True if the assignment was set. False if the player node was not found or
+     * the player is already assigned to the specified assignment.
      */
-    public void setObjectiveKey(Object player, String questPath, String objectiveKey) {
+    public boolean setObjectiveKey(Object player, String questPath, String objectiveKey) {
         PreCon.notNull(player, "player");
         PreCon.notNullOrEmpty(questPath, "questPath");
         PreCon.notNullOrEmpty(objectiveKey, "objectiveKey");
@@ -191,7 +197,7 @@ public class QuestsApi implements IDisposable {
 
         Quest quest = getQuest(questPath, false);
 
-        quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey);
+        return quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey);
     }
 
     /**
@@ -204,8 +210,11 @@ public class QuestsApi implements IDisposable {
      * @param questPath     The quests path name.
      * @param objectiveKey  The unique key that identifies the description to use.
      * @param description   The description to add if the objectiveKey does not yet exist.
+     *
+     * @return  True if the assignment was set. False if the player node was not found or
+     * the player is already assigned to the specified assignment.
      */
-    public void setObjective(Object player, String questPath, String objectiveKey, String description) {
+    public boolean setObjective(Object player, String questPath, String objectiveKey, String description) {
         PreCon.notNull(player, "player");
         PreCon.notNullOrEmpty(questPath, "questPath");
         PreCon.notNullOrEmpty(objectiveKey, "objectiveKey");
@@ -216,7 +225,7 @@ public class QuestsApi implements IDisposable {
 
         Quest quest = getQuest(questPath, false);
 
-        quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey, description);
+        return quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey, description);
     }
 
     /**

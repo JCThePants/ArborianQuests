@@ -112,16 +112,25 @@ public class ObjectiveDescriptions {
      *
      * @param playerId       The ID of the player to set assignment text for.
      * @param assignmentKey  The unique key that identifies the assignment text to use.
+     *
+     * @return  True if the assignment was set. False if the player node was not found or
+     * the player is already assigned to the specified assignment.
      */
-    public void setPlayerObjective(UUID playerId, String assignmentKey) {
+    public boolean setPlayerObjective(UUID playerId, String assignmentKey) {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(assignmentKey);
 
         if (!_playerNodes.hasNode(playerId.toString()))
-            return;
+            return false;
+
+        IDataNode playerNode = _playerNodes.getNode(playerId.toString());
+        String currentKey = playerNode.getString("assignment");
+        if (assignmentKey.equals(currentKey))
+            return false;
 
         _playerNodes.getNode(playerId.toString()).set("assignment", assignmentKey);
         _playerNodes.save();
+        return true;
     }
 
     /**
@@ -130,17 +139,24 @@ public class ObjectiveDescriptions {
      * @param playerId        The ID of the player to set assignment text for.
      * @param assignmentKey   The unique key that identifies the assignment text to use.
      * @param assignmentText  The text to use if the assignment key is not already set.
+     *
+     * @return  True if the assignment was set. False if the player node was not found or
+     * the player is already assigned to the specified assignment.
      */
-    public void setPlayerObjective(UUID playerId, String assignmentKey, String assignmentText) {
+    public boolean setPlayerObjective(UUID playerId, String assignmentKey, String assignmentText) {
         PreCon.notNull(playerId);
         PreCon.notNullOrEmpty(assignmentKey);
         PreCon.notNull(assignmentText);
 
         if (!_playerNodes.hasNode(playerId.toString()))
-            return;
+            return false;
+
+        IDataNode playerNode = _playerNodes.getNode(playerId.toString());
+        String currentKey = playerNode.getString("assignment");
+        if (assignmentKey.equals(currentKey))
+            return false;
 
         IDataNode assignments = _dataNode.getNode("assignments");
-
         String assignment = assignments.getString(assignmentKey);
 
         if (assignment == null) {
@@ -148,7 +164,8 @@ public class ObjectiveDescriptions {
             assignments.save();
         }
 
-        _playerNodes.getNode(playerId.toString()).set("assignment", assignmentKey);
+        playerNode.set("assignment", assignmentKey);
         _playerNodes.save();
+        return true;
     }
 }

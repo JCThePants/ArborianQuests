@@ -83,19 +83,7 @@ public abstract class Quest implements INamed, IHierarchyNode<Quest> {
     public static Quest getQuestFromPath(String questPath) {
         PreCon.notNull(questPath, "questPath");
 
-        String[] pathComponents = TextUtils.PATTERN_DOT.split(questPath);
-
-        Quest quest = ArborianQuests.getQuestManager().getQuest(pathComponents[0]);
-        if (quest == null)
-            return null;
-
-        for (int i=1; i < pathComponents.length; i++) {
-            quest = quest.getQuest(pathComponents[i]);
-            if (quest == null)
-                return null;
-        }
-
-        return quest;
+        return ArborianQuests.getQuestManager().getQuest(questPath);
     }
 
     /**

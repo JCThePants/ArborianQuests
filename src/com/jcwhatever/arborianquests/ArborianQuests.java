@@ -24,6 +24,8 @@
 
 package com.jcwhatever.arborianquests;
 
+import com.jcwhatever.arborianquests.click.ClickContext;
+import com.jcwhatever.arborianquests.click.GlobalClickListener;
 import com.jcwhatever.arborianquests.commands.users.BaseCommand;
 import com.jcwhatever.arborianquests.items.ScriptItemManager;
 import com.jcwhatever.arborianquests.locations.ScriptLocationManager;
@@ -72,6 +74,7 @@ public class ArborianQuests extends NucleusPlugin {
     private ScriptLocationManager _scriptLocationManager;
     private WaypointsManager _waypointsManager;
     private ScriptItemManager _scriptItemManager;
+    private ClickContext _globalClickContext;
 
     private IScriptApi _scriptApi;
     private IDataNode _metaNode;
@@ -109,6 +112,13 @@ public class ArborianQuests extends NucleusPlugin {
      */
     public static ScriptItemManager getScriptItemManager() {
         return _instance._scriptItemManager;
+    }
+
+    /**
+     * Get the global NPC click context.
+     */
+    public static ClickContext getGlobalClickContext() {
+        return _instance._globalClickContext;
     }
 
     @Override
@@ -150,6 +160,7 @@ public class ArborianQuests extends NucleusPlugin {
         IDataNode itemsNode = DataStorage.get(this, new DataPath("items"));
         itemsNode.load();
 
+        _globalClickContext = new ClickContext();
         _questManager = new QuestManager(this, getDataNode());
         _scriptRegionManager = new ScriptRegionManager(regionNode);
         _scriptLocationManager = new ScriptLocationManager(locationNode);
@@ -166,12 +177,12 @@ public class ArborianQuests extends NucleusPlugin {
         });
 
         Nucleus.getScriptApiRepo().registerApi(_scriptApi);
+        registerEventListeners(new GlobalClickListener(_globalClickContext));
     }
 
     @Override
     protected void onDisablePlugin() {
 
         Nucleus.getScriptApiRepo().unregisterApi(_scriptApi);
-        _instance = null;
     }
 }
