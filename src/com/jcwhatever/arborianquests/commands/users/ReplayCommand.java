@@ -63,7 +63,7 @@ public class ReplayCommand extends AbstractCommand implements IExecutableCommand
 
         Quest quest = ArborianQuests.getQuestManager().getQuest(questName);
         if (quest == null)
-            throw new CommandException(Lang.get(_NOT_FOUND), questName);
+            throw new CommandException(Lang.get(_NOT_FOUND, questName));
 
         Player p = (Player)sender;
 

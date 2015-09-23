@@ -50,7 +50,6 @@ import com.jcwhatever.nucleus.managed.messaging.ChatTree;
 import com.jcwhatever.nucleus.managed.messaging.ChatTree.NodeLineWriter;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionDefault;
@@ -72,7 +71,7 @@ import java.util.List;
 public class BaseCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE="My Current Quests";
-    @Localizable static final String _HELP = "Type '/{plugin-command} ?' for a list of commands.";
+    @Localizable static final String _HELP = "{GRAY}Type '{GOLD}{0}{GRAY}' for a list of commands.";
 
     public BaseCommand() {
         super();
@@ -94,7 +93,7 @@ public class BaseCommand extends AbstractCommand implements IExecutableCommand {
         int page = args.getInteger("page");
         final Player p = (Player)sender;
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         Collection<Quest> quests = ArborianQuests.getQuestManager().getQuests();
         List<HierarchyNode<Quest>> nodes = new ArrayList<>(quests.size());
@@ -136,8 +135,8 @@ public class BaseCommand extends AbstractCommand implements IExecutableCommand {
 
                 String line = quest instanceof PrimaryQuest
                         ? TextUtils.format(FormatTemplate.LIST_ITEM_DESCRIPTION,
-                        quest.getDisplayName(), quest.getName())
-                        : TextUtils.format("{WHITE}{0}", quest.getName());
+                        quest.getDisplayName(), quest.getName()).toString()
+                        : TextUtils.format("{WHITE}{0}", quest.getName()).toString();
 
                 String objective = quest.getObjectives().getPlayerObjective(p.getUniqueId());
 
@@ -151,7 +150,7 @@ public class BaseCommand extends AbstractCommand implements IExecutableCommand {
 
         pagin.show(p, page, FormatTemplate.RAW);
 
-        tell(sender, Lang.get(_HELP));
+        tell(sender, Lang.get(_HELP, getInlineHelpCommand()));
     }
 }
 

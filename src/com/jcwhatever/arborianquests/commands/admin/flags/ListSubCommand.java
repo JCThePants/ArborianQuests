@@ -75,7 +75,7 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
         if (playerId == null)
             throw new CommandException(Lang.get(_PLAYER_NOT_FOUND, playerName));
 
-        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         Collection<String> flagNames = quest.getFlags(playerId);
 

@@ -73,7 +73,7 @@ public class EditSubCommand extends AbstractCommand implements IExecutableComman
 
         WaypointsList waypoints = manager.get(name);
         if (waypoints == null)
-            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND), name);
+            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND, name));
 
         WaypointsEditor.edit(player, waypoints);
     }

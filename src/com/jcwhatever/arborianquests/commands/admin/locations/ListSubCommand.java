@@ -27,6 +27,7 @@ package com.jcwhatever.arborianquests.commands.admin.locations;
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.locations.ScriptLocation;
+import com.jcwhatever.nucleus.internal.NucLang;
 import com.jcwhatever.nucleus.managed.commands.CommandInfo;
 import com.jcwhatever.nucleus.managed.commands.arguments.ICommandArguments;
 import com.jcwhatever.nucleus.managed.commands.exceptions.CommandException;
@@ -37,6 +38,11 @@ import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
 
+import com.jcwhatever.nucleus.utils.text.components.IChatHoverable;
+import com.jcwhatever.nucleus.utils.text.components.IChatMessage;
+import com.jcwhatever.nucleus.utils.text.format.args.ClickTeleportArgModifier;
+import com.jcwhatever.nucleus.utils.text.format.args.HoverableArgModifier;
+import com.jcwhatever.nucleus.utils.text.format.args.TextArg;
 import org.bukkit.command.CommandSender;
 
 import java.util.Collection;
@@ -55,6 +61,7 @@ import java.util.Collection;
 public class ListSubCommand extends AbstractCommand implements IExecutableCommand {
 
     @Localizable static final String _PAGINATOR_TITLE = "Quest Locations";
+    @Localizable static final String _CLICK_MESSAGE = "{YELLOW}Click to teleport to location.";
 
     @Override
     public void execute (CommandSender sender, ICommandArguments args) throws CommandException {
@@ -63,12 +70,19 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
 
         Collection<ScriptLocation> locations = ArborianQuests.getScriptLocationManager().getAll();
 
-        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
         if (!args.isDefaultValue("search"))
             pagin.setSearchTerm(args.getString("search"));
 
+        IChatMessage clickMessage = NucLang.get(_CLICK_MESSAGE);
+
         for (ScriptLocation location : locations) {
-            pagin.add(location.getName(), TextUtils.formatLocation(location, true));
+
+            TextArg name = new TextArg(location.getName(),
+                    new ClickTeleportArgModifier(location),
+                    new HoverableArgModifier(IChatHoverable.HoverAction.SHOW_TEXT, clickMessage));
+
+            pagin.add(name, TextUtils.formatLocation(location, true));
         }
 
         pagin.show(sender, page, FormatTemplate.LIST_ITEM_DESCRIPTION);

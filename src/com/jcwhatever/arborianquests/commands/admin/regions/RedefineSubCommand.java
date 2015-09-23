@@ -64,7 +64,7 @@ public class RedefineSubCommand extends AbstractCommand implements IExecutableCo
 
         ScriptRegion region = regionManager.get(regionName);
         if (region == null)
-            throw new CommandException(Lang.get(_REGION_NOT_FOUND), regionName);
+            throw new CommandException(Lang.get(_REGION_NOT_FOUND, regionName));
 
         IRegionSelection selection = getRegionSelection((Player) sender);
 

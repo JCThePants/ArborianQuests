@@ -54,11 +54,11 @@ public class PlayerTalkAction extends MessageAction {
     @Override
     protected String getMessage(Player player, IDialogContext context) {
 
-        String message = TextUtils.format(super.getMessage(player, context), _args);
+        String message = TextUtils.format(super.getMessage(player, context), _args).toString();
         String format = context.getSettings().getPlayerFormat();
 
         if (format != null && player != null)
-            message = TextUtils.format(format, player.getName(), message);
+            message = TextUtils.format(format, player.getName(), message).toString();
 
         return message;
     }

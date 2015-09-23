@@ -65,7 +65,7 @@ public class AddSubCommand extends AbstractCommand implements IExecutableCommand
         final WaypointsManager manager = ArborianQuests.getWaypointsManager();
 
         if (manager.contains(name))
-            throw new CommandException(Lang.get(_WAYPOINT_ALREADY_EXISTS), name);
+            throw new CommandException(Lang.get(_WAYPOINT_ALREADY_EXISTS, name));
 
         WaypointsList waypoints = manager.add(name);
         if (waypoints == null)

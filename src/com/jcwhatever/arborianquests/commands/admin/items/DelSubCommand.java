@@ -61,7 +61,7 @@ public class DelSubCommand extends AbstractCommand implements IExecutableCommand
 
         ScriptItem scriptItem = manager.get(itemName);
         if (scriptItem == null)
-            throw new CommandException(Lang.get(_LOCATION_NOT_FOUND), itemName);
+            throw new CommandException(Lang.get(_LOCATION_NOT_FOUND, itemName));
 
         if (!manager.remove(itemName))
             throw new CommandException(Lang.get(_FAILED));

@@ -63,7 +63,7 @@ public class ListCommand extends AbstractCommand implements IExecutableCommand {
 
         int page = args.getInteger("page");
 
-        ChatPaginator pagin = createPagin(Lang.get(_PAGINATOR_TITLE));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE));
 
         Collection<Quest> quests = ArborianQuests.getQuestManager().getQuests();
 
@@ -74,8 +74,8 @@ public class ListCommand extends AbstractCommand implements IExecutableCommand {
             public String write(Quest quest) {
                 return quest instanceof PrimaryQuest
                         ? TextUtils.format(FormatTemplate.LIST_ITEM_DESCRIPTION,
-                        quest.getName(), quest.getDisplayName())
-                        : TextUtils.format("{GRAY}{0}", quest.getName());
+                        quest.getName(), quest.getDisplayName()).toString()
+                        : TextUtils.format("{GRAY}{0}", quest.getName()).toString();
             }
         }));
 

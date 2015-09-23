@@ -25,6 +25,7 @@
 package com.jcwhatever.arborianquests;
 
 import com.jcwhatever.nucleus.managed.language.Localized;
+import com.jcwhatever.nucleus.utils.text.components.IChatMessage;
 
 /**
  * Static convenience methods for localization.
@@ -42,7 +43,7 @@ public class Lang {
      * @return  Localized and formatted text.
      */
     @Localized
-    public static String get(String text, Object... args) {
+    public static IChatMessage get(CharSequence text, Object... args) {
         return ArborianQuests.getPlugin().getLanguageContext().get(text, args);
     }
 }

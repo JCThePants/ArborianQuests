@@ -62,7 +62,7 @@ public class DelSubCommand extends AbstractCommand implements IExecutableCommand
 
         WaypointsList waypoints = manager.get(name);
         if (waypoints == null)
-            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND), name);
+            throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND, name));
 
         if (!manager.remove(name))
             throw new CommandException(Lang.get(_FAILED));

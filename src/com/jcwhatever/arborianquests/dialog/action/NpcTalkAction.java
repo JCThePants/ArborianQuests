@@ -59,11 +59,11 @@ public class NpcTalkAction extends MessageAction {
     @Override
     protected String getMessage(Player player, IDialogContext context) {
 
-        String message = TextUtils.format(super.getMessage(player, context), _args);
+        String message = TextUtils.format(super.getMessage(player, context), _args).toString();
         String format = context.getSettings().getNpcFormat();
 
         if (format != null && _npcName != null)
-            message = TextUtils.format(format, _npcName, message);
+            message = TextUtils.format(format, _npcName, message).toString();
 
         return message;
     }

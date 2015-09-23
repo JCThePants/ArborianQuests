@@ -26,7 +26,6 @@ package com.jcwhatever.arborianquests.commands.admin.waypoints;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
 import com.jcwhatever.arborianquests.Lang;
-import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.waypoints.WaypointsList;
 import com.jcwhatever.arborianquests.waypoints.WaypointsManager;
 import com.jcwhatever.nucleus.managed.commands.CommandInfo;
@@ -38,11 +37,10 @@ import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.managed.messaging.ChatPaginator;
 import com.jcwhatever.nucleus.utils.text.TextUtils;
 import com.jcwhatever.nucleus.utils.text.TextUtils.FormatTemplate;
-
 import org.bukkit.command.CommandSender;
 
-import java.util.Collection;
 import javax.annotation.Nullable;
+import java.util.Collection;
 
 @CommandInfo(
         parent="waypoints",
@@ -74,8 +72,8 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
         ChatPaginator pagin;
 
         pagin = args.isDefaultValue("name")
-                ? list()
-                : listLocations(sender, args.getName("name", 48));
+                ? list(args)
+                : listLocations(args, args.getName("name", 48));
 
         if (pagin == null)
             return; // finished
@@ -90,7 +88,8 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
      *  Get list of locations in waypoints list.
      */
     @Nullable
-    private ChatPaginator listLocations(CommandSender sender, String waypointsName) throws CommandException {
+    private ChatPaginator listLocations(ICommandArguments args, String waypointsName)
+            throws CommandException {
 
         WaypointsManager manager = ArborianQuests.getWaypointsManager();
 
@@ -98,7 +97,7 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
         if (waypoints == null)
             throw new CommandException(Lang.get(_WAYPOINTS_NOT_FOUND, waypointsName));
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE_LOCATIONS, waypoints.getName()));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE_LOCATIONS, waypoints.getName()));
 
         for (int i=0; i < waypoints.size(); i++) {
             pagin.add(i, TextUtils.formatLocation(waypoints.get(i), true));
@@ -110,13 +109,13 @@ public class ListSubCommand extends AbstractCommand implements IExecutableComman
     /*
      * Get list of all waypoints lists.
      */
-    private ChatPaginator list() {
+    private ChatPaginator list(ICommandArguments args) {
 
         WaypointsManager manager = ArborianQuests.getWaypointsManager();
 
         Collection<WaypointsList> waypoints = manager.getAll();
 
-        ChatPaginator pagin = Msg.getPaginator(Lang.get(_PAGINATOR_TITLE_ALL));
+        ChatPaginator pagin = createPagin(args, 7, Lang.get(_PAGINATOR_TITLE_ALL));
 
         for (WaypointsList waypoint : waypoints) {
             pagin.add(waypoint.getName(), waypoint.size() + " locations.");
