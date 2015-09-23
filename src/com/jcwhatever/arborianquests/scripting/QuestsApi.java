@@ -25,6 +25,7 @@
 package com.jcwhatever.arborianquests.scripting;
 
 import com.jcwhatever.arborianquests.ArborianQuests;
+import com.jcwhatever.arborianquests.Lang;
 import com.jcwhatever.arborianquests.Msg;
 import com.jcwhatever.arborianquests.quests.Quest;
 import com.jcwhatever.arborianquests.quests.QuestStatus;
@@ -32,15 +33,20 @@ import com.jcwhatever.arborianquests.quests.QuestStatus.CurrentQuestStatus;
 import com.jcwhatever.arborianquests.quests.QuestStatus.QuestCompletionStatus;
 import com.jcwhatever.arborianquests.quests.SubQuest;
 import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberArrayDeque;
-import com.jcwhatever.nucleus.collections.observer.subscriber.SubscriberLinkedList;
 import com.jcwhatever.nucleus.managed.commands.response.IRequestContext;
 import com.jcwhatever.nucleus.managed.commands.response.ResponseRequestor;
 import com.jcwhatever.nucleus.managed.commands.response.ResponseType;
+import com.jcwhatever.nucleus.managed.language.Localizable;
 import com.jcwhatever.nucleus.mixins.IDisposable;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.observer.update.IUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.update.UpdateSubscriber;
 import com.jcwhatever.nucleus.utils.player.PlayerUtils;
+import com.jcwhatever.nucleus.utils.text.components.IChatClickable.ClickAction;
+import com.jcwhatever.nucleus.utils.text.components.IChatHoverable.HoverAction;
+import com.jcwhatever.nucleus.utils.text.format.args.ClickableArgModifier;
+import com.jcwhatever.nucleus.utils.text.format.args.HoverableArgModifier;
+import com.jcwhatever.nucleus.utils.text.format.args.TextArg;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nullable;
@@ -52,8 +58,33 @@ import java.util.Map;
  */
 public class QuestsApi implements IDisposable {
 
-    private static final SubscriberArrayDeque<IUpdateSubscriber> _requests = new SubscriberArrayDeque<>(10);
-    private static final Map<String, Quest> _pathCache = new HashMap<>(10);
+    private static final SubscriberArrayDeque<IUpdateSubscriber> REQUESTS = new SubscriberArrayDeque<>(10);
+    private static final Map<String, Quest> PATH_CACHE = new HashMap<>(10);
+
+    private static final TextArg ACCEPT_CLICK_ARG = new TextArg("{AQUA}Click here",
+            new ClickableArgModifier(ClickAction.RUN_COMMAND, "/accept"),
+            new HoverableArgModifier(HoverAction.SHOW_TEXT, "{YELLOW}Click to accept quest."));
+
+    private static final TextArg ACCEPT_SUGGESTION_CLICK_ARG = new TextArg("{GOLD}/accept",
+            new ClickableArgModifier(ClickAction.SUGGEST_COMMAND, "/accept"));
+
+    private static final TextArg QUEST_INFO_CLICK_ARG = new TextArg("{GOLD}/q",
+            new ClickableArgModifier(ClickAction.SUGGEST_COMMAND, "/q"));
+
+    @Localizable static final String _QUEST_QUERY =
+                    "{GREEN}------------------------------------------\n" +
+                    "{WHITE}{0: click here} to accept quest or type {1: command}\n" +
+                    "{YELLOW}Expires in 15 seconds.\n" +
+                    "{GREEN}------------------------------------------";
+
+    @Localizable static final String _QUEST_ACCEPTED =
+            "{GREEN}{0: quest name} quest Accepted.\n{GRAY}Type '{1}' anytime to get current quest info.";
+
+    @Localizable static final String _QUERY =
+            "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.\n" +
+            "Expires in 15 seconds.";
+
+    @Localizable static final String _REQUEST_EXPIRED = "{YELLOW}Request expired.";
 
     /**
      * Utility to get quest from quest path.
@@ -64,7 +95,7 @@ public class QuestsApi implements IDisposable {
     public static Quest getQuest(String questPath, boolean isNullAllowed) {
         PreCon.notNullOrEmpty(questPath, "questPath");
 
-        Quest quest = _pathCache.get(questPath);
+        Quest quest = PATH_CACHE.get(questPath);
         if (quest != null)
             return quest;
 
@@ -74,7 +105,7 @@ public class QuestsApi implements IDisposable {
 
         PreCon.isValid(quest != null, "Quest path '{0}' not found.", questPath);
 
-        _pathCache.put(questPath, quest);
+        PATH_CACHE.put(questPath, quest);
 
         return quest;
     }
@@ -110,9 +141,9 @@ public class QuestsApi implements IDisposable {
     @Override
     public void dispose() {
 
-        synchronized (_requests) {
-            while (!_requests.isEmpty()) {
-                _requests.remove().dispose();
+        synchronized (REQUESTS) {
+            while (!REQUESTS.isEmpty()) {
+                REQUESTS.remove().dispose();
             }
         }
 
@@ -124,7 +155,7 @@ public class QuestsApi implements IDisposable {
         regions.dispose();
         npcClick.dispose();
 
-        _pathCache.clear();
+        PATH_CACHE.clear();
 
         _isDisposed = true;
     }
@@ -156,6 +187,8 @@ public class QuestsApi implements IDisposable {
         PreCon.notNullOrEmpty(displayName, "displayName");
 
         Quest parent = getQuest(parentQuestPath, false);
+        assert parent != null;
+
         return parent.createQuest(subQuestName, displayName);
     }
 
@@ -174,6 +207,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player object.");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         return quest.getObjectives().getPlayerObjective(p.getUniqueId());
     }
@@ -197,6 +231,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player object.");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         return quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey);
     }
@@ -225,6 +260,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player object.");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         return quest.getObjectives().setPlayerObjective(p.getUniqueId(), objectiveKey, description);
     }
@@ -243,6 +279,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player object.");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         quest.getObjectives().clearPlayerObjective(p.getUniqueId());
     }
@@ -310,6 +347,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         QuestStatus status = quest.getStatus(p);
 
@@ -337,6 +375,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player");
 
         Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         if (quest instanceof SubQuest) {
 
@@ -368,6 +407,7 @@ public class QuestsApi implements IDisposable {
         PreCon.isValid(p != null, "Invalid player");
 
         final Quest quest = getQuest(questPath, false);
+        assert quest != null;
 
         if (quest instanceof SubQuest) {
 
@@ -386,7 +426,7 @@ public class QuestsApi implements IDisposable {
             }
         };
 
-        _requests.add(subscriber);
+        REQUESTS.add(subscriber);
 
         ResponseRequestor.contextBuilder(ArborianQuests.getPlugin())
                 .name(questPath)
@@ -394,12 +434,21 @@ public class QuestsApi implements IDisposable {
                 .response(ResponseType.ACCEPT)
                 .build(p)
                 .onRespond(subscriber)
+                .onRespond(new UpdateSubscriber<IRequestContext>() {
+                    @Override
+                    public void on(IRequestContext argument) {
+                        Msg.tell(p, Lang.get(_QUEST_ACCEPTED, quest.getDisplayName(), QUEST_INFO_CLICK_ARG));
+                    }
+                })
+                .onTimeout(new UpdateSubscriber<IRequestContext>() {
+                    @Override
+                    public void on(IRequestContext argument) {
+                        Msg.tell(p, Lang.get(_REQUEST_EXPIRED));
+                    }
+                })
                 .sendRequest();
 
-        Msg.tell(p, "{GREEN}------------------------------------------");
-        Msg.tell(p, "{WHITE}Type '{YELLOW}/accept{WHITE}' to accept the quest.");
-        Msg.tell(p, "Expires in 15 seconds.");
-        Msg.tell(p, "{GREEN}------------------------------------------");
+        Msg.tell(p, Lang.get(_QUEST_QUERY, ACCEPT_CLICK_ARG, ACCEPT_SUGGESTION_CLICK_ARG));
     }
 
     /**
@@ -410,13 +459,13 @@ public class QuestsApi implements IDisposable {
      * @param question  The question to ask the player.
      * @param onAccept  Runnable to run if the player accepts.
      */
-    public void query(Object player, String context, String question, final Runnable onAccept) {
+    public void query(Object player, String context, CharSequence question, final Runnable onAccept) {
         PreCon.notNull(player, "player");
         PreCon.notNullOrEmpty(context, "context");
         PreCon.notNull(question, "question");
         PreCon.notNull(onAccept, "onAccept");
 
-        Player p = PlayerUtils.getPlayer(player);
+        final Player p = PlayerUtils.getPlayer(player);
         PreCon.isValid(p != null, "Invalid player");
 
         UpdateSubscriber<IRequestContext> subscriber = new UpdateSubscriber<IRequestContext>() {
@@ -426,7 +475,7 @@ public class QuestsApi implements IDisposable {
             }
         };
 
-        _requests.add(subscriber);
+        REQUESTS.add(subscriber);
 
         ResponseRequestor.contextBuilder(ArborianQuests.getPlugin())
                 .name(context)
@@ -434,11 +483,16 @@ public class QuestsApi implements IDisposable {
                 .response(ResponseType.YES)
                 .build(p)
                 .onRespond(subscriber)
+                .onTimeout(new UpdateSubscriber<IRequestContext>() {
+                    @Override
+                    public void on(IRequestContext argument) {
+                        Msg.tell(p, Lang.get(_REQUEST_EXPIRED));
+                    }
+                })
                 .sendRequest();
 
         Msg.tell(p, question);
-        Msg.tell(p, "{WHITE}Type '{YELLOW}/yes{WHITE}' or ignore.");
-        Msg.tell(p, "Expires in 15 seconds.");
+        Msg.tell(p, Lang.get(_QUERY));
     }
 }
 
