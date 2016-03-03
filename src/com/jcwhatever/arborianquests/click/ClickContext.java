@@ -78,6 +78,9 @@ public class ClickContext {
         PreCon.notNull(player);
         PreCon.notNull(npc);
 
+        if (npc.getTraits().has("ArborianQuests:ClickExempt"))
+            return false;
+
         for (IClickHandler handler : _leftClickhandlers) {
             if (handler.canRun(player, npc)) {
                 handler.run(player, npc);
@@ -90,6 +93,9 @@ public class ClickContext {
     public boolean onRightClick(Player player, INpc npc) {
         PreCon.notNull(player);
         PreCon.notNull(npc);
+
+        if (npc.getTraits().has("ArborianQuests:ClickExempt"))
+            return false;
 
         for (IClickHandler handler : _rightClickhandlers) {
             if (handler.canRun(player, npc)) {

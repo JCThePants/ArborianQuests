@@ -25,6 +25,7 @@
 package com.jcwhatever.arborianquests;
 
 import com.jcwhatever.arborianquests.click.ClickContext;
+import com.jcwhatever.arborianquests.click.ClickExemptNpcTrait;
 import com.jcwhatever.arborianquests.click.GlobalClickListener;
 import com.jcwhatever.arborianquests.commands.users.BaseCommand;
 import com.jcwhatever.arborianquests.items.ScriptItemManager;
@@ -40,11 +41,11 @@ import com.jcwhatever.nucleus.managed.scripting.IScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi;
 import com.jcwhatever.nucleus.managed.scripting.SimpleScriptApi.IApiObjectCreator;
 import com.jcwhatever.nucleus.mixins.IDisposable;
+import com.jcwhatever.nucleus.providers.npc.INpcProvider;
 import com.jcwhatever.nucleus.providers.storage.DataStorage;
 import com.jcwhatever.nucleus.storage.DataPath;
 import com.jcwhatever.nucleus.storage.IDataNode;
 import com.jcwhatever.nucleus.utils.text.TextColor;
-
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -159,6 +160,11 @@ public class ArborianQuests extends NucleusPlugin {
 
         IDataNode itemsNode = DataStorage.get(this, new DataPath("items"));
         itemsNode.load();
+
+        INpcProvider provider = Nucleus.getProviders().getNpcs();
+        if (provider != null) {
+            provider.registerTrait(new ClickExemptNpcTrait());
+        }
 
         _globalClickContext = new ClickContext();
         _questManager = new QuestManager(this, getDataNode());
